@@ -32,6 +32,8 @@ int main() {
 	
 	std::cout << "This book has max number of pages:" << std::endl << std::endl << books[numberOfMax] << std::endl;
 	
+	delete[] books;
+
 	system("pause");
 	return 0;
 }
