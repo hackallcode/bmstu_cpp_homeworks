@@ -2,36 +2,8 @@
 
 #define LAST_CHAR '\0'
 
-TString::~TString()
-{
-	delete Data;
-}
 
-TString::TString()
-{
-	Length = 0;
-	Data = new char[1];
-	Data[0] = LAST_CHAR;
-}
-
-TString::TString(const TString& rhs)
-{
-	Length = rhs.Length;
-	Data = new char[Length + 1];
-	for (int i = 0; i < Length; i++) Data[i] = rhs.Data[i];
-	Data[Length] = LAST_CHAR;
-}
-
-TString::TString(const char * const data)
-{
-	Length = 0;
-	while (data[Length] != '\0') Length++;
-	Data = new char[Length + 1];
-	for (int i = 0; i < Length; i++) Data[i] = data[i];
-	Data[Length] = LAST_CHAR;
-}
-
-TString::TString(const char * const data, const size_t len)
+void TString::newData(const char * const data, const size_t len) 
 {
 	Length = len;
 	Data = new char[Length + 1];
@@ -39,37 +11,64 @@ TString::TString(const char * const data, const size_t len)
 	Data[Length] = LAST_CHAR;
 }
 
+void TString::addNewData(const char * const data, const size_t len)
+{
+	char * newData = new char[Length + len + 1];
+	for (int i = 0; i < Length; i++) newData[i] = Data[i];
+	for (int i = 0; i < len; i++) newData[Length + i] = data[i];
+	newData[Length + len] = LAST_CHAR;
+	delete[] Data;
+	Length += len;
+	Data = newData;
+}
+
+TString::~TString()
+{
+	delete[] Data;
+}
+
+TString::TString()
+{
+	newData(nullptr, 0);
+}
+
+TString::TString(const TString& rhs)
+{
+	newData(rhs.Data, rhs.Length);
+}
+
+TString::TString(const char * const data)
+{
+	size_t len = 0;
+	while (data[len] != '\0') len++;
+	newData(data, len);
+}
+
+TString::TString(const char * const data, const size_t len)
+{
+	newData(data, len);
+}
+
 TString& TString::operator =(const TString& rhs)
 {
 	if (rhs == *this) return *this;
-	delete Data;
-	Length = rhs.Length;
-	Data = new char[Length + 1];
-	for (int i = 0; i < Length; i++) Data[i] = rhs.Data[i];
-	Data[Length] = LAST_CHAR;
+	delete[] Data;
+	newData(rhs.Data, rhs.Length);
 	return *this;
 }
 
 TString& TString::operator =(const char * const data)
 {
-	delete Data;
-	Length = 0;
-	while (data[Length] != '\0') Length++;
-	Data = new char[Length + 1];
-	for (int i = 0; i < Length; i++) Data[i] = data[i];
-	Data[Length] = LAST_CHAR;
+	delete[] Data;
+	size_t len = 0;
+	while (data[len] != '\0') len++;
+	newData(data, len);
 	return *this;
 }
 
 TString& TString::operator +=(const TString& rhs)
 {
-	char * newData = new char[Length + rhs.Length + 1];
-	for (int i = 0; i < Length; i++) newData[i] = Data[i];
-	for (int i = 0; i < rhs.Length; i++) newData[Length + i] = rhs.Data[i];
-	Length += rhs.Length;
-	delete Data;
-	Data = newData;
-	Data[Length] = LAST_CHAR;
+	addNewData(rhs.Data, rhs.Length);
 	return *this;
 }
 
@@ -77,13 +76,7 @@ TString& TString::operator +=(const char * const data)
 {
 	size_t len = 0;
 	while (data[len] != '\0') len++;
-	char * newData = new char[Length + len + 1];
-	for (int i = 0; i < Length; i++) newData[i] = Data[i];
-	for (int i = 0; i < len; i++) newData[Length + i] = data[i];
-	delete Data;
-	Length += len;
-	Data = newData;
-	Data[Length] = LAST_CHAR;
+	addNewData(data, len);
 	return *this;
 }
 
@@ -107,11 +100,12 @@ bool TString::operator ==(const char * const data) const
 
 bool TString::operator <(const TString& rhs) const
 {
-	for (int i = 0; i < Length + 1 && i < rhs.Length + 1; i++)
-		if (Data[i] < rhs.Data[i]) 
+	for (int i = 0; i < Length + 1 && i < rhs.Length + 1; i++) {
+		if (Data[i] < rhs.Data[i])
 			return true;
-		else if (Data[i] > rhs.Data[i]) 
+		else if (Data[i] > rhs.Data[i])
 			return false;
+	}
 	return false;
 }
 
@@ -157,12 +151,12 @@ void TString::RTrim(char symbol)
 	int k = 0;
 	while (Length - k > 0 && Data[Length - 1 - k] == symbol) k++;
 	if (k == 0) return;
-	char * newData = new char[Length - k + 1];
-	for (int i = 0; i < Length - k; i++) newData[i] = Data[i];
-	delete Data;
-	Length = Length - k;
+	Length -= k;
+	char * newData = new char[Length + 1];
+	for (int i = 0; i < Length; i++) newData[i] = Data[i];
+	newData[Length] = LAST_CHAR;
+	delete[] Data;
 	Data = newData;
-	Data[Length] = LAST_CHAR;
 }
 
 void TString::LTrim(char symbol)
@@ -170,12 +164,12 @@ void TString::LTrim(char symbol)
 	int k = 0;
 	while (Length - k > 0 && Data[k] == symbol) k++;
 	if (k == 0) return;
-	char * newData = new char[Length - k + 1];
-	for (int i = k; i < Length; i++) newData[i - k] = Data[i];
-	delete Data;
-	Length = Length - k;
+	Length -= k;
+	char * newData = new char[Length + 1];
+	for (int i = 0; i < Length; i++) newData[i] = Data[k + i];
+	newData[Length] = LAST_CHAR;
+	delete[] Data;
 	Data = newData;
-	Data[Length] = LAST_CHAR;
 }
 
 TString operator+(const TString & a, const TString & b)

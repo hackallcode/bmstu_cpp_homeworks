@@ -9,6 +9,12 @@ class TString
 private:
 	size_t Length;
 	char * Data;
+	
+	// Функция заполнения массива Data
+	void newData(const char * const data, const size_t len);
+	
+	// Функция добавления данных
+	void addNewData(const char * const data, const size_t len);
 public:
 	// Деструктор
 	~TString();

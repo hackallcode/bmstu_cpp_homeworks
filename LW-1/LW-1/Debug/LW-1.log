@@ -1,3 +1,14 @@
-﻿  check_TString.cpp
+﻿  TString.cpp
+c:\users\vladimir\documents\visual studio 2015\projects\bmstu projects\bmstu-projects-2nd-semester\lw-1\lw-1\tstring.cpp(10): warning C4018: '<': signed/unsigned mismatch
+c:\users\vladimir\documents\visual studio 2015\projects\bmstu projects\bmstu-projects-2nd-semester\lw-1\lw-1\tstring.cpp(17): warning C4018: '<': signed/unsigned mismatch
+c:\users\vladimir\documents\visual studio 2015\projects\bmstu projects\bmstu-projects-2nd-semester\lw-1\lw-1\tstring.cpp(18): warning C4018: '<': signed/unsigned mismatch
+c:\users\vladimir\documents\visual studio 2015\projects\bmstu projects\bmstu-projects-2nd-semester\lw-1\lw-1\tstring.cpp(86): warning C4018: '<': signed/unsigned mismatch
+c:\users\vladimir\documents\visual studio 2015\projects\bmstu projects\bmstu-projects-2nd-semester\lw-1\lw-1\tstring.cpp(96): warning C4018: '<': signed/unsigned mismatch
+c:\users\vladimir\documents\visual studio 2015\projects\bmstu projects\bmstu-projects-2nd-semester\lw-1\lw-1\tstring.cpp(103): warning C4018: '<': signed/unsigned mismatch
+c:\users\vladimir\documents\visual studio 2015\projects\bmstu projects\bmstu-projects-2nd-semester\lw-1\lw-1\tstring.cpp(114): warning C4018: '<': signed/unsigned mismatch
+c:\users\vladimir\documents\visual studio 2015\projects\bmstu projects\bmstu-projects-2nd-semester\lw-1\lw-1\tstring.cpp(115): warning C4018: '<': signed/unsigned mismatch
+c:\users\vladimir\documents\visual studio 2015\projects\bmstu projects\bmstu-projects-2nd-semester\lw-1\lw-1\tstring.cpp(125): warning C4018: '<': signed/unsigned mismatch
+c:\users\vladimir\documents\visual studio 2015\projects\bmstu projects\bmstu-projects-2nd-semester\lw-1\lw-1\tstring.cpp(156): warning C4018: '<': signed/unsigned mismatch
+c:\users\vladimir\documents\visual studio 2015\projects\bmstu projects\bmstu-projects-2nd-semester\lw-1\lw-1\tstring.cpp(169): warning C4018: '<': signed/unsigned mismatch
   LW-1.vcxproj -> C:\Users\Vladimir\Documents\Visual Studio 2015\Projects\BMSTU Projects\BMSTU-Projects-2nd-Semester\LW-1\Debug\LW-1.exe
   LW-1.vcxproj -> C:\Users\Vladimir\Documents\Visual Studio 2015\Projects\BMSTU Projects\BMSTU-Projects-2nd-Semester\LW-1\Debug\LW-1.pdb (Partial PDB)
