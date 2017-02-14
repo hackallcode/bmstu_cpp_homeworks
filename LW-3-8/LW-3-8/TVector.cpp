@@ -2,8 +2,7 @@
 
 TVector::~TVector()
 {
-	if (Data != nullptr)
-		delete[] Data;
+	delete[] Data;
 }
 
 TVector::TVector()
@@ -16,14 +15,14 @@ TVector::TVector(const TVector & rhs)
 {
 	Length = rhs.Length;
 	Data = new double[Length];
-	for (size_t i = 0; i < Length; i++) Data[i] = rhs.Data[i];
+	memcpy(Data, rhs.Data, Length * sizeof(double));
 }
 
 TVector::TVector(const double * const data, const size_t length)
 {
 	Length = length;
 	Data = new double[Length];
-	for (size_t i = 0; i < Length; i++) Data[i] = data[i];
+	memcpy(Data, data, Length * sizeof(double));
 }
 
 TVector & TVector::operator=(const TVector & rhs)
@@ -32,17 +31,15 @@ TVector & TVector::operator=(const TVector & rhs)
 	delete[] Data;
 	Length = rhs.Length;
 	Data = new double[Length];
-	for (size_t i = 0; i < Length; i++) Data[i] = rhs.Data[i];
+	memcpy(Data, rhs.Data, Length * sizeof(double));
 	return *this;
 }
 
 TVector & TVector::operator+=(const double * const data)
 {
 	double * newData = new double[Length * 2];
-	for (size_t i = 0; i < Length; i++) {
-		newData[i] = Data[i];
-		newData[Length + i] = data[i];
-	}
+	memcpy(newData, Data, Length * sizeof(double));
+	memcpy(newData + Length, data, Length * sizeof(double));
 	delete[] Data;
 	Length *= 2;
 	Data = newData;
