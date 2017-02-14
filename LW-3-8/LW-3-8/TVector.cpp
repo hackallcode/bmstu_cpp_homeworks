@@ -28,6 +28,8 @@ TVector::TVector(const double * const data, const size_t length)
 
 TVector & TVector::operator=(const TVector & rhs)
 {
+	if (&rhs == this) return *this;
+	delete[] Data;
 	Length = rhs.Length;
 	Data = new double[Length];
 	for (size_t i = 0; i < Length; i++) Data[i] = rhs.Data[i];
