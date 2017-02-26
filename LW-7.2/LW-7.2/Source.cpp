@@ -46,6 +46,10 @@ Strings * split(std::string str, std::string delim)
 	size_t delta = delim.length();
 
 	while ((next = str.find(delim, prev)) != std::string::npos) {
+		if (next - prev == 0) {
+			prev = next + delta;
+			continue;
+		}
 		if (res == nullptr) {
 			newStrings(res, str.substr(prev, next - prev), nullptr);
 			last = res;
@@ -83,6 +87,12 @@ int main()
 
 	std::string buf;
 	while (getline(fin, buf)) {
+		for (size_t i = 0; i < buf.size(); i++) {
+			if (buf[i] == '.' || buf[i] == ',' || buf[i] == '-' || buf[i] == '!' || buf[i] == '?' || buf[i] == '"' ||
+				buf[i] == '(' || buf[i] == ')' || buf[i] == '\'' || buf[i] == ':' || buf[i] == ';') {
+				buf[i] = ' ';
+			}
+		}
 		Strings * first = split(buf, " ");
 		Strings * words = first;
 		while (words != nullptr) {
