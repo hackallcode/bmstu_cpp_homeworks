@@ -5,11 +5,85 @@
 // Возможные знаки препинания
 const char marks[12] = { ' ', '!', '"', '\'', '(', ')', ',', '-', '.', ':', ';', '?' };
 
+// Проверка символа на знак препинания
+inline bool isMark(char letter) {
+	for (const char & mark : marks) {
+		if (mark == letter) 
+			return true;
+	}
+	return false;
+}
+
 // Структура списка
-struct Words {
+struct WordsElement
+{
 	std::string data;
-	Words * prev;
-	Words * next;
+	WordsElement * prev;
+	WordsElement * next;
+};
+
+// Класс для работы со списком
+class WordsList 
+{
+private:
+	WordsElement * Word;
+public:
+	// Деструктор
+	~WordsList()
+	{
+		while (Word != nullptr) {
+			WordsElement * next = Word->next;
+			delete Word;
+			Word = next;
+		}
+	}
+
+	// Конструктор по умолчанию
+	WordsList() : Word(nullptr)
+	{}
+
+	// Добавление слова в конец списка
+	void Add(const std::string data)
+	{
+		if (Word == nullptr) {
+			Word = new WordsElement;
+			Word->data = data;
+			Word->next = nullptr;
+			Word->prev = nullptr;
+			return;
+		}
+		WordsElement * lastWord = Word;
+		while (lastWord->next != nullptr) lastWord = lastWord->next;
+		lastWord->next = new WordsElement;
+		lastWord->next->data = data;
+		lastWord->next->next = nullptr;
+		lastWord->next->prev = lastWord;
+	}
+
+	// Функция печати слова с окружением из n слов
+	void Print(std::ostream & stream, const std::string & search_word, size_t count)
+	{
+		WordsElement * lastWord = Word;
+		while (lastWord != nullptr) {
+			if (lastWord->data == search_word) {
+
+				WordsElement * printedWord = lastWord;
+				size_t i = 0;
+				while (printedWord->prev != nullptr && i < count) {
+					printedWord = printedWord->prev;
+					i++;
+				}
+				for (size_t j = 0; j < i + 1 + count; j++) {
+					if (printedWord == nullptr) break;
+					stream << printedWord->data << " ";
+					printedWord = printedWord->next;
+				}
+				stream << std::endl;
+
+			}
+			lastWord = lastWord->next;
+		}
+	}
 };
 
 // Функция открытия файла
@@ -32,52 +106,15 @@ bool openDialog(std::ifstream & fin, const std::string printed_name = "file")
 	} while (true);
 }
 
-// Добавление слова в конец списка
-void addWord(Words * & words, std::string data)
-{
-	if (words == nullptr) {
-		words = new Words;
-		words->data = data;
-		words->next = nullptr;
-		words->prev = nullptr;
-		return;
-	}
-	Words * lastWord = words;
-	while (lastWord->next != nullptr) lastWord = lastWord->next;
-	lastWord->next = new Words;
-	lastWord->next->data = data;
-	lastWord->next->next = nullptr;
-	lastWord->next->prev = lastWord;
-}
-
-// Удаление списка
-void deleteWords(Words * & words) 
-{
-	while (words != nullptr) {
-		Words * next = words->next;
-		delete words;
-		words = next;
-	}
-}
-
-// Проверка символа на знак препинания
-inline bool isMark(char letter) {
-	for (const char & mark : marks) {
-		if (mark == letter) 
-			return true;
-	}
-	return false;
-}
-
 // Разделение строки на слова
-Words * split(std::string & str)
+WordsList * split(std::string & str)
 {
-	Words * words = nullptr;
+	WordsList * words = new WordsList;
 	std::string word = "";
 	for (size_t i = 0; i < str.size(); i++) {
 		if (isMark(str[i])) {
 			if (word != "") {
-				addWord(words, word);
+				words->Add(word);
 				word = "";
 			}
 		}
@@ -85,24 +122,8 @@ Words * split(std::string & str)
 			word += str[i];
 		}
 	}
-	if (word != "") addWord(words, word);
+	if (word != "") words->Add(word);
 	return words;
-}
-
-// Функция печати слова с окружением из n слов
-void printWords(Words * printedWord, size_t n)
-{
-	size_t i = 0;
-	while (printedWord->prev != nullptr && i < n) {
-		printedWord = printedWord->prev;
-		i++;
-	}
-	for (size_t j = 0; j < i + 1 + n; j++) {
-		if (printedWord == nullptr) break;
-		std::cout << printedWord->data << " ";
-		printedWord = printedWord->next;
-	}
-	std::cout << std::endl;
 }
 
 int main() 
@@ -120,13 +141,9 @@ int main()
 
 	std::string buf;
 	while (getline(fin, buf)) {
-		Words * words = split(buf);
-		Words * lastWord = words;
-		while (lastWord != nullptr) {
-			if (lastWord->data == search_word) printWords(lastWord, n);
-			lastWord = lastWord->next;
-		}
-		deleteWords(words);
+		WordsList * words = split(buf);
+		words->Print(std::cout, search_word, n);
+		delete words;
 	}
 	
 	fin.close();
