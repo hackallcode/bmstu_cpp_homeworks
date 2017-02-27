@@ -14,19 +14,16 @@ inline bool isMark(char letter) {
 	return false;
 }
 
-// Структура списка
-struct WordsElement
-{
-	std::string data;
-	WordsElement * prev;
-	WordsElement * next;
-};
-
 // Класс для работы со списком
 class WordsList 
 {
 private:
-	WordsElement * Word;
+	// Структура списка
+	struct WordsElement	{
+		std::string data;
+		WordsElement * prev;
+		WordsElement * next;
+	} * Word;
 public:
 	// Деструктор
 	~WordsList()
