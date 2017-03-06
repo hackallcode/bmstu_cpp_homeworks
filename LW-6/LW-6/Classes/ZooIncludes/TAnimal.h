@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include <windows.h>
 
 class TAnimal abstract
 {
@@ -17,10 +18,7 @@ protected:
 	bool IsAlive; // Флаг: живой или мертвый
 public:
 	const static size_t ClassID = 0; // ID класса
-
-	// Деструктор
-	~TAnimal() = default;
-	
+		
 	// Конструктор по умолчанию
 	TAnimal();
 
@@ -42,7 +40,7 @@ public:
 	void AddChildrenCount(size_t childrenCount);
 
 	// Добавить дни жизни
-	void AddDays(size_t daysNumber);
+	void IncDays();
 
 	// Действие в указанное время
 	virtual void Live(std::ostream & stream, float time);

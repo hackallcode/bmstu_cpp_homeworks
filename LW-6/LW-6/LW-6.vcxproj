@@ -110,31 +110,32 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Classes\TAnimal.cpp" />
-    <ClCompile Include="Classes\TArtiodactyla.cpp" />
-    <ClCompile Include="Classes\TCarnivora.cpp" />
-    <ClCompile Include="Classes\TElephas.cpp" />
-    <ClCompile Include="Classes\TGiraffa.cpp" />
-    <ClCompile Include="Classes\THippopotamus.cpp" />
-    <ClCompile Include="Classes\TLeo.cpp" />
-    <ClCompile Include="Classes\TLoxodonta.cpp" />
-    <ClCompile Include="Classes\TProboscidea.cpp" />
-    <ClCompile Include="Classes\TTigris.cpp" />
-    <ClCompile Include="Classes\TZoo.cpp" />
+    <ClCompile Include="Classes\ZooIncludes\TAnimal.cpp" />
+    <ClCompile Include="Classes\ZooIncludes\TArtiodactyla.cpp" />
+    <ClCompile Include="Classes\ZooIncludes\TCarnivora.cpp" />
+    <ClCompile Include="Classes\ZooIncludes\TElephas.cpp" />
+    <ClCompile Include="Classes\ZooIncludes\TGiraffa.cpp" />
+    <ClCompile Include="Classes\ZooIncludes\THippopotamus.cpp" />
+    <ClCompile Include="Classes\ZooIncludes\TLeo.cpp" />
+    <ClCompile Include="Classes\ZooIncludes\TLoxodonta.cpp" />
+    <ClCompile Include="Classes\ZooIncludes\TProboscidea.cpp" />
+    <ClCompile Include="Classes\ZooIncludes\TTigris.cpp" />
+    <ClCompile Include="Classes\ZooIncludes\TZoo.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Classes\TAnimal.h" />
-    <ClInclude Include="Classes\TArtiodactyla.h" />
-    <ClInclude Include="Classes\TCarnivora.h" />
-    <ClInclude Include="Classes\TElephas.h" />
-    <ClInclude Include="Classes\TGiraffa.h" />
-    <ClInclude Include="Classes\THippopotamus.h" />
-    <ClInclude Include="Classes\TLeo.h" />
-    <ClInclude Include="Classes\TLoxodonta.h" />
-    <ClInclude Include="Classes\TProboscidea.h" />
-    <ClInclude Include="Classes\TTigris.h" />
-    <ClInclude Include="Classes\TZoo.h" />
+    <ClInclude Include="Classes\ZooIncludes.h" />
+    <ClInclude Include="Classes\ZooIncludes\TAnimal.h" />
+    <ClInclude Include="Classes\ZooIncludes\TArtiodactyla.h" />
+    <ClInclude Include="Classes\ZooIncludes\TCarnivora.h" />
+    <ClInclude Include="Classes\ZooIncludes\TElephas.h" />
+    <ClInclude Include="Classes\ZooIncludes\TGiraffa.h" />
+    <ClInclude Include="Classes\ZooIncludes\THippopotamus.h" />
+    <ClInclude Include="Classes\ZooIncludes\TLeo.h" />
+    <ClInclude Include="Classes\ZooIncludes\TLoxodonta.h" />
+    <ClInclude Include="Classes\ZooIncludes\TProboscidea.h" />
+    <ClInclude Include="Classes\ZooIncludes\TTigris.h" />
+    <ClInclude Include="Classes\ZooIncludes\TZoo.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

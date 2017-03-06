@@ -2,20 +2,17 @@
 
 #include "TAnimal.h"
 
-class TCarnivora abstract
+class TArtiodactyla abstract
 	: public TAnimal
 {
 public:
-	const static size_t ClassID = 3; // ID класса
-
-	// Деструктор
-	~TCarnivora() = default;
-
+	const static size_t ClassID = 1; // ID класса
+	
 	// Конструктор по умолчанию
-	TCarnivora();
+	TArtiodactyla();
 
 	// Пользовательский конструктор
-	TCarnivora(const std::string & name, size_t adultAge, size_t deathAge);
+	TArtiodactyla(const std::string & name, size_t adultAge, size_t deathAge);
 
 	// Действие в указанное время
 	virtual void Live(std::ostream & stream, float time) override;

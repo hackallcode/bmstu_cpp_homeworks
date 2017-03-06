@@ -1,16 +1,21 @@
 #include "TLoxodonta.h"
 
+#define ADULT_AGE 15
+#define DEATH_AGE 20
+
+const std::string TLoxodonta::Names[3] = { "Ian", "Luk", "Jace" };
+
 TLoxodonta::TLoxodonta()
-	: TProboscidea()
+	: TLoxodonta(Names[rand() % (sizeof(Names) / sizeof(Names[0]))])
 {}
 
 TLoxodonta::TLoxodonta(const std::string & name)
-	: TProboscidea(name, 15, 20)
+	: TProboscidea(name, ADULT_AGE, DEATH_AGE)
 {}
 
 TLoxodonta * TLoxodonta::MakeChild()
 {
-	TLoxodonta * child = new TLoxodonta(LoxodontaNames[ rand() % ( sizeof(LoxodontaNames)/sizeof(LoxodontaNames[0]) ) ]);
+	TLoxodonta * child = new TLoxodonta(Names[rand() % (sizeof(Names) / sizeof(Names[0]))]);
 	return child;
 }
 

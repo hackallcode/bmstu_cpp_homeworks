@@ -9,82 +9,87 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="TZoo Header Files">
+      <UniqueIdentifier>{8a62475d-6d73-481b-88ec-cba0ea4c340a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TZoo Source Files">
+      <UniqueIdentifier>{cc0ff60c-d855-4113-bc7b-96a29df7875e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\TAnimal.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Classes\ZooIncludes\TAnimal.cpp">
+      <Filter>TZoo Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\TArtiodactyla.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Classes\ZooIncludes\TArtiodactyla.cpp">
+      <Filter>TZoo Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\TCarnivora.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Classes\ZooIncludes\TCarnivora.cpp">
+      <Filter>TZoo Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\TElephas.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Classes\ZooIncludes\TElephas.cpp">
+      <Filter>TZoo Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\TGiraffa.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Classes\ZooIncludes\TGiraffa.cpp">
+      <Filter>TZoo Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\THippopotamus.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Classes\ZooIncludes\THippopotamus.cpp">
+      <Filter>TZoo Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\TLeo.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Classes\ZooIncludes\TLeo.cpp">
+      <Filter>TZoo Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\TLoxodonta.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Classes\ZooIncludes\TLoxodonta.cpp">
+      <Filter>TZoo Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\TProboscidea.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Classes\ZooIncludes\TProboscidea.cpp">
+      <Filter>TZoo Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\TTigris.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Classes\ZooIncludes\TTigris.cpp">
+      <Filter>TZoo Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\TZoo.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Classes\ZooIncludes\TZoo.cpp">
+      <Filter>TZoo Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Classes\TAnimal.h">
+    <ClInclude Include="Classes\ZooIncludes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Classes\TArtiodactyla.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Classes\ZooIncludes\TZoo.h">
+      <Filter>TZoo Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Classes\TCarnivora.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Classes\ZooIncludes\TTigris.h">
+      <Filter>TZoo Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Classes\TElephas.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Classes\ZooIncludes\TProboscidea.h">
+      <Filter>TZoo Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Classes\TGiraffa.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Classes\ZooIncludes\TLoxodonta.h">
+      <Filter>TZoo Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Classes\THippopotamus.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Classes\ZooIncludes\TLeo.h">
+      <Filter>TZoo Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Classes\TLeo.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Classes\ZooIncludes\THippopotamus.h">
+      <Filter>TZoo Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Classes\TLoxodonta.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Classes\ZooIncludes\TGiraffa.h">
+      <Filter>TZoo Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Classes\TProboscidea.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Classes\ZooIncludes\TElephas.h">
+      <Filter>TZoo Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Classes\TZoo.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Classes\ZooIncludes\TCarnivora.h">
+      <Filter>TZoo Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Classes\TTigris.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Classes\ZooIncludes\TArtiodactyla.h">
+      <Filter>TZoo Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\ZooIncludes\TAnimal.h">
+      <Filter>TZoo Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

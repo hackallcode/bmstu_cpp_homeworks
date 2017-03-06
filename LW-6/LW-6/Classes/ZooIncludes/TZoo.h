@@ -1,11 +1,8 @@
 ﻿#pragma once
 
 #include <iostream>
+#include <windows.h>
 #include "TAnimal.h"
-
-const float STEP = 1;
-const size_t MAX_CHILDREN = 3;
-const size_t AVR_DAYS_FOR_NEW_CHILD = 10;
 
 class TZoo
 {
@@ -41,7 +38,7 @@ public:
 	bool RemoveAnimal(size_t ID);
 
 	// Такт жизни
-	void Work(std::ostream & stream);
+	void Work(std::ostream & stream = std::cout);
 
 	// Добавить дни (ускорить время)
 	void AddDays(size_t daysNumber);

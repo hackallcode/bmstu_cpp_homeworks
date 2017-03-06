@@ -2,27 +2,23 @@
 
 #include "TArtiodactyla.h"
 
-const std::string GiraffaNames[3] = { "Tom", "Billy", "Mark" };
-
-class TGiraffa
+class THippopotamus
 	: public TArtiodactyla
 {
+private:
+	static const std::string Names[3];
 public:
-	const static size_t ClassID = 11; // ID класса
-
-	// Деструктор
-	~TGiraffa() = default;
+	static const size_t ClassID = 12; // ID класса
 
 	// Конструктор по умолчанию
-	TGiraffa();
+	THippopotamus();
 
 	// Пользовательский консруктор
-	TGiraffa(const std::string & name);
+	THippopotamus(const std::string & name);
 
 	// Пользовательский конструктор
-	virtual TGiraffa * MakeChild() override;
+	virtual THippopotamus * MakeChild() override;
 
 	// Действие в указанное время
 	virtual void Live(std::ostream & stream, float time) override;
-
 };

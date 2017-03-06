@@ -2,16 +2,13 @@
 
 #include "TProboscidea.h"
 
-const std::string LoxodontaNames[3] = { "Ian", "Luk", "Jace" };
-
 class TLoxodonta
 	: public TProboscidea
 {
+private:
+	static const std::string Names[3];
 public:
 	const static size_t ClassID = 22; // ID класса
-
-	// Деструктор
-	~TLoxodonta() = default;
 
 	// Конструктор по умолчанию
 	TLoxodonta();
@@ -24,5 +21,4 @@ public:
 
 	// Действие в указанное время
 	virtual void Live(std::ostream & stream, float time) override;
-
 };

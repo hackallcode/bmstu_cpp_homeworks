@@ -2,16 +2,13 @@
 
 #include "TCarnivora.h"
 
-const std::string TigrisNames[3] = { "Izobel", "Julia", "Ronald" };
-
 class TTigris
 	: public TCarnivora
 {
+private:
+	static const std::string Names[3];
 public:
 	const static size_t ClassID = 32; // ID класса
-
-	// Деструктор
-	~TTigris() = default;
 
 	// Конструктор по умолчанию
 	TTigris();
@@ -24,5 +21,4 @@ public:
 
 	// Действие в указанное время
 	virtual void Live(std::ostream & stream, float time) override;
-
 };

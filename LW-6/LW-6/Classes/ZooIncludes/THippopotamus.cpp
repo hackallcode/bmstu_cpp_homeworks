@@ -1,16 +1,21 @@
 #include "THippopotamus.h"
 
+#define ADULT_AGE 15
+#define DEATH_AGE 25
+
+const std::string THippopotamus::Names[3] = { "Greg", "Fiona", "Jennifer" };
+
 THippopotamus::THippopotamus()
-	: TArtiodactyla()
+	: THippopotamus(Names[rand() % (sizeof(Names) / sizeof(Names[0]))])
 {}
 
 THippopotamus::THippopotamus(const std::string & name)
-	: TArtiodactyla(name, 15, 25)
+	: TArtiodactyla(name, ADULT_AGE, DEATH_AGE)
 {}
 
 THippopotamus * THippopotamus::MakeChild()
 {
-	THippopotamus * child = new THippopotamus(HippopotamusNames[ rand() % ( sizeof(HippopotamusNames)/sizeof(HippopotamusNames[0]) ) ]);
+	THippopotamus * child = new THippopotamus(Names[rand() % (sizeof(Names) / sizeof(Names[0]))]);
 	return child;
 }
 

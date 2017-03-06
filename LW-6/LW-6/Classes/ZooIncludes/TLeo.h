@@ -2,16 +2,13 @@
 
 #include "TCarnivora.h"
 
-const std::string LeoNames[3] = { "Kristofer", "Frenk", "Debby" };
-
 class TLeo
 	: public TCarnivora
 {
+private:
+	static const std::string Names[3];
 public:
 	const static size_t ClassID = 31; // ID класса
-
-	// Деструктор
-	~TLeo() = default;
 
 	// Конструктор по умолчанию
 	TLeo();
@@ -24,5 +21,4 @@ public:
 
 	// Действие в указанное время
 	virtual void Live(std::ostream & stream, float time) override;
-
 };

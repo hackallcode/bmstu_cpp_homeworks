@@ -2,16 +2,13 @@
 
 #include "TProboscidea.h"
 
-const std::string ElephasNames[3] = { "Kate", "Mary", "Anna" };
-
 class TElephas
 	: public TProboscidea
 {
+private:
+	static const std::string Names[3];
 public:
-	const static size_t ClassID = 21; // ID класса
-
-	// Деструктор
-	~TElephas() = default;
+	static const size_t ClassID = 21; // ID класса
 
 	// Конструктор по умолчанию
 	TElephas();
@@ -24,5 +21,4 @@ public:
 
 	// Действие в указанное время
 	virtual void Live(std::ostream & stream, float time) override;
-
 };

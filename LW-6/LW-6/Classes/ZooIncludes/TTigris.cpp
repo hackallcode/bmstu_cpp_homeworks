@@ -1,16 +1,21 @@
 #include "TTigris.h"
 
+#define ADULT_AGE 30
+#define DEATH_AGE 37
+
+const std::string TTigris::Names[3] = { "Izobel", "Julia", "Ronald" };
+
 TTigris::TTigris()
-	: TCarnivora()
+	: TTigris(Names[rand() % (sizeof(Names) / sizeof(Names[0]))])
 {}
 
 TTigris::TTigris(const std::string & name)
-	: TCarnivora(name, 30, 37)
+	: TCarnivora(name, ADULT_AGE, DEATH_AGE)
 {}
 
 TTigris * TTigris::MakeChild()
 {
-	TTigris * child = new TTigris(TigrisNames[ rand() % ( sizeof(TigrisNames)/sizeof(TigrisNames[0]) ) ]);
+	TTigris * child = new TTigris(Names[ rand() % ( sizeof(Names)/sizeof(Names[0]) ) ]);
 	return child;
 }
 

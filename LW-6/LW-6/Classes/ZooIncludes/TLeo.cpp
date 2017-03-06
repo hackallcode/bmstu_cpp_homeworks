@@ -1,16 +1,21 @@
 #include "TLeo.h"
 
+#define ADULT_AGE 5
+#define DEATH_AGE 25
+
+const std::string TLeo::Names[3] = { "Kristofer", "Frenk", "Debby" };
+
 TLeo::TLeo()
-	: TCarnivora()
+	: TLeo(Names[rand() % (sizeof(Names) / sizeof(Names[0]))])
 {}
 
 TLeo::TLeo(const std::string & name)
-	: TCarnivora(name, 5, 25)
+	: TCarnivora(name, ADULT_AGE, DEATH_AGE)
 {}
 
 TLeo * TLeo::MakeChild()
 {
-	TLeo * child = new TLeo(LeoNames[ rand() % ( sizeof(LeoNames)/sizeof(LeoNames[0]) ) ]);
+	TLeo * child = new TLeo(Names[rand() % (sizeof(Names) / sizeof(Names[0]))]);
 	return child;
 }
 

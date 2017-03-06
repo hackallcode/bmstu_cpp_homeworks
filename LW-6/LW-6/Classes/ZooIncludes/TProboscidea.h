@@ -8,9 +8,6 @@ class TProboscidea abstract
 public:
 	const static size_t ClassID = 2; // ID класса
 
-	// Деструктор
-	~TProboscidea() = default;
-
 	// Конструктор по умолчанию
 	TProboscidea();
 

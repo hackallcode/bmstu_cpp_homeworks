@@ -1,16 +1,21 @@
 #include "TGiraffa.h"
 
+#define ADULT_AGE 10
+#define DEATH_AGE 20
+
+const std::string TGiraffa::Names[3] = { "Tom", "Billy", "Mark" };
+
 TGiraffa::TGiraffa()
-	: TArtiodactyla()
+	: TGiraffa(Names[rand() % (sizeof(Names) / sizeof(Names[0]))])
 {}
 
 TGiraffa::TGiraffa(const std::string & name)
-	: TArtiodactyla(name, 10, 20)
+	: TArtiodactyla(name, ADULT_AGE, DEATH_AGE)
 {}
 
 TGiraffa * TGiraffa::MakeChild()
 {
-	TGiraffa * child = new TGiraffa(GiraffaNames[ rand() % ( sizeof(GiraffaNames)/sizeof(GiraffaNames[0]) ) ]);
+	TGiraffa * child = new TGiraffa(Names[rand() % (sizeof(Names) / sizeof(Names[0]))]);
 	return child;
 }
 

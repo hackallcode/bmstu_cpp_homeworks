@@ -1,16 +1,21 @@
 #include "TElephas.h"
 
+#define ADULT_AGE 60
+#define DEATH_AGE 80
+
+const std::string TElephas::Names[3] = { "Kate", "Mary", "Anna" };
+
 TElephas::TElephas()
-	: TProboscidea()
+	: TElephas(Names[rand() % (sizeof(Names) / sizeof(Names[0]))])
 {}
 
 TElephas::TElephas(const std::string & name)
-	: TProboscidea(name, 70, 80)
+	: TProboscidea(name, ADULT_AGE, DEATH_AGE)
 {}
 
 TElephas * TElephas::MakeChild()
 {
-	TElephas * child = new TElephas(ElephasNames[ rand() % ( sizeof(ElephasNames)/sizeof(ElephasNames[0]) ) ]);
+	TElephas * child = new TElephas();
 	return child;
 }
 

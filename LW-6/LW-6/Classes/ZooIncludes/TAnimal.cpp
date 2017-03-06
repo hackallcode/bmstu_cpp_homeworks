@@ -51,6 +51,7 @@ size_t TAnimal::GetChildrenCount() const
 
 bool TAnimal::ChildPossibility() const
 {
+	// Если взрослый и ещё не старый
 	if (IsAlive && AdultAge <= Age && Age <= DeathAge)
 		return true;
 	else
@@ -62,25 +63,29 @@ void TAnimal::AddChildrenCount(size_t childrenCount)
 	ChildrenCount += childrenCount;
 }
 
-void TAnimal::AddDays(size_t daysCount)
+void TAnimal::IncDays()
 {
+	// Если жив, то прибавляем возраст, иначе возраст трупа
 	if (IsAlive) {
-		Age += daysCount;
+		Age++;
 		if (Age >= DeathAge * 2 || Age >= DeathAge && rand() % (int(DeathAge * 2) - Age) == 0) {
 			IsAlive = false;
 		}
 	}
 	else {
-		CorpseAge += daysCount;
+		CorpseAge++;
 	}
 }
 
 void TAnimal::Live(std::ostream & stream, float time)
 {
-	stream << ID << ". " << GetName() << " (" << GetAge() << " days old): ";
+	// Живет или мертв
 	if (IsAlive)
-		stream << "Living";
-	else
-		stream << "Died";
+		stream << ID << ". " << GetName() << " (" << GetAge() << " days old): " << "Living";
+	else {
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY | FOREGROUND_RED);
+		stream << ID << ". " << GetName() << " (" << GetAge() << " days old): " << "Died";
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+	}
 	stream << std::endl;
 }
