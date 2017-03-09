@@ -30,16 +30,51 @@ int intFromString(const char * data)
 		else
 			len++;
 	}
-	
+
 	// 2147483647 - максимум состоит из 10 цифр
 	if (len > 10) throw TooBigNumberException();
 
-	__int64 resCopy = 0;
+	/******************************************** РАБОТАЮЩИЙ БЫДЛОКОД ********************************************
+	if (data[shift] > '2') 
+		throw TooBigNumberException();
+	else if (data[shift] == '2')
+		if (data[shift + 1] > '1') 
+			throw TooBigNumberException();
+		else if (data[shift + 1] == '1')
+			if (data[shift + 2] > '4') 
+				throw TooBigNumberException();
+			else if (data[shift + 2] == '4')
+				if (data[shift + 3] > '7') 
+					throw TooBigNumberException();
+				else if (data[shift + 3] == '7')
+					if (data[shift + 4] > '4') 
+						throw TooBigNumberException();
+					else if (data[shift + 4] == '4')
+						if (data[shift + 5] > '8') 
+							throw TooBigNumberException();
+						else if (data[shift + 5] == '8')
+							if (data[shift + 6] > '3') 
+								throw TooBigNumberException();
+							else if (data[shift + 6] == '3')
+								if (data[shift + 7] > '6') 
+									throw TooBigNumberException();
+								else if (data[shift + 7] == '6')
+									if (data[shift + 8] > '4') 
+										throw TooBigNumberException();
+									else if (data[shift + 8] == '4')
+										if (data[shift + 9] > '7' && !isMinus || data[shift + 9] > '8' && isMinus) 
+											throw TooBigNumberException();
+	/************************************************************************************************************/
+
 	int result = 0;
-	for (size_t i = 0; i < len; i++) {	
-		resCopy += pow(10, len - i - 1) * numeralFromChar(data[shift + i]) * (isMinus ? -1 : 1);
-		result = resCopy;
-		if (resCopy != result) throw TooBigNumberException();
+	for (size_t i = 0; i < len; i++) {
+		if (i == 0 && len == 10 && numeralFromChar(data[shift + i]) > 2) throw TooBigNumberException();
+		// Без доп переменной неправильно считает (0 - 9 = -8)
+		int plus = pow(10, len - i - 1) * numeralFromChar(data[shift + i]) * (isMinus ? -1 : 1);
+		result += plus;
+		if (result < 0 && !isMinus || result >= 0 && isMinus) {
+			throw TooBigNumberException();
+		}
 	}
 	return result;
 }
@@ -75,7 +110,7 @@ float floatFromString(const char * data)
 		else
 			int_len++;
 	}
-	
+
 	float result = 0;
 	for (size_t i = 0; i < int_len; i++) {
 		result += pow(10, int_len - i - 1) * numeralFromChar(data[shift + i]) * (isMinus ? -1 : 1);
@@ -114,7 +149,7 @@ int main() {
 
 	intFromString("-00002147483648");
 	intFromString("00002147483647");
-	
+
 	try {
 		intFromString("-2147483649");
 	}
