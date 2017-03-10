@@ -1,4 +1,4 @@
-#include <iostream>
+п»ї#include <iostream>
 #include <vector>
 #include <exception>
 #include "CastException.h"
@@ -22,7 +22,7 @@ int intFromString(const char * data)
 	if (data[0] == '+')
 		shift = 1;
 
-	// Подсчет длины без знака и нулей перед числом
+	// РџРѕРґСЃС‡РµС‚ РґР»РёРЅС‹ Р±РµР· Р·РЅР°РєР° Рё РЅСѓР»РµР№ РїРµСЂРµРґ С‡РёСЃР»РѕРј
 	size_t len = 0;
 	while (data[len + shift]) {
 		if (len == 0 && data[len + shift] == '0')
@@ -31,10 +31,10 @@ int intFromString(const char * data)
 			len++;
 	}
 
-	// 2147483647 - максимум состоит из 10 цифр
+	// 2147483647 - РјР°РєСЃРёРјСѓРј СЃРѕСЃС‚РѕРёС‚ РёР· 10 С†РёС„СЂ
 	if (len > 10) throw TooBigNumberException();
 
-	/******************************************** РАБОТАЮЩИЙ БЫДЛОКОД ********************************************
+	/******************************************** Р РђР‘РћРўРђР®Р©РР™ Р‘Р«Р”Р›РћРљРћР” ********************************************
 	if (len == 10)
 		if (data[shift] > '2')
 			throw TooBigNumberException();
@@ -70,7 +70,7 @@ int intFromString(const char * data)
 	int result = 0;
 	for (size_t i = 0; i < len; i++) {
 		if (i == 0 && len == 10 && numeralFromChar(data[shift + i]) > 2) throw TooBigNumberException();
-		// Без доп переменной неправильно считает (0 - 9 = -8)
+		// Р‘РµР· РґРѕРї РїРµСЂРµРјРµРЅРЅРѕР№ РЅРµРїСЂР°РІРёР»СЊРЅРѕ СЃС‡РёС‚Р°РµС‚ (0 - 9 = -8)
 		int plus = pow(10, len - i - 1) * numeralFromChar(data[shift + i]) * (isMinus ? -1 : 1);
 		result += plus;
 		if (result < 0 && !isMinus || result >= 0 && isMinus) {
@@ -101,7 +101,7 @@ float floatFromString(const char * data)
 	if (data[0] == '+')
 		shift = 1;
 
-	// Подсчет длины без знака и нулей перед числом
+	// РџРѕРґСЃС‡РµС‚ РґР»РёРЅС‹ Р±РµР· Р·РЅР°РєР° Рё РЅСѓР»РµР№ РїРµСЂРµРґ С‡РёСЃР»РѕРј
 	size_t int_len = 0;
 	while (data[int_len + shift]) {
 		if (data[int_len + shift] == ',' || data[int_len + shift] == '.')

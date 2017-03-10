@@ -1,4 +1,4 @@
-#ifndef __TSTRING_INCLUDE__
+﻿#ifndef __TSTRING_INCLUDE__
 #define __TSTRING_INCLUDE__
 
 #include <iostream>

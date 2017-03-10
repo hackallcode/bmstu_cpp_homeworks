@@ -1,4 +1,4 @@
-#include "TTriad.h"
+﻿#include "TTriad.h"
 
 TTriad::TTriad() : First(0), Second(0), Third(0) 
 {}
