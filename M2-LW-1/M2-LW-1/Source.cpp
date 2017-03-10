@@ -35,35 +35,36 @@ int intFromString(const char * data)
 	if (len > 10) throw TooBigNumberException();
 
 	/******************************************** ÐÀÁÎÒÀÞÙÈÉ ÁÛÄËÎÊÎÄ ********************************************
-	if (data[shift] > '2') 
-		throw TooBigNumberException();
-	else if (data[shift] == '2')
-		if (data[shift + 1] > '1') 
+	if (len == 10)
+		if (data[shift] > '2')
 			throw TooBigNumberException();
-		else if (data[shift + 1] == '1')
-			if (data[shift + 2] > '4') 
+		else if (data[shift] == '2')
+			if (data[shift + 1] > '1')
 				throw TooBigNumberException();
-			else if (data[shift + 2] == '4')
-				if (data[shift + 3] > '7') 
+			else if (data[shift + 1] == '1')
+				if (data[shift + 2] > '4')
 					throw TooBigNumberException();
-				else if (data[shift + 3] == '7')
-					if (data[shift + 4] > '4') 
+				else if (data[shift + 2] == '4')
+					if (data[shift + 3] > '7')
 						throw TooBigNumberException();
-					else if (data[shift + 4] == '4')
-						if (data[shift + 5] > '8') 
+					else if (data[shift + 3] == '7')
+						if (data[shift + 4] > '4')
 							throw TooBigNumberException();
-						else if (data[shift + 5] == '8')
-							if (data[shift + 6] > '3') 
+						else if (data[shift + 4] == '4')
+							if (data[shift + 5] > '8')
 								throw TooBigNumberException();
-							else if (data[shift + 6] == '3')
-								if (data[shift + 7] > '6') 
+							else if (data[shift + 5] == '8')
+								if (data[shift + 6] > '3')
 									throw TooBigNumberException();
-								else if (data[shift + 7] == '6')
-									if (data[shift + 8] > '4') 
+								else if (data[shift + 6] == '3')
+									if (data[shift + 7] > '6')
 										throw TooBigNumberException();
-									else if (data[shift + 8] == '4')
-										if (data[shift + 9] > '7' && !isMinus || data[shift + 9] > '8' && isMinus) 
+									else if (data[shift + 7] == '6')
+										if (data[shift + 8] > '4')
 											throw TooBigNumberException();
+										else if (data[shift + 8] == '4')
+											if (data[shift + 9] > '7' && !isMinus || data[shift + 9] > '8' && isMinus)
+												throw TooBigNumberException();
 	/************************************************************************************************************/
 
 	int result = 0;
@@ -122,31 +123,7 @@ float floatFromString(const char * data)
 }
 
 int main() {
-	try {
-		unsigned long long s = ULLONG_MAX;
-		long long * a = new  long long[s];
-	}
-	catch (std::bad_alloc & e) {
-		std::cout << "Bad alloc!" << std::endl;
-	}
-
-	try {
-		std::string str;
-		str = std::string(str.max_size() + 1, 'a');
-	}
-	catch (std::length_error) {
-		std::cout << "Length error!" << std::endl;
-	}
-
-	try {
-		std::vector<int> vec;
-		vec.reserve(1);
-		vec.at(3);
-	}
-	catch (std::out_of_range) {
-		std::cout << "Out of range!" << std::endl;
-	}
-
+	
 	intFromString("-00002147483648");
 	intFromString("00002147483647");
 
