@@ -67,6 +67,20 @@ private:
 		}
 	}
 
+	void FindCycle(TNode*& curNode, TNode*& prevNode, const value_type & value) {
+		curNode = Root;
+		prevNode = curNode;
+		while (curNode) {
+			prevNode = curNode;
+			if (curNode->Data == value)
+				return;
+			if (curNode->Data < value)
+				curNode = curNode->Right;
+			else
+				curNode = curNode->Left;
+		}
+	}
+
 public:
 	TBinaryTree()
 	{ }
@@ -90,47 +104,34 @@ public:
 			return true;
 		}
 
-		TNode * curNode = Root;
-		TNode * prevNode = curNode;
-		do
-		{
-			prevNode = curNode;
-			if (curNode->Data == data)
-				return false;
-			if (curNode->Data < data)
-				curNode = curNode->Right;
-			else
-				curNode = curNode->Left;
-		} while (curNode);
+		TNode * curNode;
+		TNode * prevNode;
+		FindCycle(curNode, prevNode, data);
 
-		TNode * newNode = new TNode(data);
-		(prevNode->Data < data) ? prevNode->Right = newNode : prevNode->Left = newNode;
-		return true;
+		if (curNode == nullptr) {
+			TNode * newNode = new TNode(data);
+			(prevNode->Data < data) ? prevNode->Right = newNode : prevNode->Left = newNode;
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
-	// Требуется реализовать функцию поиска элемента
-	// Если узел содержит искомый элемент, то функция возвращает указатель на этот узел
-	// Если элемента в дереве не найдено, то функция генерирует исключение TNotFoundException
 	TNode * Find(const value_type & value)
 	{
 		if (Root == nullptr) {
 			throw TNotFoundException("element not found");
 		}
 
-		TNode * curNode = Root;
-		TNode * prevNode = curNode;
-		do
-		{
-			prevNode = curNode;
-			if (curNode->Data == value)
-				return curNode;
-			if (curNode->Data < value)
-				curNode = curNode->Right;
-			else
-				curNode = curNode->Left;
-		} while (curNode);
+		TNode * curNode;
+		TNode * prevNode;
+		FindCycle(curNode, prevNode, value);
 
-		throw TNotFoundException("element not found");
+		if (curNode != nullptr)
+			return curNode;
+		else
+			throw TNotFoundException("element not found");
 	}
 
 	friend std::ostream& operator << (std::ostream & out, const TBinaryTree& tree);
