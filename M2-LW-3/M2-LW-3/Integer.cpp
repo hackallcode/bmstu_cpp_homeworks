@@ -198,12 +198,7 @@ Integer Integer::operator >> (int shift)
 
 Integer::operator bool()
 {
-    if (data_ == 0) {
-        return false;
-    }
-    else {
-        return true;
-    }
+    return data_ != 0;
 }
 
 Integer::operator int()
