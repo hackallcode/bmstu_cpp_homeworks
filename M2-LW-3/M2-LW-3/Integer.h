@@ -107,6 +107,15 @@ public:
     // Битовый сдвиг вправо
     Integer operator >> (int shift);
 
+    // Приведение к bool
+    explicit operator bool();
+
+    // Приведение к int
+    explicit operator int();
+
+    // Приведение к float
+    explicit operator float();
+
     // Прибавление
     friend Integer operator+(Integer const& left, Integer const& right);
 

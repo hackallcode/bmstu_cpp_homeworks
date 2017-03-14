@@ -47,6 +47,8 @@ Integer& Integer::operator-=(Integer const& integer)
 
 Integer& Integer::operator*=(Integer const& integer)
 {
+    bool isSameSign = (data_ >= 0 && integer.data_ >= 0 || data_ < 0 && integer.data_ < 0);
+
     unsigned short a_0 = data_; // Младшие 16 бит первого числа
     unsigned short a_1 = data_ >> 16; // Старшие 16 бит первого числа
     unsigned short b_0 = integer.data_; // Младшие 16 бит второго числа
@@ -60,13 +62,13 @@ Integer& Integer::operator*=(Integer const& integer)
     unsigned int result_4 = a_0 * b_0;
 
     // Если выполняется одно из условий, то число точно уйдет за пределы 32 бит
-    if (result_1 > 0 || result_2 + result_3 > USHRT_MAX) {
+    if (result_1 > 0 || result_2 + result_3 > (isSameSign ? SHRT_MAX : USHRT_MAX)) {
         throw IntegerOverflowException();
     }
 
     unsigned int result = (result_2 + result_3) << 16;
     // Если добавить int, то можно уйти за 32 бита
-    if (UINT_MAX - result_4 < result) {
+    if ((isSameSign ? INT_MAX : UINT_MAX) - result_4 < result) {
         throw IntegerOverflowException();
     }
     data_ = result + result_4;
@@ -192,6 +194,26 @@ Integer Integer::operator >> (int shift)
     Integer result(*this);
     result >>= shift;
     return result;
+}
+
+Integer::operator bool()
+{
+    if (data_ == 0) {
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+
+Integer::operator int()
+{
+    return data_;
+}
+
+Integer::operator float()
+{
+    return (float) data_;
 }
 
 Integer operator+(Integer const& left, Integer const& right)

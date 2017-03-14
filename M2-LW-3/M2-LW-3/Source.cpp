@@ -62,6 +62,24 @@ int main() {
         std::cout << e.what() << std::endl;
     }
 
+    int a = (int) i;
+
+    i = 0;
+    if (i) {
+        std::cout << "true" << std::endl;
+    }   
+    else {
+        std::cout << "false" << std::endl;
+    }
+
+    i = 1;
+    if (i) {
+        std::cout << "true" << std::endl;
+    }
+    else {
+        std::cout << "false" << std::endl;
+    }
+
     system("pause");
     return 0;
 }
