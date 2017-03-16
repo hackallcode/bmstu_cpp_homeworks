@@ -81,24 +81,15 @@ public:
 
     void reserve(size_type _count)
     {
-        if (_count == internalCapacity_) {
+        if (_count <= internalCapacity_) {
             return;
         }
-        if (_count == 0) {
-            delete[] ptr_;
-            ptr_ = nullptr;
-            size_ = 0;
-            internalCapacity_ = 0;
-        }
 
-        value_type * newPtr = new value_type[sizeof(value_type) * _count];
-        memcpy(newPtr, ptr_, sizeof(value_type) * (_count > internalCapacity_ ? internalCapacity_ : _count));
+        internalCapacity_ = _count;
+        value_type * newPtr = new value_type[sizeof(value_type) * internalCapacity_];
+        memcpy(newPtr, ptr_, sizeof(value_type) * size_);
         delete[] ptr_;
         ptr_ = newPtr;
-        if (_count < size_) {
-            size_ = _count;
-        }
-        internalCapacity_ = _count;
     }
 
     Vector(const Vector& _rhs)
@@ -119,9 +110,7 @@ public:
             ptr_ = new value_type[sizeof(value_type) * internalCapacity_];
         }
         size_ = _rhs.size_;
-        for (size_t i = 0; i < internalCapacity_; i++) {
-            ptr_[i] = _rhs.ptr_[i];
-        }
+        memcpy(ptr_, _rhs.ptr_, sizeof(value_type) * internalCapacity_);
         return *this;
     }
 
@@ -206,9 +195,9 @@ public:
 
     void swap(Vector& _other) throw()
     {
-        Vector temp = *this;
-        *this = _other;
-        _other = temp;
+        std::swap(ptr_, _other.ptr_);
+        std::swap(size_, _other.size_);
+        std::swap(internalCapacity_, _other.internalCapacity_);
     }
 
     void resize(size_type _size, value_type _value = value_type())
