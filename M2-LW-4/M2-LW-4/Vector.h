@@ -97,13 +97,14 @@ public:
         , size_(_rhs.size_)
     {
         ptr_ = new value_type[sizeof(value_type) * internalCapacity_];
-        for (size_t i = 0; i < internalCapacity_; i++) {
-            ptr_[i] = _rhs.ptr_[i];
-        }
+        memcpy(ptr_, _rhs.ptr_, sizeof(value_type) * internalCapacity_);
     }
 
     Vector& operator=(const Vector& _rhs)
     {
+        if (_rhs.ptr_ == this->ptr_) {
+            return *this;
+        }
         if (internalCapacity_ != _rhs.internalCapacity_) {
             delete[] ptr_;
             internalCapacity_ = _rhs.internalCapacity_;
