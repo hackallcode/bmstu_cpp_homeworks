@@ -24,11 +24,6 @@ public:
         : Descriptor(nullptr)
     { }
 
-    ~NotCopyable() 
-    {
-        Close();
-    }
-
     NotCopyable(const NotCopyable&) = delete;
     NotCopyable& operator = (const NotCopyable&) = delete;
 
@@ -59,6 +54,19 @@ public:
     {
         return Descriptor;
     }
+};
+
+class NotCopyableRaii {
+private:
+    NotCopyable * ptr_;
+public:
+    ~NotCopyableRaii()
+    {
+        ptr_->Close();
+    }
+    NotCopyableRaii(NotCopyable * ptr)
+        :ptr_(ptr)
+    {}
 };
 
 #endif // __NOTCOPYABLE_INCLUDED__

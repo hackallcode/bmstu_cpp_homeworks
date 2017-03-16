@@ -6,6 +6,8 @@ int main()
     try
     {
         NotCopyable obj;
+        NotCopyableRaii objRaii(&obj);
+
         obj.OpenToWrite("someFile.txt");
 
         obj.OpenToRead("someOtherFile.txt");
