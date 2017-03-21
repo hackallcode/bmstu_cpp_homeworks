@@ -47,7 +47,7 @@ public:
         : size_(0)
         , internalCapacity_(_capacity)
     {
-        ptr_ = new value_type[sizeof(value_type) * internalCapacity_];
+        ptr_ = new value_type[internalCapacity_];
     }
 
     ~Vector()
@@ -87,7 +87,7 @@ public:
         }
 
         internalCapacity_ = _count;
-        value_type * newPtr = new value_type[sizeof(value_type) * internalCapacity_];
+        value_type * newPtr = new value_type[internalCapacity_];
         memcpy(newPtr, ptr_, sizeof(value_type) * size_);
         delete[] ptr_;
         ptr_ = newPtr;
@@ -97,7 +97,7 @@ public:
         : internalCapacity_(_rhs.internalCapacity_)
         , size_(_rhs.size_)
     {
-        ptr_ = new value_type[sizeof(value_type) * internalCapacity_];
+        ptr_ = new value_type[internalCapacity_];
         memcpy(ptr_, _rhs.ptr_, sizeof(value_type) * internalCapacity_);
     }
 
@@ -109,7 +109,7 @@ public:
         if (internalCapacity_ != _rhs.internalCapacity_) {
             delete[] ptr_;
             internalCapacity_ = _rhs.internalCapacity_;
-            ptr_ = new value_type[sizeof(value_type) * internalCapacity_];
+            ptr_ = new value_type[internalCapacity_];
         }
         size_ = _rhs.size_;
         memcpy(ptr_, _rhs.ptr_, sizeof(value_type) * internalCapacity_);
