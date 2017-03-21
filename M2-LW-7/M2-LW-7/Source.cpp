@@ -55,7 +55,7 @@ int main()
         {
             Vector<int>::value_type item = vec2.at(1000000);
         }
-        catch (const OutOfRangeException & e)
+        catch (const std::exception & e)
         {
             std::cout << e.what() << std::endl;
         }

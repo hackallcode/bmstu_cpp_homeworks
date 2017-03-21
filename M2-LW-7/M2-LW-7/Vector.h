@@ -5,7 +5,7 @@
 #include <exception>
 
 class OutOfRangeException
-    : std::exception
+    : public std::exception
 {
 public:
     OutOfRangeException() throw()
