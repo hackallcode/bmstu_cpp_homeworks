@@ -32,20 +32,25 @@ public:
     using iterator = value_type*;
     using const_iterator = value_type* const;
 
+private:
     // Data
     value_type data_[N];
 
+public:
+    // Constructor
     Array()
     {}
 
+    // User constructor
     Array(T data[N])
     {
         memcpy(data_, data, N * sizeof(value_type));
     }
 
-    Array(std::initializer_list<T>& const list)
+    // User constructor
+    Array(std::initializer_list<T> list)
     {
-        memcpy(data_, list.begin(), (N < list.size() ? N : list.size()) * sizeof(value_type));
+        std::copy(list.begin(), list.end(), data_);
     }
 
     // Access to items
@@ -164,13 +169,23 @@ public:
     {
         std::swap(data_, other.data_);
     }
+
+    // Friend functions
+    template<class T, std::size_t N>
+    friend bool operator==(Array<T, N>& lhs, Array<T, N>& rhs);
+
+    template<class T, std::size_t N>
+    friend bool operator<(Array<T, N>& lhs, Array<T, N>& rhs);
+
+    template<class T, std::size_t N>
+    friend bool operator<=(Array<T, N>& lhs, Array<T, N>& rhs);
 };
 
 template<class T, std::size_t N>
 bool operator==(Array<T, N>& lhs, Array<T, N>& rhs)
 {
     for (size_t i = 0; i < N; i++) {
-        if (lhs[i] != rhs[i]) {
+        if (lhs.data_[i] != rhs.data_[i]) {
             return false;
         }
     }
@@ -178,7 +193,7 @@ bool operator==(Array<T, N>& lhs, Array<T, N>& rhs)
 }
 
 template<class T, std::size_t N>
-bool operator!=(Array<T, N>& lhs, Array<T, N>& rhs)
+inline bool operator!=(Array<T, N>& lhs, Array<T, N>& rhs)
 {
     return !(lhs == rhs)
 }
@@ -187,7 +202,7 @@ template<class T, std::size_t N>
 bool operator<(Array<T, N>& lhs, Array<T, N>& rhs)
 {
     for (size_t i = 0; i < N; i++) {
-        if (lhs[i] >= rhs[i]) {
+        if (lhs.data_[i] >= rhs.data_[i]) {
             return false;
         }
     }
@@ -198,7 +213,7 @@ template<class T, std::size_t N>
 bool operator<=(Array<T, N>& lhs, Array<T, N>& rhs)
 {
     for (size_t i = 0; i < N; i++) {
-        if (lhs[i] > rhs[i]) {
+        if (lhs.data_[i] > rhs.data_[i]) {
             return false;
         }
     }
@@ -206,13 +221,13 @@ bool operator<=(Array<T, N>& lhs, Array<T, N>& rhs)
 }
 
 template<class T, std::size_t N>
-bool operator>(Array<T, N>& lhs, Array<T, N>& rhs)
+inline bool operator>(Array<T, N>& lhs, Array<T, N>& rhs)
 {
     return rhs < lhs;
 }
 
 template<class T, std::size_t N>
-bool operator>=(Array<T, N>& lhs, Array<T, N>& rhs)
+inline bool operator>=(Array<T, N>& lhs, Array<T, N>& rhs)
 {
     return rhs <= lhs;
 }
