@@ -1,6 +1,7 @@
 #pragma once
 
 #include <exception>
+#include <initializer_list>
 
 class OutOfRangeException
     : public std::exception
@@ -33,6 +34,19 @@ public:
 
     // Data
     value_type data_[N];
+
+    Array()
+    {}
+
+    Array(T data[N])
+    {
+        memcpy(data_, data, N * sizeof(value_type));
+    }
+
+    Array(std::initializer_list<T>& const list)
+    {
+        memcpy(data_, list.begin(), (N < list.size() ? N : list.size()) * sizeof(value_type));
+    }
 
     // Access to items
     reference at(size_type index) 

@@ -1,10 +1,12 @@
 #include <iostream>
+#include <initializer_list>
 #include "Array.h"
 
 int main()
 {
     std::cout << "Array<int, 3> a { {1, 2, 3} };" << std::endl;
-    Array<int, 3> a { {1, 2, 3} };
+    int ia[3] = { 1, 2, 3 };
+    Array<int, 3> a(ia);
     
     std::cout << "a.at(0): " << a.at(0) << std::endl;
     std::cout << "a[0]: " << a[0] << std::endl;
@@ -33,6 +35,10 @@ int main()
     catch (std::exception& e) {
         std::cout << e.what() << std::endl;
     }
+
+    std::initializer_list<double> dc = { 1.1, 2.2, 3.3 };
+    Array<double, 3> c(dc);
+    std::cout << "c[2]: " << c[2] << std::endl;
 
     system("pause");
     return 0;
