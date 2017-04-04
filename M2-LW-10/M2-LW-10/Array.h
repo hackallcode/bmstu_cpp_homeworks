@@ -44,7 +44,7 @@ public:
     // User constructor
     Array(T data[N])
     {
-        memcpy(data_, data, N * sizeof(value_type));
+        std::copy(data, data + N, data_);
     }
 
     // User constructor
@@ -169,23 +169,13 @@ public:
     {
         std::swap(data_, other.data_);
     }
-
-    // Friend functions
-    template<class T, std::size_t N>
-    friend bool operator==(Array<T, N>& lhs, Array<T, N>& rhs);
-
-    template<class T, std::size_t N>
-    friend bool operator<(Array<T, N>& lhs, Array<T, N>& rhs);
-
-    template<class T, std::size_t N>
-    friend bool operator<=(Array<T, N>& lhs, Array<T, N>& rhs);
 };
 
 template<class T, std::size_t N>
 bool operator==(Array<T, N>& lhs, Array<T, N>& rhs)
 {
     for (size_t i = 0; i < N; i++) {
-        if (lhs.data_[i] != rhs.data_[i]) {
+        if (lhs[i] != rhs[i]) {
             return false;
         }
     }
@@ -202,7 +192,7 @@ template<class T, std::size_t N>
 bool operator<(Array<T, N>& lhs, Array<T, N>& rhs)
 {
     for (size_t i = 0; i < N; i++) {
-        if (lhs.data_[i] >= rhs.data_[i]) {
+        if (lhs[i] >= rhs[i]) {
             return false;
         }
     }
@@ -213,7 +203,7 @@ template<class T, std::size_t N>
 bool operator<=(Array<T, N>& lhs, Array<T, N>& rhs)
 {
     for (size_t i = 0; i < N; i++) {
-        if (lhs.data_[i] > rhs.data_[i]) {
+        if (lhs[i] > rhs[i]) {
             return false;
         }
     }
