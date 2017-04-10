@@ -1,10 +1,8 @@
 #pragma once
 
 #include <vector> // for std::vector
-#include <list> // for std::list
-#include <vcruntime_exception.h> // for std::bad_array_new_length
+#include <vcruntime_exception.h> // for std::bad_alloc
 #include <utility> // for std::swap
-#include <xutility> // for std::copy
 #include <cmath> // for ceil()
 
 #define MIN_BUCKETS_COUNT 8
@@ -112,7 +110,7 @@ public:
             return bucketIndex_ > (buckets_.size() - 1);
         }
 
-    private:
+    protected:
         buckets_type & buckets_;
         int bucketIndex_;
         int valueIndex_;
@@ -184,6 +182,7 @@ public:
         : buckets_(buckets_type(bucket_count))
         , hasher_(hash)
         , keyEqual_(equal)
+        , maxLoadFactor_(1)
     {}
 
     // Copy constructor
@@ -191,6 +190,7 @@ public:
         : buckets_(buckets_type(other.buckets_))
         , hasher_(other.hasher_)
         , keyEqual_(other.keyEqual_)
+        , maxLoadFactor_(other.maxLoadFactor_)
     {}
 
     // Constructor from [first, last)
@@ -205,8 +205,9 @@ public:
         : buckets_(buckets_type(bucket_count))
         , hasher_(hash)
         , keyEqual_(equal)
+        , maxLoadFactor_(1)
     {
-        buckets_.insert(buckets_.end(), first, last);
+        Insert(first, last);
     }
 
     // Constructor from std::initializer_list
@@ -219,8 +220,9 @@ public:
         : buckets_(buckets_type(bucket_count))
         , hasher_(other.hasher_)
         , keyEqual_(other.keyEqual_)
+        , maxLoadFactor_(1)
     {
-        buckets_.insert(buckets.end(), initList);
+        Insert(initList);
     }
 
     // Destructor
@@ -236,6 +238,7 @@ public:
         buckets_ = other.buckets_;
         hasher_ = other.hasher_;
         keyEqual_ = other.keyEqual_;
+        maxLoadFactor_ = other.maxLoadFactor_;
     }
 
     /* ITERATORS */
@@ -277,7 +280,7 @@ public:
     // Is empty or no
     bool Empty() const
     {
-        return buckets_.empty();
+        return Size() == 0;
     }
 
     // Number of elements
@@ -304,6 +307,7 @@ public:
         for (bucket_type& bucket : buckets_) {
             bucket.clear();
         }
+        buckets_.resize(MIN_BUCKETS_COUNT);
     }
 
     // Insert an element
@@ -315,7 +319,7 @@ public:
         }
 
         if (float(Size() + 1) / (float)BucketCount() >= MaxLoadFactor()) {
-            Rehash(buckets_.size() * 8);
+            Rehash(buckets_.size() * MIN_BUCKETS_COUNT);
         }
         buckets_[Bucket(value)].push_back(value);
         return std::pair<iterator, bool>(iterator(buckets_, &(buckets_[Bucket(value)].back())), true);
@@ -448,17 +452,17 @@ public:
     // First iterator in bucket
     iterator Begin(size_type n)
     {
-        return iterator(buckets_, n);
+        return iterator(buckets_, n, false);
     }
 
     const_iterator Begin(size_type n) const
     {
-        return const_iterator(buckets_, n);
+        return const_iterator(buckets_, n, false);
     }
 
     const_iterator CBegin(size_type n) const
     {
-        return const_iterator(buckets_, n);
+        return const_iterator(buckets_, n, false);
     }
 
     // Iterator after last
@@ -520,18 +524,30 @@ public:
     {
         maxLoadFactor_ = ml;
         /* Rehash, if LoadFactor more than MaxLoadFactor
-        if (LoadFactor() > maxLoadFactor_) {
-            Rehash(buckets_.size() * 8 * ceil(LoadFactor() / maxLoadFactor_ / 8));
+        if (LoadFactor() > MaxLoadFactor()) {
+            Rehash(buckets_.size() * MIN_BUCKETS_COUNT * ceil(LoadFactor() / MaxLoadFactor() / MIN_BUCKETS_COUNT));
         } */
     }
 
     // Sets the number of buckets to count and rehashes the container
     void Rehash(size_type count)
     {
+        if (count < Size() / MaxLoadFactor()) { 
+            count = std::ceil(Size() / MaxLoadFactor());
+        };
+        size_type newCount = MIN_BUCKETS_COUNT;
+        while (newCount < count) {
+            newCount *= 2;
+        }
+
+        if (newCount == BucketCount()) {
+            return;
+        }
+
         buckets_type bucketsCopy(buckets_);
 
         buckets_.clear();
-        buckets_.resize(count);
+        buckets_.resize(newCount);
         for (iterator it(bucketsCopy); !it.IsEnd(); ++it) {
             Insert(*it);
         }
@@ -540,7 +556,7 @@ public:
     // Sets new capacity of the container
     void Reserve(size_type count)
     {
-        buckets_.reserve(count);
+        Rehash(std::ceil(count / MaxLoadFactor()));
     }
 
     /* OBSERVERS */
