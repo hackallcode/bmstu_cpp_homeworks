@@ -68,6 +68,7 @@ int main()
         std::cout << test_2.BucketSize(j) << " ";
     }
     std::cout << std::endl;
+    std::cout << *(test_2.Find(3)) << std::endl;
     std::cout << *(test_2.Begin()) << std::endl;
     std::cout << *(--test_2.End()) << std::endl;
     test_2.Erase(2);

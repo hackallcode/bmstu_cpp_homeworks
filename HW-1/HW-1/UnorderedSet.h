@@ -26,7 +26,7 @@ public:
 
     // Iterators
     class Iterator
-        : public std::iterator<std::random_access_iterator_tag, value_type>
+        : public std::iterator<std::bidirectional_iterator_tag, value_type>
     {
     public:
         Iterator() = default;
@@ -84,7 +84,7 @@ public:
 
         Iterator& operator--()
         {
-            if (!IsBegin()) {
+            if (!IsBeforeBegin()) {
                 if (valueIndex_ > 0) {
                     --valueIndex_;
                 }
@@ -102,12 +102,16 @@ public:
             return *this;
         }
 
-        bool IsBegin() {
+        bool IsBeforeBegin() {
             return bucketIndex_ < 0;
         }
 
         bool IsEnd() {
             return bucketIndex_ > (buckets_.size() - 1);
+        }
+
+        bool IsBucketBegin() {
+            return valueIndex_ == 0;
         }
 
     protected:
@@ -116,7 +120,7 @@ public:
         int valueIndex_;
         value_type * ptr_;
 
-        Iterator(buckets_type & buckets, bool isEnd = false)
+        Iterator(buckets_type & buckets, bool isEnd)
             : buckets_(buckets)
         {
             if (isEnd) {
@@ -135,7 +139,7 @@ public:
             ptr_ = nullptr;
         }
 
-        Iterator(buckets_type & buckets, int bucketIndex, bool isEnd = false)
+        Iterator(buckets_type & buckets, int bucketIndex, bool isEnd)
             : buckets_(buckets)
             , bucketIndex_(bucketIndex)
         {
@@ -246,17 +250,17 @@ public:
     // First iterator
     iterator Begin()
     {
-        return iterator(buckets_);
+        return iterator(buckets_, false);
     }
 
     const_iterator Begin() const
     {
-        return const_iterator(buckets_);
+        return const_iterator(buckets_, false);
     }
 
     const_iterator CBegin() const
     {
-        return const_iterator(buckets_);
+        return const_iterator(buckets_, false);
     }
 
     // Iterator after last
@@ -315,14 +319,14 @@ public:
     {
         iterator it = Find(value);
         if (!it.IsEnd()) {
-            return std::pair<iterator, bool>(it, false);
+            return std::make_pair(it, false);
         }
 
         if (float(Size() + 1) / (float)BucketCount() >= MaxLoadFactor()) {
             Rehash(buckets_.size() * MIN_BUCKETS_COUNT);
         }
         buckets_[Bucket(value)].push_back(value);
-        return std::pair<iterator, bool>(iterator(buckets_, &(buckets_[Bucket(value)].back())), true);
+        return std::make_pair(iterator(buckets_, &(buckets_[Bucket(value)].back())), true);
     }
 
     // Insert elements from [first, last)
@@ -406,20 +410,28 @@ public:
     // Element with this value
     iterator Find(const value_type& value)
     {
-        for (iterator it(buckets_); !it.IsEnd(); ++it) {
-            if (keyEqual_(*it, value)) {
-                return it;
-            }
+        iterator it = iterator(buckets_, Bucket(value), false);
+        if (it.ptr_ != nullptr) {
+            do {
+                if (keyEqual_(*it, value)) {
+                    return it;
+                }
+                ++it;
+            } while (!it.IsBucketBegin());
         }
         return iterator(buckets_, true);
     }
 
     const_iterator Find(const value_type& value) const
     {
-        for (const_iterator it(buckets_); !it.IsEnd(); ++it) {
-            if (keyEqual_(*it, value)) {
-                return it;
-            }
+        const_iterator it = const_iterator(buckets_, Bucket(value), false);
+        if (it.ptr_ != nullptr) {
+            do {
+                if (keyEqual_(*it, value)) {
+                    return it;
+                }
+                ++it;
+            } while (!it.IsBucketBegin());
         }
         return const_iterator(buckets_, true);
     }
@@ -427,24 +439,14 @@ public:
     // Range of element with this value
     std::pair<iterator, iterator> EqualRange(const value_type& value)
     {
-        for (iterator it(buckets_); !it.IsEnd(); ++it) {
-            if (keyEqual_(*it, value)) {
-                return std::pair<iterator, iterator>(it, it);
-            }
-        }
-        iterator it = iterator(buckets_, true);
-        return std::pair<iterator, iterator>(it, it);
+        iterator it = Find(value);
+        return std::make_pair(it, it);
     }
 
     std::pair<const_iterator, const_iterator> EqualRange(const value_type& value) const
     {
-        for (const_iterator it(buckets_); !it.IsEnd(); ++it) {
-            if (keyEqual_(*it, value)) {
-                return std::pair<const_iterator, const_iterator>(it, it);
-            }
-        }
-        const_iterator it = const_iterator(buckets_, true);
-        return std::pair<const_iterator, const_iterator>(it, it);
+        iterator it = Find(value);
+        return std::make_pair(it, it);
     }
 
     /* BUCKET INTERFACE */
@@ -532,7 +534,7 @@ public:
     // Sets the number of buckets to count and rehashes the container
     void Rehash(size_type count)
     {
-        if (count < Size() / MaxLoadFactor()) { 
+        if (count < Size() / MaxLoadFactor()) {
             count = std::ceil(Size() / MaxLoadFactor());
         };
         size_type newCount = MIN_BUCKETS_COUNT;
@@ -548,7 +550,7 @@ public:
 
         buckets_.clear();
         buckets_.resize(newCount);
-        for (iterator it(bucketsCopy); !it.IsEnd(); ++it) {
+        for (iterator it(bucketsCopy, false); !it.IsEnd(); ++it) {
             Insert(*it);
         }
     }
