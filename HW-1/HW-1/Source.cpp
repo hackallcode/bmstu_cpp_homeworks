@@ -8,8 +8,8 @@ void hasher() {
 
 int main() 
 {
-    /* std::unordered_set *
-    std::unordered_set<int> test;
+    /* std::unordered_set */
+    std_unordered_set<int> test;
     test.max_load_factor(2);
     std::cout << test.empty() << std::endl;
     for (int i = 0; i < 10; i++) {
@@ -34,7 +34,7 @@ int main()
     std::cout << *(--test.end()) << std::endl;
     test.erase(2);
     std::cout << test.size() << " " << test.bucket_count() << std::endl;
-    std::unordered_set<int> test_copy(test);
+    std_unordered_set<int> test_copy(test);
     std::cout << test.empty() << std::endl;
     test.clear();
     std::cout << test.empty() << std::endl;
@@ -47,6 +47,7 @@ int main()
     std::cout << test.size() << " " << test.bucket_count() << std::endl << std::endl;
     /**/
 
+    /*
     UnorderedSet<int> test_2;
     test_2.MaxLoadFactor(2);
     std::cout << test_2.Empty() << std::endl;
@@ -84,7 +85,8 @@ int main()
     std::cout << test_2.Size() << " " << test_2.BucketCount() << std::endl;
     test_2.Rehash(100);
     std::cout << test_2.Size() << " " << test_2.BucketCount() << std::endl << std::endl;
-
+    /**/
+    
     system("pause");
     return 0;
 }

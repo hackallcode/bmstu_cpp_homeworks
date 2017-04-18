@@ -618,3 +618,51 @@ void swap(UnorderedSet<Key, Hash, KeyEqual>& lhs, UnorderedSet<Key, Hash, KeyEqu
 {
     lhs.swap(rhs);
 }
+
+template< class Key,
+    class Hash = std::hash<Key>,
+    class KeyEqual = std::equal_to<Key>
+> class std_unordered_set
+    : public UnorderedSet<Key, Hash, KeyEqual>
+{
+public:
+    iterator begin() { return Begin(); }
+    const_iterator begin() const { return Begin(); }
+    const_iterator cbegin() const { return CBegin(); }
+    iterator end() { return End(); }
+    const_iterator end() const { return End(); }
+    const_iterator cend() const { return CEnd(); }
+    bool empty() const { return Empty(); }
+    size_type size() const { return Size(); }
+    size_type max_size() const { return MaxSize(); }
+    void clear() { Clear(); }
+    std::pair<iterator, bool> insert(const value_type& value) { return Insert(value); }
+    void insert(iterator first, iterator last) { Insert(first, last); }
+    void insert(std::initializer_list<value_type> initList) { Insert(initList); }
+    iterator erase(const_iterator position) { return Erase(position); }
+    iterator erase(const_iterator first, const_iterator last) { return Erase(first, last); }
+    size_type erase(const value_type& value) { return Erase(value); }
+    void swap(UnorderedSet& other) { Swap(other); }
+    size_type count(const value_type& value) const { return count(value); }
+    iterator find(const value_type& value) { return Find(value); }
+    const_iterator find(const value_type& value) const { return Find(value); }
+    std::pair<iterator, iterator> equal_range(const value_type& value) { return EqualRange(value); }
+    std::pair<const_iterator, const_iterator> equal_range(const value_type& value) const { return EqualRange(value); }
+    iterator begin(size_type n) { return Begin(n); }
+    const_iterator begin(size_type n) const { return Begin(n); }
+    const_iterator cbegin(size_type n) const { return CBegin(n); }
+    iterator end(size_type n) { return End(n); }
+    const_iterator end(size_type n) const { return End(n); }
+    const_iterator cend(size_type n) const { return CEnd(n); }
+    size_type bucket_count() const { return BucketCount(); }
+    size_type max_bucket_count() const { return MaxBucketCount(); }
+    size_type bucket_size(size_type n) const { return BucketSize(n); }
+    size_type bucket(const value_type& value) const { return Bucket(value); }
+    float load_factor() const { return LoadFactor(); }
+    float max_load_factor() const { return MaxLoadFactor(); }
+    void max_load_factor(float ml) { MaxLoadFactor(ml); }
+    void rehash(size_type count) { Rehash(count); }
+    void reserve(size_type count) { Reserve(count); }
+    hasher hash_function() const { return HashFunction(); }
+    key_equal key_eq() const { return KeyEq(); }
+};
