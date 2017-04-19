@@ -21,7 +21,9 @@ int main()
         std::cout << std::endl;
     }
     std::cout << *(test.begin(5)) << std::endl;
-    std::cout << *(--test.end(6)) << std::endl; 
+    auto it = test.end(6);
+    it--;
+    std::cout << *(it) << std::endl;
     test.max_load_factor(1);
     test.insert(3);
     test.insert(11);

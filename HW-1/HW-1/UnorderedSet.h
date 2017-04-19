@@ -82,6 +82,12 @@ public:
             return *this;
         }
 
+        Iterator operator++(int) {
+            Iterator result = *this;
+            ++(*this);
+            return result;
+        }
+
         Iterator& operator--()
         {
             if (!IsBeforeBegin()) {
@@ -100,6 +106,12 @@ public:
                 ptr_ = (bucketIndex_ > -1) ? &buckets_[bucketIndex_][valueIndex_] : nullptr;
             }
             return *this;
+        }
+
+        Iterator operator--(int) {
+            Iterator result = *this;
+            --(*this);
+            return result;
         }
 
         bool IsBeforeBegin() {
