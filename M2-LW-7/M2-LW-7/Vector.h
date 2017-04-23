@@ -1,6 +1,8 @@
 #ifndef __TVECTOR_INCLUDED__
 #define __TVECTOR_INCLUDED__
 
+#pragma warning(disable:4996)
+
 #include <memory>
 #include <exception>
 
@@ -88,7 +90,7 @@ public:
 
         internalCapacity_ = _count;
         value_type * newPtr = new value_type[internalCapacity_];
-        memcpy(newPtr, ptr_, sizeof(value_type) * size_);
+        std::copy(ptr_, ptr_ + size_, newPtr);
         delete[] ptr_;
         ptr_ = newPtr;
     }
@@ -98,7 +100,7 @@ public:
         , size_(_rhs.size_)
     {
         ptr_ = new value_type[internalCapacity_];
-        memcpy(ptr_, _rhs.ptr_, sizeof(value_type) * internalCapacity_);
+        std::copy(_rhs.ptr_, _rhs.ptr_ + size_, ptr_);
     }
 
     Vector& operator=(const Vector& _rhs)
@@ -112,7 +114,7 @@ public:
             ptr_ = new value_type[internalCapacity_];
         }
         size_ = _rhs.size_;
-        memcpy(ptr_, _rhs.ptr_, sizeof(value_type) * internalCapacity_);
+        std::copy(_rhs.ptr_, _rhs.ptr_ + internalCapacity_, ptr_);
         return *this;
     }
 
