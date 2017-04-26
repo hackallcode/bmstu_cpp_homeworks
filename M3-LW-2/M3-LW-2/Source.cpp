@@ -8,10 +8,10 @@ void qsort(It beg, It end, Cmp cmp)
     It middle = beg + (end - beg) / 2;
     while (left <= right)
     {
-        while (cmp(*left, *middle) < 0) {
+        while (cmp(*left, *middle)) {
             ++left;
         }
-        while (cmp(*right, *middle) > 0) {
+        while (cmp(*middle, *right)) {
             --right;
         }
         if (left <= right) {
@@ -31,7 +31,7 @@ void qsort(It beg, It end, Cmp cmp)
 template<class T>
 void print(std::vector<T> vec)
 {
-    for (T& el : vec) {
+    for (T const& el : vec) {
         std::cout << el << " ";
     }
     std::cout << std::endl;
@@ -47,28 +47,25 @@ void print<std::string>(std::vector<std::string> vec)
 }
 
 template<class T>
-int Compare(T left, T right)
-{
-    if (left < right) {
-        return -1;
-    }
-    else if (left > right) {
-        return 1;
-    }
-    else {
-        return 0;
-    }
+bool compare(T a, T b) {
+    return a < b;
 }
 
 int main() {
     std::vector<std::string> vec{ "5", "3", "4", "1", "2" };
     print(vec);
-    qsort(vec.begin(), --vec.end(), Compare<std::string>);
+    qsort(vec.begin(), --vec.end(), compare<std::string>);
     print(vec);
 
     std::vector<int> vec2{ 5, 3, 4, 1, 2 };
     print(vec2);
-    qsort(vec2.begin(), --vec2.end(), Compare<int>);
+    qsort(vec2.begin(), --vec2.end(), compare<int>);
     print(vec2);
+
+    std::vector<bool> vec3{ 1, 0, 0, 1, 1, 0, 1 };
+    print(vec3);
+    qsort(vec3.begin(), --vec3.end(), compare<bool>);
+    print(vec3);
+
     system("pause");
 }
