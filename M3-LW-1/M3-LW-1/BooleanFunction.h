@@ -136,7 +136,7 @@ public:
     BooleanFunction operator()(const std::initializer_list<BooleanFunction> fs) const;
 
     bool is_monotone() const;
-    bool is_symmetric() const;
+    bool is_symmetric() const; /* БОНУС */
     bool is_self_dual() const;
     bool is_linear() const;
     bool is_T1() const;
@@ -149,10 +149,11 @@ public:
     // Возвращает АНФ функции
     std::vector<value_type> anf() const;
 
+    // Удаляет фиктивные переменные
+    void ReduceFunc(); /* БОНУС */
+
 private:
     std::vector<value_type> func_;
-
-    static std::vector<value_type> ReduceFunc_(std::vector<value_type> const& func);
 };
 
 // пусть BooleanFunction представляет из себя функцию "01110000"

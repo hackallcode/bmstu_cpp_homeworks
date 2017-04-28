@@ -533,12 +533,10 @@ void test_combo()
     assert(!coef[2]);
     assert(coef[4 + 1]); // x0y
     assert(coef[4 + 2]); // x1y
-    /*/ Единственный неработающий тест
     assert(coef[16 + 8 + 1]);  // z0z1x0
     assert(coef[16 + 8 + 2]); // z0z1x0
     assert(coef[16 + 8 + 4]);  // z0z1y
-    assert(!coef[63]);
-    /**/
+    assert(!coef[31]);
 }
 
 void test_combo2()
@@ -559,6 +557,15 @@ void test_combo2()
 
     BooleanFunction test(c.anf());
     assert(test.weight() == 0);
+}
+
+void test_bonus()
+{
+    BooleanFunction x = BooleanFunction::var(2, 5);
+    assert(get_polynom(x) == "x2");
+    x.ReduceFunc();
+    assert(get_polynom(x) == "x0");
+    assert(x.is_symmetric());
 }
 
 int main()
@@ -595,6 +602,9 @@ int main()
     RUN_TEST(test_calc, "successed");
     RUN_TEST(test_combo, "successed");
     RUN_TEST(test_combo2, "successed");
+
+    /* Тест бонусных функций */
+    RUN_TEST(test_bonus, "successed");
 
     system("pause");
 }

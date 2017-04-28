@@ -301,7 +301,7 @@ BooleanFunction BooleanFunction::operator()(const std::vector<BooleanFunction>& 
 }
 /**/
 
-// ВАРИАНТ 2. Функция от векторов значений
+/*/ ВАРИАНТ 2. Функция от векторов значений
 BooleanFunction BooleanFunction::operator()(const std::vector<BooleanFunction>& fs) const
 {
     if (fs.size() != dimension()) {
@@ -334,6 +334,37 @@ BooleanFunction BooleanFunction::operator()(const std::vector<BooleanFunction>& 
 }
 /**/
 
+BooleanFunction BooleanFunction::operator()(const std::vector<BooleanFunction>& fs) const
+{
+    if (fs.size() != dimension()) {
+        throw IncorrectLengthException();
+    }
+    if (fs.size() == 0) {
+        return BooleanFunction();
+    }
+
+    size_type d = 0;
+    for (BooleanFunction const& f : fs) {
+        if (f.dimension() > d) {
+            d = f.dimension();
+        }
+    }
+
+    BooleanFunction result(d);
+
+    for (size_type i = 0; i < result.func_.size(); ++i) {
+        std::vector<bool> vars;
+        for (BooleanFunction const& f : fs) {
+            vars.push_back(f.func_[i % f.size()]);
+        }
+        result.func_[i] = (*this)(vars);
+    }
+
+    //result.func_ = ReduceFunc_(result.func_);
+
+    return result;
+}
+
 BooleanFunction BooleanFunction::operator()(const std::initializer_list<BooleanFunction> fs) const
 {
     if (fs.size() != dimension()) {
@@ -360,7 +391,7 @@ BooleanFunction BooleanFunction::operator()(const std::initializer_list<BooleanF
         result.func_[i] = (*this)(vars);
     }
 
-    result.func_ = ReduceFunc_(result.func_);
+    //result.func_ = ReduceFunc_(result.func_);
 
     return result;
 }
@@ -469,22 +500,22 @@ std::vector<BooleanFunction::value_type> BooleanFunction::anf() const
     return result;
 }
 
-std::vector<BooleanFunction::value_type> BooleanFunction::ReduceFunc_(std::vector<value_type> const& func)
+void BooleanFunction::ReduceFunc()
 {
-    size_type dim = static_cast<size_type>(log2(func.size()));
+    size_type dim = static_cast<size_type>(log2(func_.size()));
 
     std::vector<bool> isEssential(dim, false);
 
     for (size_type j = 0; j < dim; ++j) {
         size_type s = static_cast<size_type>(pow(2, j)); // Размер половины участка
-        size_type c = static_cast<size_type>(func.size() / (s * 2)); // Количество пар
+        size_type c = static_cast<size_type>(func_.size() / (s * 2)); // Количество пар
 
         for (size_type k = 0; k < c; ++k) {
             if (isEssential[j]) {
                 break;
             }
             for (size_type i = 2 * s * k; i < 2 * s * k + s; ++i) {
-                if (func[i] != func[i + s]) {
+                if (func_[i] != func_[i + s]) {
                     isEssential[j] = true;
                     break;
                 }
@@ -500,12 +531,12 @@ std::vector<BooleanFunction::value_type> BooleanFunction::ReduceFunc_(std::vecto
     }
 
     if (dim != newDim) {
-        std::vector<bool> isResValue(func.size(), true);
+        std::vector<bool> isResValue(func_.size(), true);
 
         for (size_type j = 0; j < dim; ++j) {
             if (!isEssential[j]) {
                 size_type s = static_cast<size_type>(pow(2, j)); // Размер половины участка
-                size_type c = static_cast<size_type>(func.size() / (s * 2)); // Количество пар
+                size_type c = static_cast<size_type>(func_.size() / (s * 2)); // Количество пар
 
                 for (size_type k = 0; k < c; ++k) {
                     for (size_type i = 2 * s * k + s; i < 2 * s * k + 2 * s; ++i) {
@@ -517,18 +548,14 @@ std::vector<BooleanFunction::value_type> BooleanFunction::ReduceFunc_(std::vecto
 
         std::vector<value_type> result;
 
-        for (size_type i = 0; i < func.size(); ++i) {
+        for (size_type i = 0; i < func_.size(); ++i) {
             if (isResValue[i]) {
-                result.push_back(func[i]);
+                result.push_back(func_[i]);
             }
         }
 
-        return result;
+        func_ = result;
     }
-    else {
-        return func;
-    }
-
 }
 
 std::string get_polynom(const BooleanFunction& rhs)
