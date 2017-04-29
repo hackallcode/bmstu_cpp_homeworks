@@ -150,10 +150,12 @@ public:
     std::vector<value_type> anf() const;
 
     // Удаляет фиктивные переменные
-    void ReduceFunc(); /* БОНУС */
+    void reduce(); /* БОНУС */
 
 private:
     std::vector<value_type> func_;
+
+    static void BooleanFunction::fast_anf(std::vector<value_type>& func, size_type first, size_type dim);
 };
 
 // пусть BooleanFunction представляет из себя функцию "01110000"

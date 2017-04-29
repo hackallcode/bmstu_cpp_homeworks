@@ -153,12 +153,12 @@ BooleanFunction BooleanFunction::operator~()
 
 bool BooleanFunction::operator==(const BooleanFunction& rhs) const
 {
-    std::vector<value_type> anf_1 = anf();
-    std::vector<value_type> anf_2 = rhs.anf();
-    size_type s = anf_1.size() <= anf_2.size() ? anf_1.size() : anf_2.size();
+    size_type s1 = func_.size();
+    size_type s2 = rhs.func_.size();
+    size_type s = s1 >= s2 ? s1 : s2;
 
     for (size_type i = 0; i < s; i++) {
-        if (anf_1[i] != anf_2[i]) {
+        if (func_[i % s1] != rhs.func_[i % s2]) {
             return false;
         }
     }
@@ -266,42 +266,6 @@ bool BooleanFunction::operator()(const std::initializer_list<bool> vars) const
     return func_[index];
 }
 
-/*/ ВАРИАНТ 1. Функциия от функций с фиктивными переменными на выходе
-BooleanFunction BooleanFunction::operator()(const std::vector<BooleanFunction>& fs) const
-{
-    if (fs.size() != dimension()) {
-        throw IncorrectLengthException();
-    }
-    if (fs.size() == 0) {
-        return BooleanFunction();
-    }
-
-    size_type d = 0;
-    for (BooleanFunction const& f : fs) {
-        d += f.dimension();
-    }
-
-    BooleanFunction result(d);
-
-    for (size_type i = 0; i < result.func_.size(); ++i) {
-        bool value = true;
-        size_type index = 0;
-        for (BooleanFunction const& f : fs) {
-            std::vector<bool> vars;
-            for (size_type j = 0; j < f.dimension(); ++j) {
-                vars.push_back(i & static_cast<size_t>(pow(2, index)));
-                ++index;
-            }
-            value &= f(vars);
-        }
-        result.func_[i] = value;
-    }
-
-    return result;
-}
-/**/
-
-/*/ ВАРИАНТ 2. Функция от векторов значений
 BooleanFunction BooleanFunction::operator()(const std::vector<BooleanFunction>& fs) const
 {
     if (fs.size() != dimension()) {
@@ -327,40 +291,6 @@ BooleanFunction BooleanFunction::operator()(const std::vector<BooleanFunction>& 
         }
         result.func_[i] = (*this)(vars);
     }
-
-    result.func_ = ReduceFunc_(result.func_);
-
-    return result;
-}
-/**/
-
-BooleanFunction BooleanFunction::operator()(const std::vector<BooleanFunction>& fs) const
-{
-    if (fs.size() != dimension()) {
-        throw IncorrectLengthException();
-    }
-    if (fs.size() == 0) {
-        return BooleanFunction();
-    }
-
-    size_type d = 0;
-    for (BooleanFunction const& f : fs) {
-        if (f.dimension() > d) {
-            d = f.dimension();
-        }
-    }
-
-    BooleanFunction result(d);
-
-    for (size_type i = 0; i < result.func_.size(); ++i) {
-        std::vector<bool> vars;
-        for (BooleanFunction const& f : fs) {
-            vars.push_back(f.func_[i % f.size()]);
-        }
-        result.func_[i] = (*this)(vars);
-    }
-
-    //result.func_ = ReduceFunc_(result.func_);
 
     return result;
 }
@@ -390,8 +320,6 @@ BooleanFunction BooleanFunction::operator()(const std::initializer_list<BooleanF
         }
         result.func_[i] = (*this)(vars);
     }
-
-    //result.func_ = ReduceFunc_(result.func_);
 
     return result;
 }
@@ -484,6 +412,7 @@ bool BooleanFunction::is_functionally_complete_system() const
     return !is_T0() && !is_T1() && !is_linear() && !is_self_dual() && !is_monotone();
 }
 
+/*/ Метод треугольника Паскаля
 std::vector<BooleanFunction::value_type> BooleanFunction::anf() const
 {
     std::vector<value_type> result(func_.size());
@@ -499,8 +428,18 @@ std::vector<BooleanFunction::value_type> BooleanFunction::anf() const
 
     return result;
 }
+/**/
 
-void BooleanFunction::ReduceFunc()
+// Метод преобразовний Мёбиуса
+std::vector<BooleanFunction::value_type> BooleanFunction::anf() const
+{
+    std::vector<value_type> result(func_);
+    fast_anf(result, 0, dimension());
+    return result;
+}
+/**/
+
+void BooleanFunction::reduce()
 {
     size_type dim = static_cast<size_type>(log2(func_.size()));
 
@@ -556,6 +495,25 @@ void BooleanFunction::ReduceFunc()
 
         func_ = result;
     }
+}
+
+void BooleanFunction::fast_anf(std::vector<value_type>& func, size_type first, size_type dim)
+{
+    if (dim == 0) {
+        return;
+    }
+
+    size_type half_size = static_cast<size_type>(pow(2, dim - 1));
+    if (first + 2 * half_size > func.size()) {
+        throw IncorrectNumberException();
+    }
+
+    for (size_type i = first; i < first + half_size; ++i) {
+        func[i + half_size] = (func[i] != func[i + half_size]);
+    }
+
+    fast_anf(func, first, dim - 1);
+    fast_anf(func, first + half_size, dim - 1);
 }
 
 std::string get_polynom(const BooleanFunction& rhs)

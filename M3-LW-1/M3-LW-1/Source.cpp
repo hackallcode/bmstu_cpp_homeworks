@@ -563,7 +563,7 @@ void test_bonus()
 {
     BooleanFunction x = BooleanFunction::var(2, 5);
     assert(get_polynom(x) == "x2");
-    x.ReduceFunc();
+    x.reduce();
     assert(get_polynom(x) == "x0");
     assert(x.is_symmetric());
 }
