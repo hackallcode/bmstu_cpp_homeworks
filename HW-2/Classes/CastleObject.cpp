@@ -5,25 +5,22 @@ using namespace AttackAndDefend;
 
 CastleObject::CastleObject()
     : StaticObject()
-    , health_(0.f)
     , maxHealth_(0.f)
     , armor_(0.f)
     , maxArmor_(0.f)
 {
     InitLabel_();
+    SetHealth(maxHealth_);
 }
 
 CastleObject::CastleObject(float maxHealth, std::string const& fileName)
     : StaticObject(MARGIN_SIZE, GROUND_HEIGHT, fileName)
-    , health_(maxHealth)
     , maxHealth_(maxHealth)
     , armor_(0.f)
     , maxArmor_(2.f * maxHealth)
 {
     InitLabel_();
-    char buf[10];
-    _itoa_s(int(health_), buf, 10);
-    label_->setString(buf);
+    SetHealth(maxHealth_);
 }
 
 void CastleObject::Update(Game* const scene)
@@ -91,7 +88,7 @@ void AttackAndDefend::CastleObject::onPositionUpdate_()
 
 void AttackAndDefend::CastleObject::InitLabel_()
 {
-    label_ = cocos2d::CCLabelTTF::create("", "Helvetica", 30, cocos2d::Size(GetW(), 30));
+    label_ = cocos2d::CCLabelTTF::create("", "Helvetica", 30, cocos2d::Size(GetW(), 60));
     UpdateLabelPosition();
 }
 

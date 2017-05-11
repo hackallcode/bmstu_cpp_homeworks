@@ -41,6 +41,11 @@ bool Game::init()
         return false;
     }
 
+    // Set background
+    cocos2d::CCSprite * background = cocos2d::CCSprite::create("background.png");
+    background->setAnchorPoint(cocos2d::Vec2(0, 0));
+    addChild(background, -1);
+
     //////////////////////////////
     // 2. Objects
 
@@ -79,8 +84,15 @@ void Game::update(float)
         GLOBAL_GAME_SCENE->rightCastle_->Update(this);
     }
 
-    updateAttackers_(GLOBAL_GAME_SCENE->leftAttackers_);
-    updateAttackers_(GLOBAL_GAME_SCENE->rightAttackers_);
+    for (int i = 0; i < leftAttackers_.size(); ++i) {
+        leftAttackers_[i]->Update(this);
+    }
+    for (int i = 0; i < rightAttackers_.size(); ++i) {
+        rightAttackers_[i]->Update(this);
+    }
+
+    killAttackers_(GLOBAL_GAME_SCENE->leftAttackers_);
+    killAttackers_(GLOBAL_GAME_SCENE->rightAttackers_);
 }
 
 std::shared_ptr<CastleObject>& Game::InitLeftCastle_(CastleType id)
@@ -182,15 +194,13 @@ std::shared_ptr<AttackerObject>& Game::AddRightAttacker_(AttackerType id)
     return rightAttackers_.back();
 }
 
-void Game::updateAttackers_(std::vector<std::shared_ptr<AttackerObject>>& attackers)
+void Game::killAttackers_(std::vector<std::shared_ptr<AttackerObject>>& attackers)
 {
-    auto it = attackers.begin();
     for (int i = 0; i < attackers.size(); ++i) {
-        attackers[i]->Update(this);
         if (attackers[i]->GetHealth() == 0) {
             removeChild(attackers[i]->GetSprite());
             removeChild(attackers[i]->GetLabel());
-            it = attackers.erase(it);
+            attackers.erase(attackers.begin() + i);
             --i;
         }
     }

@@ -70,6 +70,7 @@ void GameObject::SetSprite(cocos2d::Sprite * pointer)
 {
     sprite_ = pointer;
     if (sprite_) {
+        sprite_->setAnchorPoint(cocos2d::Vec2(0, 0));
         SetW_(sprite_->getContentSize().width);
         SetH_(sprite_->getContentSize().height);
     }
@@ -113,7 +114,7 @@ void AttackAndDefend::GameObject::onPositionUpdate_()
 {
     if (sprite_) {
         if (isRightAlignment_ != prevIsRightAlignment_) {
-            sprite_->setAnchorPoint(cocos2d::Vec2((IsRightAlignment() ? 1 : 0), 0));
+            sprite_->setRotation3D(cocos2d::Vec3(0, (IsRightAlignment() ? 180 : 0), 0));
             prevIsRightAlignment_ = isRightAlignment_;
         }
         if (x_ != prevX_ || w_ != prevW_ || frameWidth_ != prevFrameWidth_) {

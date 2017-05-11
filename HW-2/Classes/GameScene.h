@@ -57,7 +57,7 @@ private:
     std::shared_ptr<CastleObject>& InitRightCastle_(CastleType id = CastleType::SimpleCastle);
     std::shared_ptr<AttackerObject>& AddLeftAttacker_(AttackerType id = AttackerType::SimpleAttacker);
     std::shared_ptr<AttackerObject>& AddRightAttacker_(AttackerType id = AttackerType::SimpleAttacker);
-    void updateAttackers_(std::vector<std::shared_ptr<AttackerObject>>& attackers);
+    void killAttackers_(std::vector<std::shared_ptr<AttackerObject>>& attackers);
 };
 
 #endif // __GAME_SCENE_INCLUDED__
