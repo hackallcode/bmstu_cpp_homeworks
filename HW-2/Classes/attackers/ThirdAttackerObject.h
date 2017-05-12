@@ -12,6 +12,9 @@ namespace AttackAndDefend {
         ThirdAttackerObject();
 
         virtual ~ThirdAttackerObject() = default;
+
+        virtual size_t GetCost() const override;
+        static size_t GetClassCost();
     };
 
 }

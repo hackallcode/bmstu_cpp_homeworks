@@ -152,6 +152,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\attackers\ThirdAttackerObject.cpp" />
     <ClCompile Include="..\Classes\BlockObject.cpp" />
     <ClCompile Include="..\Classes\blocks\BasicBlockObject.cpp" />
+    <ClCompile Include="..\Classes\blocks\GrassBlockObject.cpp" />
     <ClCompile Include="..\Classes\castles\SimpleCastleObject.cpp" />
     <ClCompile Include="..\Classes\castles\StrongCastleObject.cpp" />
     <ClCompile Include="..\Classes\StaticObject.cpp" />
@@ -170,6 +171,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\attackers\ThirdAttackerObject.h" />
     <ClInclude Include="..\Classes\BlockObject.h" />
     <ClInclude Include="..\Classes\blocks\BasicBlockObject.h" />
+    <ClInclude Include="..\Classes\blocks\GrassBlockObject.h" />
     <ClInclude Include="..\Classes\castles\SimpleCastleObject.h" />
     <ClInclude Include="..\Classes\castles\StrongCastleObject.h" />
     <ClInclude Include="..\Classes\StaticObject.h" />

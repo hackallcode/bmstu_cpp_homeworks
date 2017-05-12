@@ -72,6 +72,9 @@
     <ClCompile Include="..\Classes\attackers\ThirdAttackerObject.cpp">
       <Filter>src\objects\attackers</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\blocks\GrassBlockObject.cpp">
+      <Filter>src\objects\blocks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -121,6 +124,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\attackers\ThirdAttackerObject.h">
       <Filter>src\objects\attackers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\blocks\GrassBlockObject.h">
+      <Filter>src\objects\blocks</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -15,15 +15,18 @@ namespace AttackAndDefend {
         virtual ~AttackerObject() = default;
 
         virtual void Update(Game* const scene) override;
+        void Attack(Game* const scene);
 
         void Damage(float power);
 
         void SetHealth(float health);
         
-        float GetHealth();
-        float GetMaxHealth();
-        float GetPower();
-        cocos2d::CCLabelTTF * GetLabel();
+        float GetHealth() const;
+        float GetMaxHealth() const;
+        float GetPower() const;
+        cocos2d::CCLabelTTF * GetLabel() const;
+
+        virtual size_t GetCost() const;
 
     protected:
         float health_;

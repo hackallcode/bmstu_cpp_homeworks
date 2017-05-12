@@ -27,12 +27,12 @@ void DynamicObject::Update(Game* const scene)
     SetX(GetX() + hSpeed_);
 }
 
-float DynamicObject::GetHSpeed()
+float DynamicObject::GetHSpeed() const
 {
     return hSpeed_;
 }
 
-float DynamicObject::GetVSpeed()
+float DynamicObject::GetVSpeed() const
 {
     return vSpeed_;
 }

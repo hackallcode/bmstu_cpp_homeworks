@@ -46,16 +46,31 @@ bool Game::init()
     background->setAnchorPoint(cocos2d::Vec2(0, 0));
     addChild(background, -1);
 
+    leftMoneyLabel_ = cocos2d::CCLabelTTF::create("", "Helvetica", 60, cocos2d::Size(510, 60));
+    leftMoneyLabel_->setPosition(10, getContentSize().height - MARGIN_SIZE);
+    leftMoneyLabel_->setAnchorPoint(cocos2d::Vec2(0, 1));
+    addChild(leftMoneyLabel_, 0);
+
+    rightMoneyLabel_ = cocos2d::CCLabelTTF::create("", "Helvetica", 60, cocos2d::Size(510, 60));
+    rightMoneyLabel_->setPosition(getContentSize().width - 10, getContentSize().height - MARGIN_SIZE);
+    rightMoneyLabel_->setAnchorPoint(cocos2d::Vec2(1, 1));
+    addChild(rightMoneyLabel_, 0);
+
     //////////////////////////////
     // 2. Objects
 
-    for (float i = 0; i < 10; ++i) {
-        blocks_.push_back(std::shared_ptr<BlockObject>(new BasicBlockObject(192 * i, 0)));
-        addChild(blocks_[i]->GetSprite(), 0);
+    for (float i = 0; i < 24; ++i) {
+        blocks_.push_back(std::shared_ptr<BlockObject>(new BasicBlockObject(80 * i, 0)));
+        blocks_.push_back(std::shared_ptr<BlockObject>(new GrassBlockObject(80 * i, 80)));
+        addChild(blocks_[2*i]->GetSprite(), 0);
+        addChild(blocks_[2*i+1]->GetSprite(), 10);
     }
 
-    InitLeftCastle_();
+    InitLeftCastle_();    
+    SetLeftMoney(50);
+
     InitRightCastle_();
+    SetRightMoney(50);
 
     //////////////////////////////
     // 3. Listeners 
@@ -73,6 +88,23 @@ bool Game::init()
 
 void Game::update(float)
 {
+    if (leftCastle_->GetHealth() == 0) {
+        cocos2d::CCLabelTTF * victoryLabel_ = cocos2d::CCLabelTTF::create("RIGHT PLAYER WINS!", "Helvetica", 100, cocos2d::Size(1920, 1080),
+            cocos2d::TextHAlignment::CENTER, cocos2d::TextVAlignment::CENTER);
+        victoryLabel_->setAnchorPoint(cocos2d::Vec2(0, 0));
+        victoryLabel_->setColor(cocos2d::Color3B(60, 60, 60));
+        addChild(victoryLabel_);
+        return;
+    }
+    else if (rightCastle_->GetHealth() == 0) {
+        cocos2d::CCLabelTTF * victoryLabel_ = cocos2d::CCLabelTTF::create("LEFT PLAYER WINS!", "Helvetica", 100, cocos2d::Size(1920, 1080),
+            cocos2d::TextHAlignment::CENTER, cocos2d::TextVAlignment::CENTER);
+        victoryLabel_->setAnchorPoint(cocos2d::Vec2(0, 0));
+        victoryLabel_->setColor(cocos2d::Color3B(60, 60, 60));
+        addChild(victoryLabel_);
+        return;
+    }
+
     for (auto& block : GLOBAL_GAME_SCENE->blocks_) {
         block->Update(this);
     }
@@ -90,16 +122,54 @@ void Game::update(float)
     for (int i = 0; i < rightAttackers_.size(); ++i) {
         rightAttackers_[i]->Update(this);
     }
-
+    for (int i = 0; i < leftAttackers_.size(); ++i) {
+        leftAttackers_[i]->Attack(this);
+    }
+    for (int i = 0; i < rightAttackers_.size(); ++i) {
+        rightAttackers_[i]->Attack(this);
+    }
     killAttackers_(GLOBAL_GAME_SCENE->leftAttackers_);
     killAttackers_(GLOBAL_GAME_SCENE->rightAttackers_);
+}
+
+void Game::SetLeftMoney(size_t money)
+{
+    leftMoney_ = money;
+    
+    char buf[15];
+    _itoa_s(int(money), buf, 10);
+    size_t intSize = 0;
+    while (buf[intSize] != '\0') {
+        ++intSize;
+    }
+
+    std::string labelStr(buf, intSize);
+    labelStr += " coins";
+    leftMoneyLabel_->setString(labelStr);
+}
+
+void Game::SetRightMoney(size_t money)
+{
+    rightMoney_ = money;
+
+    char buf[15];
+    _itoa_s(int(money), buf, 10);
+    size_t intSize = 0;
+    while (buf[intSize] != '\0') {
+        ++intSize;
+    }
+
+    std::string labelStr(buf, intSize);
+    labelStr += " coins";
+    rightMoneyLabel_->setString(labelStr);
 }
 
 std::shared_ptr<CastleObject>& Game::InitLeftCastle_(CastleType id)
 {
     if (leftCastle_.get() != nullptr) {
         removeChild(leftCastle_->GetSprite());
-        removeChild(leftCastle_->GetLabel());
+        removeChild(leftCastle_->GetHealthLabel());
+        removeChild(leftCastle_->GetArmorLabel());
     }
     CastleObject * t;
     switch (id)
@@ -113,7 +183,8 @@ std::shared_ptr<CastleObject>& Game::InitLeftCastle_(CastleType id)
     }
     leftCastle_ = std::shared_ptr<CastleObject>(t);
     addChild(leftCastle_->GetSprite(), 3);
-    addChild(leftCastle_->GetLabel(), 4);
+    addChild(leftCastle_->GetHealthLabel(), 4);
+    addChild(leftCastle_->GetArmorLabel(), 4);
     return leftCastle_;
 }
 
@@ -122,7 +193,8 @@ std::shared_ptr<CastleObject>& Game::InitRightCastle_(CastleType id)
 
     if (rightCastle_.get() != nullptr) {
         removeChild(rightCastle_->GetSprite());
-        removeChild(rightCastle_->GetLabel());
+        removeChild(rightCastle_->GetHealthLabel());
+        removeChild(rightCastle_->GetArmorLabel());
     }
     CastleObject * t;
     switch (id)
@@ -137,7 +209,8 @@ std::shared_ptr<CastleObject>& Game::InitRightCastle_(CastleType id)
     rightCastle_ = std::shared_ptr<CastleObject>(t);
     rightCastle_->SetRightAlignment(getContentSize().width);
     addChild(rightCastle_->GetSprite(), 3);
-    addChild(rightCastle_->GetLabel(), 4);
+    addChild(rightCastle_->GetHealthLabel(), 4);
+    addChild(rightCastle_->GetArmorLabel(), 4);
     return rightCastle_;
 }
 
@@ -198,6 +271,12 @@ void Game::killAttackers_(std::vector<std::shared_ptr<AttackerObject>>& attacker
 {
     for (int i = 0; i < attackers.size(); ++i) {
         if (attackers[i]->GetHealth() == 0) {
+            if (attackers == leftAttackers_) {
+                SetRightMoney(rightMoney_ + attackers[i]->GetCost() * 2);
+            }
+            else {
+                SetLeftMoney(leftMoney_ + attackers[i]->GetCost() * 2);
+            }
             removeChild(attackers[i]->GetSprite());
             removeChild(attackers[i]->GetLabel());
             attackers.erase(attackers.begin() + i);
@@ -213,47 +292,93 @@ void OnKeyPressed(cocos2d::EventKeyboard::KeyCode code, cocos2d::Event * event)
     }
 
     if (code == cocos2d::EventKeyboard::KeyCode::KEY_Q) {
-        GLOBAL_GAME_SCENE->AddLeftAttacker_(Game::AttackerType::SimpleAttacker);
+        if (GLOBAL_GAME_SCENE->leftMoney_ >= AttackAndDefend::SimpleAttackerObject::GetClassCost()) {
+            GLOBAL_GAME_SCENE->SetLeftMoney(GLOBAL_GAME_SCENE->leftMoney_ - AttackAndDefend::SimpleAttackerObject::GetClassCost());
+            GLOBAL_GAME_SCENE->AddLeftAttacker_(Game::AttackerType::SimpleAttacker);
+        }
     }
     if (code == cocos2d::EventKeyboard::KeyCode::KEY_W) {
-        GLOBAL_GAME_SCENE->AddLeftAttacker_(Game::AttackerType::FirstAttacker);
+        if (GLOBAL_GAME_SCENE->leftMoney_ >= AttackAndDefend::FirstAttackerObject::GetClassCost()) {
+            GLOBAL_GAME_SCENE->SetLeftMoney(GLOBAL_GAME_SCENE->leftMoney_ - AttackAndDefend::FirstAttackerObject::GetClassCost());
+            GLOBAL_GAME_SCENE->AddLeftAttacker_(Game::AttackerType::FirstAttacker);
+        }
     }
     if (code == cocos2d::EventKeyboard::KeyCode::KEY_E) {
-        GLOBAL_GAME_SCENE->AddLeftAttacker_(Game::AttackerType::SecondAttacker);
+        if (GLOBAL_GAME_SCENE->leftMoney_ >= AttackAndDefend::SecondAttackerObject::GetClassCost()) {
+            GLOBAL_GAME_SCENE->SetLeftMoney(GLOBAL_GAME_SCENE->leftMoney_ - AttackAndDefend::SecondAttackerObject::GetClassCost());
+            GLOBAL_GAME_SCENE->AddLeftAttacker_(Game::AttackerType::SecondAttacker);
+        }
     }
     if (code == cocos2d::EventKeyboard::KeyCode::KEY_R) {
-        GLOBAL_GAME_SCENE->AddLeftAttacker_(Game::AttackerType::ThirdAttacker);
+        if (GLOBAL_GAME_SCENE->leftMoney_ >= AttackAndDefend::ThirdAttackerObject::GetClassCost()) {
+            GLOBAL_GAME_SCENE->SetLeftMoney(GLOBAL_GAME_SCENE->leftMoney_ - AttackAndDefend::ThirdAttackerObject::GetClassCost());
+            GLOBAL_GAME_SCENE->AddLeftAttacker_(Game::AttackerType::ThirdAttacker);
+        }
     }
     if (code == cocos2d::EventKeyboard::KeyCode::KEY_A) {
-        GLOBAL_GAME_SCENE->InitLeftCastle_(Game::CastleType::SimpleCastle);
+        if (GLOBAL_GAME_SCENE->leftMoney_ >= AttackAndDefend::StrongCastleObject::GetClassCost()) {
+            GLOBAL_GAME_SCENE->SetLeftMoney(GLOBAL_GAME_SCENE->leftMoney_ - AttackAndDefend::StrongCastleObject::GetClassCost());
+            GLOBAL_GAME_SCENE->InitLeftCastle_(Game::CastleType::StrongCastle);
+        }
     }
     if (code == cocos2d::EventKeyboard::KeyCode::KEY_S) {
-        GLOBAL_GAME_SCENE->InitLeftCastle_(Game::CastleType::StrongCastle);
+        if (GLOBAL_GAME_SCENE->leftMoney_ >= 100 &&
+            GLOBAL_GAME_SCENE->leftCastle_->GetHealth() < GLOBAL_GAME_SCENE->leftCastle_->GetMaxHealth()) {
+            GLOBAL_GAME_SCENE->SetLeftMoney(GLOBAL_GAME_SCENE->leftMoney_ - 100);
+            GLOBAL_GAME_SCENE->leftCastle_->SetHealth(GLOBAL_GAME_SCENE->leftCastle_->GetHealth() + 100);
+        }
     }
-    if (code == cocos2d::EventKeyboard::KeyCode::KEY_Z) {
-        GLOBAL_GAME_SCENE->leftCastle_->SetHealth(GLOBAL_GAME_SCENE->leftCastle_->GetMaxHealth());
+    if (code == cocos2d::EventKeyboard::KeyCode::KEY_D) {
+        if (GLOBAL_GAME_SCENE->leftMoney_ >= 100 &&
+            GLOBAL_GAME_SCENE->leftCastle_->GetArmor() < GLOBAL_GAME_SCENE->leftCastle_->GetMaxArmor()) {
+            GLOBAL_GAME_SCENE->SetLeftMoney(GLOBAL_GAME_SCENE->leftMoney_ - 100);
+            GLOBAL_GAME_SCENE->leftCastle_->SetArmor(GLOBAL_GAME_SCENE->leftCastle_->GetArmor() + 100);
+        }
     }
 
-    if (code == cocos2d::EventKeyboard::KeyCode::KEY_P) {
-        GLOBAL_GAME_SCENE->AddRightAttacker_(Game::AttackerType::SimpleAttacker);
-    }
-    if (code == cocos2d::EventKeyboard::KeyCode::KEY_O) {
-        GLOBAL_GAME_SCENE->AddRightAttacker_(Game::AttackerType::FirstAttacker);
+    if (code == cocos2d::EventKeyboard::KeyCode::KEY_U) {
+        if (GLOBAL_GAME_SCENE->rightMoney_ >= AttackAndDefend::SimpleAttackerObject::GetClassCost()) {
+            GLOBAL_GAME_SCENE->SetRightMoney(GLOBAL_GAME_SCENE->rightMoney_ - AttackAndDefend::SimpleAttackerObject::GetClassCost());
+            GLOBAL_GAME_SCENE->AddRightAttacker_(Game::AttackerType::SimpleAttacker);
+        }
     }
     if (code == cocos2d::EventKeyboard::KeyCode::KEY_I) {
-        GLOBAL_GAME_SCENE->AddRightAttacker_(Game::AttackerType::SecondAttacker);
+        if (GLOBAL_GAME_SCENE->rightMoney_ >= AttackAndDefend::FirstAttackerObject::GetClassCost()) {
+            GLOBAL_GAME_SCENE->SetRightMoney(GLOBAL_GAME_SCENE->rightMoney_ - AttackAndDefend::FirstAttackerObject::GetClassCost());
+            GLOBAL_GAME_SCENE->AddRightAttacker_(Game::AttackerType::FirstAttacker);
+        }
     }
-    if (code == cocos2d::EventKeyboard::KeyCode::KEY_U) {
-        GLOBAL_GAME_SCENE->AddRightAttacker_(Game::AttackerType::ThirdAttacker);
+    if (code == cocos2d::EventKeyboard::KeyCode::KEY_O) {
+        if (GLOBAL_GAME_SCENE->rightMoney_ >= AttackAndDefend::SecondAttackerObject::GetClassCost()) {
+            GLOBAL_GAME_SCENE->SetRightMoney(GLOBAL_GAME_SCENE->rightMoney_ - AttackAndDefend::SecondAttackerObject::GetClassCost());
+            GLOBAL_GAME_SCENE->AddRightAttacker_(Game::AttackerType::SecondAttacker);
+        }
     }
-    if (code == cocos2d::EventKeyboard::KeyCode::KEY_L) {
-        GLOBAL_GAME_SCENE->InitRightCastle_(Game::CastleType::SimpleCastle);
+    if (code == cocos2d::EventKeyboard::KeyCode::KEY_P) {
+        if (GLOBAL_GAME_SCENE->rightMoney_ >= AttackAndDefend::ThirdAttackerObject::GetClassCost()) {
+            GLOBAL_GAME_SCENE->SetRightMoney(GLOBAL_GAME_SCENE->rightMoney_ - AttackAndDefend::ThirdAttackerObject::GetClassCost());
+            GLOBAL_GAME_SCENE->AddRightAttacker_(Game::AttackerType::ThirdAttacker);
+        }
+    }
+    if (code == cocos2d::EventKeyboard::KeyCode::KEY_J) {
+        if (GLOBAL_GAME_SCENE->rightMoney_ >= AttackAndDefend::StrongCastleObject::GetClassCost()) {
+            GLOBAL_GAME_SCENE->SetRightMoney(GLOBAL_GAME_SCENE->rightMoney_ - AttackAndDefend::StrongCastleObject::GetClassCost());
+            GLOBAL_GAME_SCENE->InitRightCastle_(Game::CastleType::StrongCastle);
+        }
     }
     if (code == cocos2d::EventKeyboard::KeyCode::KEY_K) {
-        GLOBAL_GAME_SCENE->InitRightCastle_(Game::CastleType::StrongCastle);
+        if (GLOBAL_GAME_SCENE->rightMoney_ >= 100 &&
+            GLOBAL_GAME_SCENE->rightCastle_->GetHealth() < GLOBAL_GAME_SCENE->rightCastle_->GetMaxHealth()) {
+            GLOBAL_GAME_SCENE->SetRightMoney(GLOBAL_GAME_SCENE->rightMoney_ - 100);
+            GLOBAL_GAME_SCENE->rightCastle_->SetHealth(GLOBAL_GAME_SCENE->rightCastle_->GetHealth() + 100);
+        }
     }
-    if (code == cocos2d::EventKeyboard::KeyCode::KEY_M) {
-        GLOBAL_GAME_SCENE->rightCastle_->SetHealth(GLOBAL_GAME_SCENE->rightCastle_->GetMaxHealth());
+    if (code == cocos2d::EventKeyboard::KeyCode::KEY_L) {
+        if (GLOBAL_GAME_SCENE->rightMoney_ >= 100 &&
+            GLOBAL_GAME_SCENE->rightCastle_->GetArmor() < GLOBAL_GAME_SCENE->rightCastle_->GetMaxArmor()) {
+            GLOBAL_GAME_SCENE->SetRightMoney(GLOBAL_GAME_SCENE->rightMoney_ - 100);
+            GLOBAL_GAME_SCENE->rightCastle_->SetArmor(GLOBAL_GAME_SCENE->rightCastle_->GetArmor() + 100);
+        }
     }
 }
 

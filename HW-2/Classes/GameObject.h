@@ -9,7 +9,7 @@ class Game;
 namespace AttackAndDefend {
 
     const float MARGIN_SIZE = 20.f;
-    const float GROUND_HEIGHT = 192.f;    
+    const float GROUND_HEIGHT = 80.f;    
 
     class GameObject abstract
     {
@@ -22,12 +22,12 @@ namespace AttackAndDefend {
 
         virtual void Update(Game* const scene);
 
-        cocos2d::Sprite* GetSprite();
-        float GetX();
-        float GetY();
-        float GetW();
-        float GetH();
-        bool IsRightAlignment();
+        cocos2d::Sprite* GetSprite() const;
+        float GetX() const;
+        float GetY() const;
+        float GetW() const;
+        float GetH() const;
+        bool IsRightAlignment() const;
 
         void SetSprite(cocos2d::Sprite* pointer);
         void SetX(float x);

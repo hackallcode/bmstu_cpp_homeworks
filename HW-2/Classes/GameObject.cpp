@@ -36,32 +36,32 @@ GameObject::GameObject(float x, float y, std::string const& fileName)
 void GameObject::Update(Game* const scene)
 {}
 
-cocos2d::Sprite * GameObject::GetSprite()
+cocos2d::Sprite * GameObject::GetSprite() const
 {
     return sprite_;
 }
 
-float GameObject::GetX()
+float GameObject::GetX() const
 {
     return x_;
 }
 
-float GameObject::GetY()
+float GameObject::GetY() const
 {
     return y_;
 }
 
-float GameObject::GetW()
+float GameObject::GetW() const
 {
     return w_;
 }
 
-float GameObject::GetH()
+float GameObject::GetH() const
 {
     return h_;
 }
 
-bool GameObject::IsRightAlignment()
+bool GameObject::IsRightAlignment() const
 {
     return isRightAlignment_;
 }

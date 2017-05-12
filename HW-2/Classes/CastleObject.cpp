@@ -6,21 +6,21 @@ using namespace AttackAndDefend;
 CastleObject::CastleObject()
     : StaticObject()
     , maxHealth_(0.f)
-    , armor_(0.f)
     , maxArmor_(0.f)
 {
-    InitLabel_();
+    InitLabels_();
     SetHealth(maxHealth_);
+    SetArmor(0.f);
 }
 
 CastleObject::CastleObject(float maxHealth, std::string const& fileName)
     : StaticObject(MARGIN_SIZE, GROUND_HEIGHT, fileName)
     , maxHealth_(maxHealth)
-    , armor_(0.f)
     , maxArmor_(2.f * maxHealth)
 {
-    InitLabel_();
+    InitLabels_();
     SetHealth(maxHealth_);
+    SetArmor(0.f);
 }
 
 void CastleObject::Update(Game* const scene)
@@ -47,59 +47,77 @@ void CastleObject::SetHealth(float health)
     health_ = health;
     char buf[10];
     _itoa_s(int(health_), buf, 10);
-    label_->setString(buf);
+    healthLabel_->setString(buf);
 }
 
 void CastleObject::SetArmor(float armor)
 {
     armor_ = armor;
+    char buf[10];
+    _itoa_s(int(armor_), buf, 10);
+    armorLabel_->setString(buf);
 }
 
-float CastleObject::GetHealth()
+float CastleObject::GetHealth() const
 {
     return health_;
 }
 
-float CastleObject::GetMaxHealth()
+float CastleObject::GetMaxHealth() const
 {
     return maxHealth_;
 }
 
-float CastleObject::GetArmor()
+float CastleObject::GetArmor() const
 {
     return armor_;
 }
 
-float CastleObject::GetMaxArmor()
+float CastleObject::GetMaxArmor() const
 {
     return maxArmor_;
 }
 
-cocos2d::CCLabelTTF * AttackAndDefend::CastleObject::GetLabel()
+cocos2d::CCLabelTTF * AttackAndDefend::CastleObject::GetHealthLabel() const
 {
-    return label_;
+    return healthLabel_;
+}
+
+cocos2d::CCLabelTTF * AttackAndDefend::CastleObject::GetArmorLabel() const
+{
+    return armorLabel_;
+}
+
+size_t AttackAndDefend::CastleObject::GetCost() const
+{
+    return 0;
 }
 
 void AttackAndDefend::CastleObject::onPositionUpdate_()
 {
     GameObject::onPositionUpdate_();
-    UpdateLabelPosition();
+    UpdateLabelsPosition();
 }
 
-void AttackAndDefend::CastleObject::InitLabel_()
+void AttackAndDefend::CastleObject::InitLabels_()
 {
-    label_ = cocos2d::CCLabelTTF::create("", "Helvetica", 30, cocos2d::Size(GetW(), 60));
-    UpdateLabelPosition();
+    healthLabel_ = cocos2d::CCLabelTTF::create("", "Helvetica", 30, cocos2d::Size(GetW(), 30));
+    armorLabel_ = cocos2d::CCLabelTTF::create("", "Helvetica", 30, cocos2d::Size(GetW(), 30));
+    UpdateLabelsPosition();
 }
 
-void AttackAndDefend::CastleObject::UpdateLabelPosition()
+void AttackAndDefend::CastleObject::UpdateLabelsPosition()
 {
     if (isRightAlignment_) {
-        label_->setPosition(frameWidth_ - MARGIN_SIZE, GROUND_HEIGHT + GetH() + MARGIN_SIZE);
-        label_->setAnchorPoint(cocos2d::Vec2(1, 0));
+        healthLabel_->setPosition(frameWidth_ - MARGIN_SIZE, GROUND_HEIGHT + GetH() + MARGIN_SIZE);
+        healthLabel_->setAnchorPoint(cocos2d::Vec2(1, 0));
+        armorLabel_->setPosition(frameWidth_ - MARGIN_SIZE, GROUND_HEIGHT + GetH() + MARGIN_SIZE + 40);
+        armorLabel_->setAnchorPoint(cocos2d::Vec2(1, 0));
     }
     else {
-        label_->setPosition(MARGIN_SIZE, GROUND_HEIGHT + GetH() + MARGIN_SIZE);
-        label_->setAnchorPoint(cocos2d::Vec2(0, 0));
+        healthLabel_->setPosition(MARGIN_SIZE, GROUND_HEIGHT + GetH() + MARGIN_SIZE);
+        healthLabel_->setAnchorPoint(cocos2d::Vec2(0, 0));
+        armorLabel_->setPosition(MARGIN_SIZE, GROUND_HEIGHT + GetH() + MARGIN_SIZE + 40);
+        armorLabel_->setAnchorPoint(cocos2d::Vec2(0, 0));
     }
 }

@@ -25,6 +25,34 @@ void AttackerObject::Update(Game* const scene)
 {
     DynamicObject::Update(scene);
 
+    std::vector<std::shared_ptr<AttackerObject>> attackers;
+    if (IsRightAlignment()) {
+        attackers = scene->leftAttackers_;
+    }
+    else {
+        attackers = scene->rightAttackers_;
+    }
+    for (std::shared_ptr<AttackerObject>& attacker : attackers) {
+        float attackerBorderX = scene->getContentSize().width - (attacker->GetX() + attacker->GetW()) - GetW();
+        if (GetX() > attackerBorderX) {
+            SetX(attackerBorderX);
+        }
+    }
+
+    float maxDistance = 0;
+    if (IsRightAlignment()) {
+        maxDistance = scene->getContentSize().width - (scene->leftCastle_->GetW() + 2 * MARGIN_SIZE + GetW());
+    }
+    else {
+        maxDistance = scene->getContentSize().width - (scene->rightCastle_->GetW() + 2 * MARGIN_SIZE + GetW());
+    }
+    if (GetX() > maxDistance) {
+        SetX(maxDistance);
+    }
+}
+
+void AttackAndDefend::AttackerObject::Attack(Game * const scene)
+{
     bool isAttackOther = false;
 
     std::vector<std::shared_ptr<AttackerObject>> attackers;
@@ -35,10 +63,7 @@ void AttackerObject::Update(Game* const scene)
         attackers = scene->rightAttackers_;
     }
     for (std::shared_ptr<AttackerObject>& attacker : attackers) {
-        float attackerBorderX = scene->getContentSize().width - (attacker->GetX() + attacker->GetW() + MARGIN_SIZE) - GetW();
-        if (GetX() > attackerBorderX) {
-            SetX(attackerBorderX);
-        }
+        float attackerBorderX = scene->getContentSize().width - (attacker->GetX() + attacker->GetW()) - GetW();
         if (GetX() == attackerBorderX) {
             attacker->Damage(GetPower());
             isAttackOther = true;
@@ -53,9 +78,6 @@ void AttackerObject::Update(Game* const scene)
         }
         else {
             maxDistance = scene->getContentSize().width - (scene->rightCastle_->GetW() + 2 * MARGIN_SIZE + GetW());
-        }
-        if (GetX() > maxDistance) {
-            SetX(maxDistance);
         }
         if (GetX() == maxDistance) {
             if (IsRightAlignment()) {
@@ -84,24 +106,29 @@ void AttackerObject::SetHealth(float health)
     label_->setString(buf);
 }
 
-float AttackerObject::GetHealth()
+float AttackerObject::GetHealth() const
 {
     return health_;
 }
 
-float AttackerObject::GetMaxHealth()
+float AttackerObject::GetMaxHealth() const
 {
     return maxHealth_;
 }
 
-float AttackerObject::GetPower()
+float AttackerObject::GetPower() const
 {
     return power_;
 }
 
-cocos2d::CCLabelTTF * AttackAndDefend::AttackerObject::GetLabel()
+cocos2d::CCLabelTTF * AttackAndDefend::AttackerObject::GetLabel() const
 {
     return label_;
+}
+
+size_t AttackAndDefend::AttackerObject::GetCost() const
+{
+    return 0;
 }
 
 void AttackAndDefend::AttackerObject::onPositionUpdate_()

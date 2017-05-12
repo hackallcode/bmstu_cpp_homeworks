@@ -6,6 +6,7 @@
 #include <memory>
 
 #include "blocks/BasicBlockObject.h"
+#include "blocks/GrassBlockObject.h"
 
 #include "castles/SimpleCastleObject.h"
 #include "castles/StrongCastleObject.h"
@@ -48,10 +49,18 @@ private:
 
     std::vector<std::shared_ptr<BlockObject>> blocks_;
 
+    size_t leftMoney_;
+    size_t rightMoney_;
+    cocos2d::CCLabelTTF * leftMoneyLabel_;
+    cocos2d::CCLabelTTF * rightMoneyLabel_;
+    void SetLeftMoney(size_t money);
+    void SetRightMoney(size_t money);
+    
     std::shared_ptr<CastleObject> leftCastle_;
     std::vector<std::shared_ptr<AttackerObject>> leftAttackers_;
     std::shared_ptr<CastleObject> rightCastle_;
     std::vector<std::shared_ptr<AttackerObject>> rightAttackers_;
+
 
     std::shared_ptr<CastleObject>& InitLeftCastle_(CastleType id = CastleType::SimpleCastle);
     std::shared_ptr<CastleObject>& InitRightCastle_(CastleType id = CastleType::SimpleCastle);

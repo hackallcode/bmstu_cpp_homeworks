@@ -21,23 +21,27 @@ namespace AttackAndDefend {
         void SetHealth(float health);
         void SetArmor(float armor);
 
-        float GetHealth();
-        float GetMaxHealth();
-        float GetArmor();
-        float GetMaxArmor();
-        cocos2d::CCLabelTTF * GetLabel();
+        float GetHealth() const;
+        float GetMaxHealth() const;
+        float GetArmor() const;
+        float GetMaxArmor() const;
+        cocos2d::CCLabelTTF * GetHealthLabel() const;
+        cocos2d::CCLabelTTF * GetArmorLabel() const;
+
+        virtual size_t GetCost() const;
 
     protected:
         float health_;
         float maxHealth_;
         float armor_;
         float maxArmor_;
-        cocos2d::CCLabelTTF * label_;
+        cocos2d::CCLabelTTF * healthLabel_;
+        cocos2d::CCLabelTTF * armorLabel_;
 
         virtual void onPositionUpdate_() override;
 
-        void InitLabel_();
-        void UpdateLabelPosition();
+        void InitLabels_();
+        void UpdateLabelsPosition();
     };
 
 }

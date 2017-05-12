@@ -17,8 +17,8 @@ namespace AttackAndDefend {
 
         virtual void Update(Game* const scene) override;
 
-        float GetHSpeed();
-        float GetVSpeed();
+        float GetHSpeed() const;
+        float GetVSpeed() const;
 
         void SetHSpeed(float speed);
         void SetVSpeed(float speed);

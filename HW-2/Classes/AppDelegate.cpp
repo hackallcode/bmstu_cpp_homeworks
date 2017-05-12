@@ -3,7 +3,7 @@
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
-#define FULL_SCREEN_MODE 0
+#define FULL_SCREEN_MODE 1
 #if (!FULL_SCREEN_MODE)
     #define FRAME_SIZE_NAME resolutionSizeNo4
 #endif
@@ -85,7 +85,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     }
 
     // turn on display FPS
-    director->setDisplayStats(true);
+    //director->setDisplayStats(true);
 
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0f / 60);

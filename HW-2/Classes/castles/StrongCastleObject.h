@@ -12,6 +12,9 @@ namespace AttackAndDefend {
         StrongCastleObject();
 
         virtual ~StrongCastleObject() = default;
+
+        virtual size_t GetCost() const override;
+        static size_t GetClassCost();
     };
 
 }
