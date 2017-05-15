@@ -4,8 +4,6 @@
 #include <cstdlib>
 #include "InfInt.h"
 
-std::mutex combination_lock;
-
 void Factorial(size_t num, InfInt& result)
 {
     result = 1;
@@ -16,8 +14,6 @@ void Factorial(size_t num, InfInt& result)
 
 InfInt Combination(size_t n, size_t k)
 {
-    combination_lock.lock();
-
     InfInt factorialOne, factorialTwo, factorialThree;
 
     std::thread threadOne(Factorial, n, std::ref(factorialOne));
@@ -27,8 +23,6 @@ InfInt Combination(size_t n, size_t k)
     threadOne.join();
     threadTwo.join();
     threadThree.join();
-
-    combination_lock.unlock();
 
     return factorialOne / (factorialTwo * factorialThree);
 }
