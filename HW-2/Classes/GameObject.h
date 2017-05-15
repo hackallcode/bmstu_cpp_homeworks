@@ -20,7 +20,7 @@ namespace AttackAndDefend {
 
         virtual ~GameObject() = default;
 
-        virtual void Update(Game* const scene);
+        virtual void Update(Game* const scene) = 0;
 
         cocos2d::Sprite* GetSprite() const;
         float GetX() const;

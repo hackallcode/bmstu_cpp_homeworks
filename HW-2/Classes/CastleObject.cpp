@@ -96,17 +96,17 @@ size_t AttackAndDefend::CastleObject::GetCost() const
 void AttackAndDefend::CastleObject::onPositionUpdate_()
 {
     GameObject::onPositionUpdate_();
-    UpdateLabelsPosition();
+    UpdateLabelsPosition_();
 }
 
 void AttackAndDefend::CastleObject::InitLabels_()
 {
     healthLabel_ = cocos2d::CCLabelTTF::create("", "Helvetica", 30, cocos2d::Size(GetW(), 30));
     armorLabel_ = cocos2d::CCLabelTTF::create("", "Helvetica", 30, cocos2d::Size(GetW(), 30));
-    UpdateLabelsPosition();
+    UpdateLabelsPosition_();
 }
 
-void AttackAndDefend::CastleObject::UpdateLabelsPosition()
+void AttackAndDefend::CastleObject::UpdateLabelsPosition_()
 {
     if (isRightAlignment_) {
         healthLabel_->setPosition(frameWidth_ - MARGIN_SIZE, GROUND_HEIGHT + GetH() + MARGIN_SIZE);

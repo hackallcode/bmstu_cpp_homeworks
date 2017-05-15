@@ -33,9 +33,6 @@ GameObject::GameObject(float x, float y, std::string const& fileName)
     SetSprite(cocos2d::Sprite::create(fileName));
 }
 
-void GameObject::Update(Game* const scene)
-{}
-
 cocos2d::Sprite * GameObject::GetSprite() const
 {
     return sprite_;

@@ -41,7 +41,7 @@ namespace AttackAndDefend {
         virtual void onPositionUpdate_() override;
 
         void InitLabels_();
-        void UpdateLabelsPosition();
+        void UpdateLabelsPosition_();
     };
 
 }
