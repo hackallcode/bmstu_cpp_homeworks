@@ -3,7 +3,7 @@
 
 #include "StaticObject.h"
 
-namespace AttackAndDefend {
+namespace aad {
 
     class BlockObject abstract
         : public StaticObject

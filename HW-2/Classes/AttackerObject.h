@@ -3,7 +3,7 @@
 
 #include "DynamicObject.h"
 
-namespace AttackAndDefend {
+namespace aad {
 
     class AttackerObject abstract
         : public DynamicObject
@@ -17,7 +17,7 @@ namespace AttackAndDefend {
         virtual void Update(Game* const scene) override;
         void Attack(Game* const scene);
 
-        void Damage(float power);
+        virtual void Damage(float power) override;
 
         void SetHealth(float health);
         
@@ -37,7 +37,7 @@ namespace AttackAndDefend {
         virtual void onPositionUpdate_() override;
 
         void InitLabel_();
-        void UpdateLabelPosition();        
+        void UpdateLabelPosition();
     };
 
 }

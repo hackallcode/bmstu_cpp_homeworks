@@ -3,7 +3,7 @@
 
 #include "BlockObject.h"
 
-namespace AttackAndDefend {
+namespace aad {
 
     class BasicBlockObject
         : public BlockObject

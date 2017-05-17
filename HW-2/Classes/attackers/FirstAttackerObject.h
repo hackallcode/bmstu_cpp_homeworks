@@ -3,7 +3,7 @@
 
 #include "AttackerObject.h"
 
-namespace AttackAndDefend {
+namespace aad {
 
     class FirstAttackerObject
         : public AttackerObject

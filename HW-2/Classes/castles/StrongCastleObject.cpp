@@ -1,18 +1,16 @@
 #include "StrongCastleObject.h"
 #include "GameScene.h"
 
-using namespace AttackAndDefend;
-
-StrongCastleObject::StrongCastleObject()
+aad::StrongCastleObject::StrongCastleObject()
     : CastleObject(1000, "castles/StrongCastle.png")
 {}
 
-size_t AttackAndDefend::StrongCastleObject::GetCost() const
+size_t aad::StrongCastleObject::GetCost() const
 {
     return GetClassCost();
 }
 
-size_t AttackAndDefend::StrongCastleObject::GetClassCost()
+size_t aad::StrongCastleObject::GetClassCost()
 {
     return 500;
 }

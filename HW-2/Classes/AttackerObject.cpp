@@ -1,9 +1,7 @@
 #include "AttackerObject.h"
 #include "GameScene.h"
 
-using namespace AttackAndDefend;
-
-AttackerObject::AttackerObject()
+aad::AttackerObject::AttackerObject()
     : DynamicObject()
     , maxHealth_(0.f)
     , power_(0.f)
@@ -12,7 +10,7 @@ AttackerObject::AttackerObject()
     SetHealth(maxHealth_);
 }
 
-AttackerObject::AttackerObject(float speed, float maxHealth, float power, std::string const& fileName)
+aad::AttackerObject::AttackerObject(float speed, float maxHealth, float power, std::string const& fileName)
     : DynamicObject(MARGIN_SIZE, GROUND_HEIGHT, speed, 0.f, fileName)
     , maxHealth_(maxHealth)
     , power_(power)
@@ -21,50 +19,32 @@ AttackerObject::AttackerObject(float speed, float maxHealth, float power, std::s
     SetHealth(maxHealth_);
 }
 
-void AttackerObject::Update(Game* const scene)
+void aad::AttackerObject::Update(Game* const scene)
 {
     DynamicObject::Update(scene);
 
-    std::vector<std::shared_ptr<AttackerObject>> attackers;
-    if (IsRightAlignment()) {
-        attackers = scene->leftAttackers_;
-    }
-    else {
-        attackers = scene->rightAttackers_;
-    }
-    for (std::shared_ptr<AttackerObject>& attacker : attackers) {
-        float attackerBorderX = scene->getContentSize().width - (attacker->GetX() + attacker->GetW()) - GetW();
-        if (GetX() > attackerBorderX) {
-            SetX(attackerBorderX);
+    for (std::shared_ptr<AttackerObject>& attacker : scene->getAttackers(!IsRightAlignment())) {
+        float distance = scene->getContentSize().width - attacker->GetX() - attacker->GetW() - GetW() - GetX();
+        if (distance < ATTACKER_DISTANCE) {
+            SetX(GetX() - (ATTACKER_DISTANCE - distance));
         }
     }
 
-    float maxDistance = 0;
-    if (IsRightAlignment()) {
-        maxDistance = scene->getContentSize().width - (scene->leftCastle_->GetW() + 2 * MARGIN_SIZE + GetW());
-    }
-    else {
-        maxDistance = scene->getContentSize().width - (scene->rightCastle_->GetW() + 2 * MARGIN_SIZE + GetW());
-    }
-    if (GetX() > maxDistance) {
-        SetX(maxDistance);
+    auto& castle = scene->getCastle(!IsRightAlignment());
+    if (castle) {
+        float distance = scene->getContentSize().width - castle->GetX() - castle->GetW() - GetW() - GetX();
+        if (distance < ATTACKER_DISTANCE) {
+            SetX(GetX() - (ATTACKER_DISTANCE - distance));
+        }
     }
 }
 
-void AttackAndDefend::AttackerObject::Attack(Game * const scene)
+void aad::AttackerObject::Attack(Game* const scene)
 {
     bool isAttackOther = false;
-
-    std::vector<std::shared_ptr<AttackerObject>> attackers;
-    if (IsRightAlignment()) {
-        attackers = scene->leftAttackers_;
-    }
-    else {
-        attackers = scene->rightAttackers_;
-    }
-    for (std::shared_ptr<AttackerObject>& attacker : attackers) {
-        float attackerBorderX = scene->getContentSize().width - (attacker->GetX() + attacker->GetW()) - GetW();
-        if (GetX() == attackerBorderX) {
+    for (std::shared_ptr<AttackerObject>& attacker : scene->getAttackers(!IsRightAlignment())) {
+        float distance = scene->getContentSize().width - attacker->GetX() - attacker->GetW() - GetW() - GetX();
+        if (distance <= ATTACKER_DISTANCE) {
             attacker->Damage(GetPower());
             isAttackOther = true;
             break;
@@ -72,25 +52,17 @@ void AttackAndDefend::AttackerObject::Attack(Game * const scene)
     }
 
     if (!isAttackOther) {
-        float maxDistance = 0;
-        if (IsRightAlignment()) {
-            maxDistance = scene->getContentSize().width - (scene->leftCastle_->GetW() + 2 * MARGIN_SIZE + GetW());
-        }
-        else {
-            maxDistance = scene->getContentSize().width - (scene->rightCastle_->GetW() + 2 * MARGIN_SIZE + GetW());
-        }
-        if (GetX() == maxDistance) {
-            if (IsRightAlignment()) {
-                scene->leftCastle_->Damage(GetPower());
-            }
-            else {
-                scene->rightCastle_->Damage(GetPower());
+        auto& castle = scene->getCastle(!IsRightAlignment());
+        if (castle) {
+            float distance = scene->getContentSize().width - castle->GetX() - castle->GetW() - GetW() - GetX();
+            if (distance <= ATTACKER_DISTANCE) {
+                castle->Damage(GetPower());
             }
         }
     }
 }
 
-void AttackAndDefend::AttackerObject::Damage(float power)
+void aad::AttackerObject::Damage(float power)
 {
     SetHealth(GetHealth() - power);
     if (GetHealth() < 0) {
@@ -98,7 +70,7 @@ void AttackAndDefend::AttackerObject::Damage(float power)
     }
 }
 
-void AttackerObject::SetHealth(float health)
+void aad::AttackerObject::SetHealth(float health)
 {
     health_ = health;
     char buf[10];
@@ -106,44 +78,44 @@ void AttackerObject::SetHealth(float health)
     label_->setString(buf);
 }
 
-float AttackerObject::GetHealth() const
+float aad::AttackerObject::GetHealth() const
 {
     return health_;
 }
 
-float AttackerObject::GetMaxHealth() const
+float aad::AttackerObject::GetMaxHealth() const
 {
     return maxHealth_;
 }
 
-float AttackerObject::GetPower() const
+float aad::AttackerObject::GetPower() const
 {
     return power_;
 }
 
-cocos2d::CCLabelTTF * AttackAndDefend::AttackerObject::GetLabel() const
+cocos2d::CCLabelTTF * aad::AttackerObject::GetLabel() const
 {
     return label_;
 }
 
-size_t AttackAndDefend::AttackerObject::GetCost() const
+size_t aad::AttackerObject::GetCost() const
 {
     return 0;
 }
 
-void AttackAndDefend::AttackerObject::onPositionUpdate_()
+void aad::AttackerObject::onPositionUpdate_()
 {
     GameObject::onPositionUpdate_();
     UpdateLabelPosition();
 }
 
-void AttackAndDefend::AttackerObject::InitLabel_()
+void aad::AttackerObject::InitLabel_()
 {
     label_ = cocos2d::CCLabelTTF::create("", "Helvetica", 30, cocos2d::Size(GetW(), 30));
     UpdateLabelPosition();
 }
 
-void AttackAndDefend::AttackerObject::UpdateLabelPosition()
+void aad::AttackerObject::UpdateLabelPosition()
 {
     if (isRightAlignment_) {
         label_->setPosition(frameWidth_ - GetX(), GROUND_HEIGHT + GetH() + MARGIN_SIZE);

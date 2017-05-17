@@ -4,12 +4,13 @@
 #include <string>
 #include "cocos2d.h"
 
-class Game;
+namespace aad {
 
-namespace AttackAndDefend {
-
+    const float ATTACKER_DISTANCE = 0;
     const float MARGIN_SIZE = 20.f;
     const float GROUND_HEIGHT = 80.f;    
+
+    class Game;
 
     class GameObject abstract
     {
@@ -20,7 +21,8 @@ namespace AttackAndDefend {
 
         virtual ~GameObject() = default;
 
-        virtual void Update(Game* const scene) = 0;
+        virtual void Update(Game* const scene);
+        virtual void Damage(float power);
 
         cocos2d::Sprite* GetSprite() const;
         float GetX() const;

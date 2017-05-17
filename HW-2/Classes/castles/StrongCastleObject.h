@@ -3,7 +3,7 @@
 
 #include "CastleObject.h"
 
-namespace AttackAndDefend {
+namespace aad {
 
     class StrongCastleObject
         : public CastleObject

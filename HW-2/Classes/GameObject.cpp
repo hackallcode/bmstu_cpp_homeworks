@@ -1,9 +1,7 @@
 #include "GameObject.h"
 #include "GameScene.h"
 
-using namespace AttackAndDefend;
-
-GameObject::GameObject()
+aad::GameObject::GameObject()
     : sprite_(nullptr)
     , x_(0.f)
     , y_(0.f)
@@ -13,7 +11,7 @@ GameObject::GameObject()
     , isRightAlignment_(false)
 {}
 
-GameObject::GameObject(float x, float y, cocos2d::Sprite* sprite)
+aad::GameObject::GameObject(float x, float y, cocos2d::Sprite* sprite)
     : x_(x)
     , y_(y)
     , frameWidth_(0.f)
@@ -23,7 +21,7 @@ GameObject::GameObject(float x, float y, cocos2d::Sprite* sprite)
     SetSprite(sprite);
 }
 
-GameObject::GameObject(float x, float y, std::string const& fileName)
+aad::GameObject::GameObject(float x, float y, std::string const& fileName)
     : x_(x)
     , y_(y)
     , frameWidth_(0.f)
@@ -33,37 +31,43 @@ GameObject::GameObject(float x, float y, std::string const& fileName)
     SetSprite(cocos2d::Sprite::create(fileName));
 }
 
-cocos2d::Sprite * GameObject::GetSprite() const
+void aad::GameObject::Update(Game * const scene)
+{}
+
+void aad::GameObject::Damage(float power)
+{}
+
+cocos2d::Sprite * aad::GameObject::GetSprite() const
 {
     return sprite_;
 }
 
-float GameObject::GetX() const
+float aad::GameObject::GetX() const
 {
     return x_;
 }
 
-float GameObject::GetY() const
+float aad::GameObject::GetY() const
 {
     return y_;
 }
 
-float GameObject::GetW() const
+float aad::GameObject::GetW() const
 {
     return w_;
 }
 
-float GameObject::GetH() const
+float aad::GameObject::GetH() const
 {
     return h_;
 }
 
-bool GameObject::IsRightAlignment() const
+bool aad::GameObject::IsRightAlignment() const
 {
     return isRightAlignment_;
 }
 
-void GameObject::SetSprite(cocos2d::Sprite * pointer)
+void aad::GameObject::SetSprite(cocos2d::Sprite * pointer)
 {
     sprite_ = pointer;
     if (sprite_) {
@@ -78,19 +82,19 @@ void GameObject::SetSprite(cocos2d::Sprite * pointer)
     onPositionUpdate_();
 }
 
-void GameObject::SetX(float x)
+void aad::GameObject::SetX(float x)
 {
     x_ = x;
     onPositionUpdate_();
 }
 
-void GameObject::SetY(float y)
+void aad::GameObject::SetY(float y)
 {
     y_ = y;
     onPositionUpdate_();
 }
 
-void GameObject::SetLeftAlignment()
+void aad::GameObject::SetLeftAlignment()
 {
     if (isRightAlignment_) {
         isRightAlignment_ = false;
@@ -98,7 +102,7 @@ void GameObject::SetLeftAlignment()
     }
 }
 
-void GameObject::SetRightAlignment(float frameWidth)
+void aad::GameObject::SetRightAlignment(float frameWidth)
 {
     if (!isRightAlignment_) {
         isRightAlignment_ = true;
@@ -107,7 +111,7 @@ void GameObject::SetRightAlignment(float frameWidth)
     }
 }
 
-void AttackAndDefend::GameObject::onPositionUpdate_()
+void aad::GameObject::onPositionUpdate_()
 {
     if (sprite_) {
         if (isRightAlignment_ != prevIsRightAlignment_) {
@@ -128,7 +132,7 @@ void AttackAndDefend::GameObject::onPositionUpdate_()
     }
 }
 
-void GameObject::SetSpriteX_(float x)
+void aad::GameObject::SetSpriteX_(float x)
 {
     if (sprite_) {
         if (isRightAlignment_) {
@@ -140,20 +144,20 @@ void GameObject::SetSpriteX_(float x)
     }
 }
 
-void GameObject::SetSpriteY_(float y)
+void aad::GameObject::SetSpriteY_(float y)
 {
     if (sprite_) {
         sprite_->setPositionY(y);
     }
 }
 
-void GameObject::SetW_(float w)
+void aad::GameObject::SetW_(float w)
 {
     w_ = w;
     onPositionUpdate_();
 }
 
-void GameObject::SetH_(float h)
+void aad::GameObject::SetH_(float h)
 {
     h_ = h;
     onPositionUpdate_();

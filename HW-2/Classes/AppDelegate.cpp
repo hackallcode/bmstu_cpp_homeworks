@@ -74,12 +74,12 @@ bool AppDelegate::applicationDidFinishLaunching() {
     if (!glview) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
 #if (FULL_SCREEN_MODE)
-        glview = GLViewImpl::createWithFullScreen("AttackAndDefend");
+        glview = GLViewImpl::createWithFullScreen("aad");
 #else
-        glview = GLViewImpl::createWithRect("AttackAndDefend", cocos2d::Rect(0, 0, FRAME_SIZE_NAME.width, FRAME_SIZE_NAME.height));
+        glview = GLViewImpl::createWithRect("aad", cocos2d::Rect(0, 0, FRAME_SIZE_NAME.width, FRAME_SIZE_NAME.height));
 #endif
 #else
-        glview = GLViewImpl::create("AttackAndDefend");
+        glview = GLViewImpl::create("aad");
 #endif
         director->setOpenGLView(glview);
     }
@@ -128,7 +128,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     register_all_packages();
 
     // create a scene. it's an autorelease object
-    auto scene = Game::createScene();
+    auto scene = aad::Game::createScene();
 
     // run
     director->runWithScene(scene);

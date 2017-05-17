@@ -3,7 +3,7 @@
 
 #include "GameObject.h"
 
-namespace AttackAndDefend {
+namespace aad {
 
     class StaticObject abstract
         : public GameObject

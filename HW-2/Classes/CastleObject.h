@@ -3,7 +3,7 @@
 
 #include "StaticObject.h"
 
-namespace AttackAndDefend {
+namespace aad {
 
     class CastleObject abstract
         : public StaticObject
@@ -14,9 +14,7 @@ namespace AttackAndDefend {
 
         virtual ~CastleObject() = default;
 
-        virtual void Update(Game* const scene) override;
-
-        void Damage(float power);
+        virtual void Damage(float power) override;
 
         void SetHealth(float health);
         void SetArmor(float armor);

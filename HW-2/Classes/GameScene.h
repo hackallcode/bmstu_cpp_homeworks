@@ -2,8 +2,9 @@
 #define __GAME_SCENE_INCLUDED__
 
 #include "cocos2d.h"
-#include <vector>
-#include <memory>
+#include <vector> // std::vector
+#include <memory> // std::shared_ptr
+#include <string> // std::to_string
 
 #include "blocks/BasicBlockObject.h"
 #include "blocks/GrassBlockObject.h"
@@ -16,57 +17,87 @@
 #include "attackers/SecondAttackerObject.h"
 #include "attackers/ThirdAttackerObject.h"
 
-using namespace AttackAndDefend;
+namespace aad {
+    // CONSTANTS
+    bool const LEFT = false;
+    bool const RIGHT = true;
 
-class Game
-    : public cocos2d::Layer
-{
-public:
-    static cocos2d::Scene* createScene();
-    static Game* create();
-    virtual bool init();
+    // GAME PARAMETERS
+    size_t const START_CASH = 80;
+    float const CORPSE_COST_FACTOR = 2.f;
 
-    virtual void update(float);
+    // COORDINATES
+    float const CASH_TOP = 20.f;
+    float const CASH_LEFT = 20.f;
 
-    ~Game() = default;
+    // Z ORDERS
+    int const ATTACKER_Z_ORDER = 1;
+    int const ATTACKER_HEALTH_Z_ORDER = 2;
+    int const CASTLE_Z_ORDER = 3;
+    int const CASTLE_HEALTH_Z_ORDER = 4;
+    int const BLOCK_Z_ORDER = 5;
+    int const CASH_Z_ORDER = 6;
 
-    friend class AttackerObject;
-    friend void OnKeyPressed(cocos2d::EventKeyboard::KeyCode code, cocos2d::Event * event);
-    friend void OnKeyReleased(cocos2d::EventKeyboard::KeyCode code, cocos2d::Event * event);
-    
-private:
-    enum AttackerType {
-        SimpleAttacker = 0
-        , FirstAttacker
-        , SecondAttacker
-        , ThirdAttacker
+    class Game
+        : public cocos2d::Layer
+    {
+    public:
+        enum AttackerType {
+            SimpleAttacker = 0
+            , FirstAttacker
+            , SecondAttacker
+            , ThirdAttacker
+        };
+
+        enum CastleType {
+            SimpleCastle = 0
+            , StrongCastle
+        };
+
+        static cocos2d::Scene* createScene();
+        static Game* create();
+
+        ~Game() = default;
+
+        virtual bool init() override;
+        virtual void update(float) override;
+
+        std::shared_ptr<CastleObject> getCastle(bool isRight);
+        std::vector<std::shared_ptr<AttackerObject>>& getAttackers(bool isRight);
+        size_t getCash(bool isRight);
+        bool isGameEnd();
+
+        void initNewGame();
+        void buyCastle(bool isRight, CastleType id);
+        void buyCastleHp(bool isRight);
+        void buyCastleArmor(bool isRight);
+        void buyAttacker(bool isRight, AttackerType id);
+
+    private:
+        std::vector<std::shared_ptr<BlockObject>> blocks_;        
+        void initMap_();
+
+        std::shared_ptr<CastleObject> castles_[2];
+        void initCastle_(bool isRight, CastleType id = CastleType::SimpleCastle);
+
+        std::vector<std::shared_ptr<AttackerObject>> attackers_[2];
+        void addAttacker_(bool isRight, AttackerType id);
+        void deleteDeadAttackers_(bool isRight);
+        void deleteAllAttackers_(bool isRight);
+        
+        size_t cash_[2];
+        cocos2d::CCLabelTTF* cashLabels_[2];        
+        void initCash_(bool isRight);
+        void setCash_(bool isRight, size_t count);
+        void addCash_(bool isRight, size_t count);
+        bool subtractCash_(bool isRight, size_t count);
+        
+        cocos2d::CCLabelTTF* victoryLabel_ = nullptr;
+        void setWinningPlayer_(bool isRight);
     };
 
-    enum CastleType {
-        SimpleCastle = 0
-        , StrongCastle
-    };
+    void keyListener(cocos2d::EventKeyboard::KeyCode code, cocos2d::Event * event);
 
-    std::vector<std::shared_ptr<BlockObject>> blocks_;
-
-    size_t leftMoney_;
-    size_t rightMoney_;
-    cocos2d::CCLabelTTF * leftMoneyLabel_;
-    cocos2d::CCLabelTTF * rightMoneyLabel_;
-    void SetLeftMoney(size_t money);
-    void SetRightMoney(size_t money);
-    
-    std::shared_ptr<CastleObject> leftCastle_;
-    std::vector<std::shared_ptr<AttackerObject>> leftAttackers_;
-    std::shared_ptr<CastleObject> rightCastle_;
-    std::vector<std::shared_ptr<AttackerObject>> rightAttackers_;
-
-
-    std::shared_ptr<CastleObject>& InitLeftCastle_(CastleType id = CastleType::SimpleCastle);
-    std::shared_ptr<CastleObject>& InitRightCastle_(CastleType id = CastleType::SimpleCastle);
-    std::shared_ptr<AttackerObject>& AddLeftAttacker_(AttackerType id = AttackerType::SimpleAttacker);
-    std::shared_ptr<AttackerObject>& AddRightAttacker_(AttackerType id = AttackerType::SimpleAttacker);
-    void killAttackers_(std::vector<std::shared_ptr<AttackerObject>>& attackers);
-};
+}
 
 #endif // __GAME_SCENE_INCLUDED__

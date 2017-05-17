@@ -1,18 +1,16 @@
 #include "FirstAttackerObject.h"
 #include "GameScene.h"
 
-using namespace AttackAndDefend;
-
-FirstAttackerObject::FirstAttackerObject()
-    : AttackerObject(3.5, 15, 0.4, "attackers/FirstAttacker.png")
+aad::FirstAttackerObject::FirstAttackerObject()
+    : AttackerObject(3, 15, 0.3, "attackers/FirstAttacker.png")
 {}
 
-size_t AttackAndDefend::FirstAttackerObject::GetCost() const
+size_t aad::FirstAttackerObject::GetCost() const
 {
     return GetClassCost();
 }
 
-size_t AttackAndDefend::FirstAttackerObject::GetClassCost()
+size_t aad::FirstAttackerObject::GetClassCost()
 {
     return 40;
 }

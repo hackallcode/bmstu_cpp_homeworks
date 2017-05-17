@@ -1,9 +1,7 @@
 #include "CastleObject.h"
 #include "GameScene.h"
 
-using namespace AttackAndDefend;
-
-CastleObject::CastleObject()
+aad::CastleObject::CastleObject()
     : StaticObject()
     , maxHealth_(0.f)
     , maxArmor_(0.f)
@@ -13,7 +11,7 @@ CastleObject::CastleObject()
     SetArmor(0.f);
 }
 
-CastleObject::CastleObject(float maxHealth, std::string const& fileName)
+aad::CastleObject::CastleObject(float maxHealth, std::string const& fileName)
     : StaticObject(MARGIN_SIZE, GROUND_HEIGHT, fileName)
     , maxHealth_(maxHealth)
     , maxArmor_(2.f * maxHealth)
@@ -23,12 +21,7 @@ CastleObject::CastleObject(float maxHealth, std::string const& fileName)
     SetArmor(0.f);
 }
 
-void CastleObject::Update(Game* const scene)
-{
-    StaticObject::Update(scene);
-}
-
-void AttackAndDefend::CastleObject::Damage(float power)
+void aad::CastleObject::Damage(float power)
 {
     if (GetArmor() - power < 0) {
         SetArmor(0);
@@ -42,7 +35,7 @@ void AttackAndDefend::CastleObject::Damage(float power)
     }
 }
 
-void CastleObject::SetHealth(float health)
+void aad::CastleObject::SetHealth(float health)
 {
     health_ = health;
     char buf[10];
@@ -50,7 +43,7 @@ void CastleObject::SetHealth(float health)
     healthLabel_->setString(buf);
 }
 
-void CastleObject::SetArmor(float armor)
+void aad::CastleObject::SetArmor(float armor)
 {
     armor_ = armor;
     char buf[10];
@@ -58,55 +51,55 @@ void CastleObject::SetArmor(float armor)
     armorLabel_->setString(buf);
 }
 
-float CastleObject::GetHealth() const
+float aad::CastleObject::GetHealth() const
 {
     return health_;
 }
 
-float CastleObject::GetMaxHealth() const
+float aad::CastleObject::GetMaxHealth() const
 {
     return maxHealth_;
 }
 
-float CastleObject::GetArmor() const
+float aad::CastleObject::GetArmor() const
 {
     return armor_;
 }
 
-float CastleObject::GetMaxArmor() const
+float aad::CastleObject::GetMaxArmor() const
 {
     return maxArmor_;
 }
 
-cocos2d::CCLabelTTF * AttackAndDefend::CastleObject::GetHealthLabel() const
+cocos2d::CCLabelTTF * aad::CastleObject::GetHealthLabel() const
 {
     return healthLabel_;
 }
 
-cocos2d::CCLabelTTF * AttackAndDefend::CastleObject::GetArmorLabel() const
+cocos2d::CCLabelTTF * aad::CastleObject::GetArmorLabel() const
 {
     return armorLabel_;
 }
 
-size_t AttackAndDefend::CastleObject::GetCost() const
+size_t aad::CastleObject::GetCost() const
 {
     return 0;
 }
 
-void AttackAndDefend::CastleObject::onPositionUpdate_()
+void aad::CastleObject::onPositionUpdate_()
 {
     GameObject::onPositionUpdate_();
     UpdateLabelsPosition_();
 }
 
-void AttackAndDefend::CastleObject::InitLabels_()
+void aad::CastleObject::InitLabels_()
 {
     healthLabel_ = cocos2d::CCLabelTTF::create("", "Helvetica", 30, cocos2d::Size(GetW(), 30));
     armorLabel_ = cocos2d::CCLabelTTF::create("", "Helvetica", 30, cocos2d::Size(GetW(), 30));
     UpdateLabelsPosition_();
 }
 
-void AttackAndDefend::CastleObject::UpdateLabelsPosition_()
+void aad::CastleObject::UpdateLabelsPosition_()
 {
     if (isRightAlignment_) {
         healthLabel_->setPosition(frameWidth_ - MARGIN_SIZE, GROUND_HEIGHT + GetH() + MARGIN_SIZE);

@@ -3,7 +3,7 @@
 
 #include "GameObject.h"
 
-namespace AttackAndDefend {
+namespace aad {
 
     class DynamicObject abstract
         : public GameObject
