@@ -1,43 +1,35 @@
 #ifndef __ATTACKER_OBJECT_INCLUDED__
 #define __ATTACKER_OBJECT_INCLUDED__
 
+#include <string>
 #include "DynamicObject.h"
+#include "AliveObject.h"
 
 namespace aad {
 
     class AttackerObject abstract
-        : public DynamicObject
+        : public DynamicObject, public AliveObject
     {
     public:
         AttackerObject();
-        AttackerObject(float speed, float maxHealth, float power, std::string const& fileName);
+        AttackerObject(float maxHealth, float power, float speed, std::string const& fileName);
 
         virtual ~AttackerObject() = default;
 
         virtual void Update(Game* const scene) override;
         void Attack(Game* const scene);
 
-        virtual void Damage(float power) override;
-
-        void SetHealth(float health);
-        
-        float GetHealth() const;
-        float GetMaxHealth() const;
         float GetPower() const;
-        cocos2d::CCLabelTTF * GetLabel() const;
 
         virtual size_t GetCost() const;
 
-    protected:
-        float health_;
-        float maxHealth_;
+    protected:        
+        virtual void OnXUpdate_() override;
+        virtual void OnYUpdate_() override;
+        virtual void OnRightAlignmentUpdate_() override;
+
+    private:
         float power_;
-        cocos2d::CCLabelTTF * label_;
-
-        virtual void onPositionUpdate_() override;
-
-        void InitLabel_();
-        void UpdateLabelPosition();
     };
 
 }

@@ -60,6 +60,9 @@ bool aad::Game::init()
 
 void aad::Game::update(float)
 {
+    incCash_(LEFT);
+    incCash_(RIGHT);
+
     if (castles_[LEFT]->GetHealth() == 0) {
         setWinningPlayer_(RIGHT);
         return;
@@ -209,7 +212,7 @@ void aad::Game::initCastle_(bool isRight, CastleType id)
         removeChild(castles_[isRight]->GetHealthLabel());
         removeChild(castles_[isRight]->GetArmorLabel());
     }
-    
+
     switch (id)
     {
     case Game::SimpleCastle:
@@ -225,7 +228,7 @@ void aad::Game::initCastle_(bool isRight, CastleType id)
 
     addChild(castles_[isRight]->GetSprite(), CASTLE_Z_ORDER);
     addChild(castles_[isRight]->GetHealthLabel(), CASTLE_HEALTH_Z_ORDER);
-    addChild(castles_[isRight]->GetArmorLabel(), CASTLE_HEALTH_Z_ORDER);
+    addChild(castles_[isRight]->GetArmorLabel(), CASTLE_HEALTH_Z_ORDER);    
 }
 
 void aad::Game::addAttacker_(bool isRight, AttackerType id)
@@ -250,7 +253,8 @@ void aad::Game::addAttacker_(bool isRight, AttackerType id)
     }
 
     addChild(attackers_[isRight].back()->GetSprite(), ATTACKER_Z_ORDER);
-    addChild(attackers_[isRight].back()->GetLabel(), ATTACKER_HEALTH_Z_ORDER);
+    addChild(attackers_[isRight].back()->GetHealthLabel(), ATTACKER_HEALTH_Z_ORDER);
+    addChild(attackers_[isRight].back()->GetArmorLabel(), ATTACKER_HEALTH_Z_ORDER);
 }
 
 void aad::Game::deleteDeadAttackers_(bool isRight)
@@ -258,10 +262,10 @@ void aad::Game::deleteDeadAttackers_(bool isRight)
     for (size_t i = 0; i < attackers_[isRight].size(); ++i) {
         if (attackers_[isRight][i]->GetHealth() == 0) {
             addCash_(!isRight, attackers_[isRight][i]->GetCost() * CORPSE_COST_FACTOR);
-            
+
             removeChild(attackers_[isRight][i]->GetSprite());
-            removeChild(attackers_[isRight][i]->GetLabel());
-            
+            removeChild(attackers_[isRight][i]->GetHealthLabel());
+
             attackers_[isRight].erase(attackers_[isRight].begin() + i);
             --i;
         }
@@ -272,14 +276,17 @@ void aad::Game::deleteAllAttackers_(bool isRight)
 {
     while (attackers_[isRight].size() > 0) {
         removeChild(attackers_[isRight].back()->GetSprite());
-        removeChild(attackers_[isRight].back()->GetLabel());
-        
+        removeChild(attackers_[isRight].back()->GetHealthLabel());
+
         attackers_[isRight].pop_back();
     }
 }
 
 void aad::Game::initCash_(bool isRight)
 {
+    isPlayerBegin_[isRight] = false;
+    steps_[isRight] = 0;
+
     if (cashLabels_[isRight] == nullptr) {
         cashLabels_[isRight] = cocos2d::CCLabelTTF::create("", "Helvetica", 60, cocos2d::Size(960, 60));
         cashLabels_[isRight]->setHorizontalAlignment(
@@ -308,12 +315,27 @@ void aad::Game::addCash_(bool isRight, size_t count)
 
 bool aad::Game::subtractCash_(bool isRight, size_t count)
 {
+    isPlayerBegin_[isRight] = true;
+
     if (count > cash_[isRight]) {
         return false;
     }
     else {
         setCash_(isRight, cash_[isRight] - count);
         return true;
+    }
+}
+
+void aad::Game::incCash_(bool isRight)
+{
+    if (isPlayerBegin_[isRight]) {
+        ++steps_[isRight];
+        if (steps_[isRight] % (
+            (steps_[isRight] / CHANGE_CASH_INC_INTERVAL < CASH_INC_INTERVAL) ?
+            (CASH_INC_INTERVAL - steps_[isRight] / CHANGE_CASH_INC_INTERVAL) : 1
+            ) == 0) {
+            addCash_(isRight, 1);
+        }
     }
 }
 
@@ -340,7 +362,7 @@ void aad::keyListener(cocos2d::EventKeyboard::KeyCode code, cocos2d::Event * eve
     }
 
     if (code == cocos2d::EventKeyboard::KeyCode::KEY_SPACE && GLOBAL_GAME_SCENE->isGameEnd()) {
-        GLOBAL_GAME_SCENE->initNewGame();        
+        GLOBAL_GAME_SCENE->initNewGame();
     }
 
     if (code == cocos2d::EventKeyboard::KeyCode::KEY_Q) {

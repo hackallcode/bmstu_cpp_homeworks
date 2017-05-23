@@ -21,8 +21,9 @@ aad::DynamicObject::DynamicObject(float x, float y, float hSpeed, float vSpeed, 
 
 void aad::DynamicObject::Update(Game* const scene)
 {
-    SetY(GetY() + vSpeed_);
-    SetX(GetX() + hSpeed_);
+    SetY_(GetY() + vSpeed_);
+    SetX_(GetX() + hSpeed_);
+    GameObject::Update(scene);
 }
 
 float aad::DynamicObject::GetHSpeed() const
@@ -35,12 +36,12 @@ float aad::DynamicObject::GetVSpeed() const
     return vSpeed_;
 }
 
-void aad::DynamicObject::SetHSpeed(float speed)
+void aad::DynamicObject::SetHSpeed_(float speed)
 {
     hSpeed_ = speed;
 }
 
-void aad::DynamicObject::SetVSpeed(float speed)
+void aad::DynamicObject::SetVSpeed_(float speed)
 {
     vSpeed_ = speed;
 }

@@ -23,8 +23,10 @@ namespace aad {
     bool const RIGHT = true;
 
     // GAME PARAMETERS
-    size_t const START_CASH = 80;
-    float const CORPSE_COST_FACTOR = 2.f;
+    size_t const START_CASH = 50;
+    size_t const CASH_INC_INTERVAL = 60;
+    float const CORPSE_COST_FACTOR = 1.5f;
+    size_t const CHANGE_CASH_INC_INTERVAL = 45;
 
     // COORDINATES
     float const CASH_TOP = 20.f;
@@ -85,12 +87,15 @@ namespace aad {
         void deleteDeadAttackers_(bool isRight);
         void deleteAllAttackers_(bool isRight);
         
+        bool isPlayerBegin_[2];
+        size_t steps_[2];
         size_t cash_[2];
         cocos2d::CCLabelTTF* cashLabels_[2];        
         void initCash_(bool isRight);
         void setCash_(bool isRight, size_t count);
         void addCash_(bool isRight, size_t count);
         bool subtractCash_(bool isRight, size_t count);
+        void incCash_(bool isRight);
         
         cocos2d::CCLabelTTF* victoryLabel_ = nullptr;
         void setWinningPlayer_(bool isRight);

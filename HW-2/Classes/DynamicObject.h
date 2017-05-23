@@ -1,6 +1,7 @@
 #ifndef __DYNAMIC_OBJECT_INCLUDED__
 #define __DYNAMIC_OBJECT_INCLUDED__
 
+#include <string>
 #include "GameObject.h"
 
 namespace aad {
@@ -20,9 +21,11 @@ namespace aad {
         float GetHSpeed() const;
         float GetVSpeed() const;
 
-        void SetHSpeed(float speed);
-        void SetVSpeed(float speed);
     protected:
+        void SetHSpeed_(float speed);
+        void SetVSpeed_(float speed);
+
+    private:
         float hSpeed_;
         float vSpeed_;
     };

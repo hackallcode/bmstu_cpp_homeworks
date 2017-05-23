@@ -75,6 +75,9 @@
     <ClCompile Include="..\Classes\blocks\GrassBlockObject.cpp">
       <Filter>src\objects\blocks</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\AliveObject.cpp">
+      <Filter>src\objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -127,6 +130,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\blocks\GrassBlockObject.h">
       <Filter>src\objects\blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\AliveObject.h">
+      <Filter>src\objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

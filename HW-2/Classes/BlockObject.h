@@ -1,6 +1,7 @@
 #ifndef __BLOCK_OBJECT_INCLUDED__
 #define __BLOCK_OBJECT_INCLUDED__
 
+#include <string>
 #include "StaticObject.h"
 
 namespace aad {

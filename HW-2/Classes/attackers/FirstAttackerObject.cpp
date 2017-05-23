@@ -2,7 +2,7 @@
 #include "GameScene.h"
 
 aad::FirstAttackerObject::FirstAttackerObject()
-    : AttackerObject(3, 15, 0.3, "attackers/FirstAttacker.png")
+    : AttackerObject(FIRST_ATTACKER_HEALTH, FIRST_ATTACKER_POWER, FIRST_ATTACKER_SPEED, "attackers/FirstAttacker.png")
 {}
 
 size_t aad::FirstAttackerObject::GetCost() const
@@ -12,5 +12,5 @@ size_t aad::FirstAttackerObject::GetCost() const
 
 size_t aad::FirstAttackerObject::GetClassCost()
 {
-    return 40;
+    return FIRST_ATTACKER_COST;
 }

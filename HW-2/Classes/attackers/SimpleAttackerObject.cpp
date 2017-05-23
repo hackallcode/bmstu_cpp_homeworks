@@ -2,7 +2,7 @@
 #include "GameScene.h"
 
 aad::SimpleAttackerObject::SimpleAttackerObject()
-    : AttackerObject(1.5, 10, 0.1, "attackers/SimpleAttacker.png")
+    : AttackerObject(SIMPLE_ATTACKER_HEALTH, SIMPLE_ATTACKER_POWER, SIMPLE_ATTACKER_SPEED, "attackers/SimpleAttacker.png")
 {}
 
 size_t aad::SimpleAttackerObject::GetCost() const
@@ -12,5 +12,5 @@ size_t aad::SimpleAttackerObject::GetCost() const
 
 size_t aad::SimpleAttackerObject::GetClassCost()
 {
-    return 10;
+    return SIMPLE_ATTACKER_COST;
 }

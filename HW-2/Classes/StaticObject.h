@@ -1,6 +1,7 @@
 #ifndef __STATIC_OBJECT_INCLUDED__
 #define __STATIC_OBJECT_INCLUDED__
 
+#include <string>
 #include "GameObject.h"
 
 namespace aad {

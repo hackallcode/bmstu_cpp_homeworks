@@ -2,7 +2,7 @@
 #include "GameScene.h"
 
 aad::SecondAttackerObject::SecondAttackerObject()
-    : AttackerObject(2.5, 20, 0.7, "attackers/SecondAttacker.png")
+    : AttackerObject(SECOND_ATTACKER_HEALTH, SECOND_ATTACKER_POWER, SECOND_ATTACKER_SPEED, "attackers/SecondAttacker.png")
 {}
 
 size_t aad::SecondAttackerObject::GetCost() const
@@ -12,5 +12,5 @@ size_t aad::SecondAttackerObject::GetCost() const
 
 size_t aad::SecondAttackerObject::GetClassCost()
 {
-    return 90;
+    return SECOND_ATTACKER_COST;
 }
