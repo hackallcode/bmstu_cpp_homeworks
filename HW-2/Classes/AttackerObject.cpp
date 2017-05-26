@@ -8,7 +8,7 @@ aad::AttackerObject::AttackerObject()
 {}
 
 aad::AttackerObject::AttackerObject(float maxHealth, float power, float speed, std::string const& fileName)
-    : DynamicObject(MARGIN_SIZE, GROUND_HEIGHT, speed, 0.f, fileName)
+    : DynamicObject(ATTACKER_X_START, ATTACKER_Y_START, speed, 0.f, fileName)
     , AliveObject(this, maxHealth, 0.f)
     , power_(power)
 {}
@@ -31,6 +31,7 @@ void aad::AttackerObject::Update(Game* const scene)
             SetX_(GetX() - (ATTACKER_DISTANCE - distance));
         }
     }
+    OnPositionUpdate_();
 }
 
 void aad::AttackerObject::Attack(Game* const scene)

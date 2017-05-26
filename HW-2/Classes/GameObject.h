@@ -6,31 +6,6 @@
 
 namespace aad {
 
-    const float ATTACKER_DISTANCE = 0;
-    const float MARGIN_SIZE = 20.f;
-    const float HEALTH_FONT_SIZE = 30.f;
-    const float GROUND_HEIGHT = 80.f;    
-
-    const float SIMPLE_ATTACKER_COST = 10.f;
-    const float SIMPLE_ATTACKER_HEALTH = 10.f;
-    const float SIMPLE_ATTACKER_POWER = 0.2f;
-    const float SIMPLE_ATTACKER_SPEED = 1.5f;
-
-    const float FIRST_ATTACKER_COST = 40.f;
-    const float FIRST_ATTACKER_HEALTH = 70.f;
-    const float FIRST_ATTACKER_POWER = 0.3f;
-    const float FIRST_ATTACKER_SPEED = 3.f;
-
-    const float SECOND_ATTACKER_COST = 90.f;
-    const float SECOND_ATTACKER_HEALTH = 145.f;
-    const float SECOND_ATTACKER_POWER = 0.45f;
-    const float SECOND_ATTACKER_SPEED = 2.5f;
-
-    const float THIRD_ATTACKER_COST = 150.f;
-    const float THIRD_ATTACKER_HEALTH = 175.f;
-    const float THIRD_ATTACKER_POWER = 0.68f;
-    const float THIRD_ATTACKER_SPEED = 1.5f;
-
     class Game;
 
     class GameObject abstract

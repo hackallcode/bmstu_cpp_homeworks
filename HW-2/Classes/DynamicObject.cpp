@@ -21,9 +21,11 @@ aad::DynamicObject::DynamicObject(float x, float y, float hSpeed, float vSpeed, 
 
 void aad::DynamicObject::Update(Game* const scene)
 {
+    GameObject::Update(scene);
+
     SetY_(GetY() + vSpeed_);
     SetX_(GetX() + hSpeed_);
-    GameObject::Update(scene);
+    OnPositionUpdate_();
 }
 
 float aad::DynamicObject::GetHSpeed() const

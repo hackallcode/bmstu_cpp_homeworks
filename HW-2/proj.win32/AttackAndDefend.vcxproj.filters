@@ -22,6 +22,9 @@
     <Filter Include="src\objects\attackers">
       <UniqueIdentifier>{1dd1e2ab-56f7-46be-9f8f-cb2a86a5d8c9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\objects\gameObjects">
+      <UniqueIdentifier>{ed24da0d-ff42-4635-8b70-ae3c5df40db2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -39,44 +42,44 @@
     <ClCompile Include="..\Classes\GameObject.cpp">
       <Filter>src\objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\AttackerObject.cpp">
-      <Filter>src\objects</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\StaticObject.cpp">
-      <Filter>src\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\BlockObject.cpp">
-      <Filter>src\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\CastleObject.cpp">
       <Filter>src\objects</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\blocks\BasicBlockObject.cpp">
       <Filter>src\objects\blocks</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\attackers\SimpleAttackerObject.cpp">
-      <Filter>src\objects\attackers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\castles\SimpleCastleObject.cpp">
-      <Filter>src\objects\castles</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\castles\StrongCastleObject.cpp">
-      <Filter>src\objects\castles</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\attackers\FirstAttackerObject.cpp">
-      <Filter>src\objects\attackers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\attackers\SecondAttackerObject.cpp">
-      <Filter>src\objects\attackers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\attackers\ThirdAttackerObject.cpp">
-      <Filter>src\objects\attackers</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\blocks\GrassBlockObject.cpp">
       <Filter>src\objects\blocks</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\AliveObject.cpp">
       <Filter>src\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\attackers\AttackerNo1.cpp">
+      <Filter>src\objects\attackers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\attackers\AttackerNo2.cpp">
+      <Filter>src\objects\attackers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\attackers\AttackerNo3.cpp">
+      <Filter>src\objects\attackers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\attackers\AttackerNo4.cpp">
+      <Filter>src\objects\attackers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\castles\CastleNo1.cpp">
+      <Filter>src\objects\castles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\castles\CastleNo2.cpp">
+      <Filter>src\objects\castles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\AttackerObject.cpp">
+      <Filter>src\objects\gameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\BlockObject.cpp">
+      <Filter>src\objects\gameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\CastleObject.cpp">
+      <Filter>src\objects\gameObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -95,44 +98,44 @@
     <ClInclude Include="..\Classes\GameObject.h">
       <Filter>src\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\AttackerObject.h">
-      <Filter>src\objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\StaticObject.h">
-      <Filter>src\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\BlockObject.h">
-      <Filter>src\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\CastleObject.h">
       <Filter>src\objects</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\blocks\BasicBlockObject.h">
       <Filter>src\objects\blocks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\attackers\SimpleAttackerObject.h">
-      <Filter>src\objects\attackers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\castles\SimpleCastleObject.h">
-      <Filter>src\objects\castles</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\castles\StrongCastleObject.h">
-      <Filter>src\objects\castles</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\attackers\FirstAttackerObject.h">
-      <Filter>src\objects\attackers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\attackers\SecondAttackerObject.h">
-      <Filter>src\objects\attackers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\attackers\ThirdAttackerObject.h">
-      <Filter>src\objects\attackers</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\blocks\GrassBlockObject.h">
       <Filter>src\objects\blocks</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\AliveObject.h">
       <Filter>src\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\attackers\AttackerNo1.h">
+      <Filter>src\objects\attackers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\attackers\AttackerNo2.h">
+      <Filter>src\objects\attackers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\attackers\AttackerNo3.h">
+      <Filter>src\objects\attackers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\attackers\AttackerNo4.h">
+      <Filter>src\objects\attackers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\castles\CastleNo1.h">
+      <Filter>src\objects\castles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\castles\CastleNo2.h">
+      <Filter>src\objects\castles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\AttackerObject.h">
+      <Filter>src\objects\gameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\BlockObject.h">
+      <Filter>src\objects\gameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\CastleObject.h">
+      <Filter>src\objects\gameObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -29,9 +29,7 @@ aad::GameObject::GameObject(float x, float y, std::string const& fileName)
 }
 
 void aad::GameObject::Update(Game * const scene)
-{
-    OnPositionUpdate_();
-}
+{}
 
 cocos2d::Sprite * aad::GameObject::GetSprite() const
 {

@@ -7,21 +7,24 @@
 
 namespace aad {
 
+    const float HEALTH_FONT_SIZE = 30.f;
+    const float HEALTH_MARGIN = 20.f;
+
     class AliveObject abstract
     {
     public:
         AliveObject();
-        AliveObject(GameObject const* parent, float maxHealth, float maxArmor);
+        AliveObject(GameObject* const parent, float maxHealth, float maxArmor);
 
         virtual ~AliveObject() = default;
 
         virtual void Damage(float power);
 
-        void SetParent(GameObject const* parent);
+        void SetParent(GameObject* const parent);
         void SetHealth(float health);
         void SetArmor(float armor);
 
-        GameObject const* GetParent();
+        GameObject* GetParent() const;
         float GetHealth() const;
         float GetMaxHealth() const;
         float GetArmor() const;
@@ -35,7 +38,7 @@ namespace aad {
         virtual void OnRightAlignmentUpdate_();
 
     private:
-        GameObject const* parent_;
+        GameObject* parent_;
         float health_;
         float maxHealth_;
         float armor_;

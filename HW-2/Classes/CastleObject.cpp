@@ -7,7 +7,7 @@ aad::CastleObject::CastleObject()
 {}
 
 aad::CastleObject::CastleObject(float maxHealth, std::string const& fileName)
-    : StaticObject(MARGIN_SIZE, GROUND_HEIGHT, fileName)
+    : StaticObject(CASTLE_X_POSITION, CASTLE_Y_POSITION, fileName)
     , AliveObject(this, maxHealth, 2.f * maxHealth)
 {}
 

@@ -11,7 +11,7 @@ aad::AliveObject::AliveObject()
     , armorLabel_(nullptr)
 {}
 
-aad::AliveObject::AliveObject(GameObject const* parent, float maxHealth, float maxArmor)
+aad::AliveObject::AliveObject(GameObject* const parent, float maxHealth, float maxArmor)
     : parent_(nullptr)
     , health_(0.f)
     , maxHealth_(maxHealth)
@@ -39,7 +39,7 @@ void aad::AliveObject::Damage(float power)
     }
 }
 
-void aad::AliveObject::SetParent(GameObject const * parent)
+void aad::AliveObject::SetParent(GameObject* const parent)
 {
     parent_ = parent;
     LabelsInit_();
@@ -66,7 +66,7 @@ void aad::AliveObject::SetArmor(float armor)
     }
 }
 
-aad::GameObject const * aad::AliveObject::GetParent()
+aad::GameObject* aad::AliveObject::GetParent() const
 {
     return parent_;
 }
@@ -139,10 +139,10 @@ void aad::AliveObject::OnYUpdate_()
 {
     if (parent_ != nullptr) {
         if (healthLabel_ != nullptr) {
-            healthLabel_->setPositionY(parent_->GetY() + parent_->GetH() + MARGIN_SIZE);
+            healthLabel_->setPositionY(parent_->GetY() + parent_->GetH() + HEALTH_MARGIN);
         }
         if (armorLabel_ != nullptr) {
-            armorLabel_->setPositionY(parent_->GetY() + parent_->GetH() + 2 * MARGIN_SIZE + HEALTH_FONT_SIZE);
+            armorLabel_->setPositionY(parent_->GetY() + parent_->GetH() + 2 * HEALTH_MARGIN + HEALTH_FONT_SIZE);
         }
     }
 }

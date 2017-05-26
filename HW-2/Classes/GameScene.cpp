@@ -131,13 +131,13 @@ void aad::Game::buyCastle(bool isRight, CastleType id)
 {
     switch (id)
     {
-    case Game::SimpleCastle:
-        if (subtractCash_(isRight, SimpleCastleObject::GetClassCost())) {
+    case CastleType::CastleTypeNo1:
+        if (subtractCash_(isRight, CastleNo1::GetClassCost())) {
             initCastle_(isRight, id);
         }
         break;
-    case Game::StrongCastle:
-        if (subtractCash_(isRight, StrongCastleObject::GetClassCost())) {
+    case CastleType::CastleTypeNo2:
+        if (subtractCash_(isRight, CastleNo2::GetClassCost())) {
             initCastle_(isRight, id);
         }
         break;
@@ -166,23 +166,23 @@ void aad::Game::buyAttacker(bool isRight, AttackerType id)
 {
     switch (id)
     {
-    case aad::Game::SimpleAttacker:
-        if (subtractCash_(isRight, SimpleAttackerObject::GetClassCost())) {
+    case AttackerType::AttackerTypeNo1:
+        if (subtractCash_(isRight, AttackerNo1::GetClassCost())) {
             addAttacker_(isRight, id);
         }
         break;
-    case aad::Game::FirstAttacker:
-        if (subtractCash_(isRight, FirstAttackerObject::GetClassCost())) {
+    case AttackerType::AttackerTypeNo2:
+        if (subtractCash_(isRight, AttackerNo2::GetClassCost())) {
             addAttacker_(isRight, id);
         }
         break;
-    case aad::Game::SecondAttacker:
-        if (subtractCash_(isRight, SecondAttackerObject::GetClassCost())) {
+    case AttackerType::AttackerTypeNo3:
+        if (subtractCash_(isRight, AttackerNo3::GetClassCost())) {
             addAttacker_(isRight, id);
         }
         break;
-    case aad::Game::ThirdAttacker:
-        if (subtractCash_(isRight, ThirdAttackerObject::GetClassCost())) {
+    case AttackerType::AttackerTypeNo4:
+        if (subtractCash_(isRight, AttackerNo4::GetClassCost())) {
             addAttacker_(isRight, id);
         }
         break;
@@ -215,11 +215,11 @@ void aad::Game::initCastle_(bool isRight, CastleType id)
 
     switch (id)
     {
-    case Game::SimpleCastle:
-        castles_[isRight] = std::shared_ptr<CastleObject>(new SimpleCastleObject);
+    case CastleType::CastleTypeNo1:
+        castles_[isRight] = std::shared_ptr<CastleObject>(new CastleNo1);
         break;
-    case Game::StrongCastle:
-        castles_[isRight] = std::shared_ptr<CastleObject>(new StrongCastleObject);
+    case CastleType::CastleTypeNo2:
+        castles_[isRight] = std::shared_ptr<CastleObject>(new CastleNo2);
         break;
     }
     if (isRight) {
@@ -235,17 +235,17 @@ void aad::Game::addAttacker_(bool isRight, AttackerType id)
 {
     switch (id)
     {
-    case Game::SimpleAttacker:
-        attackers_[isRight].push_back(std::shared_ptr<AttackerObject>(new SimpleAttackerObject));
+    case AttackerType::AttackerTypeNo1:
+        attackers_[isRight].push_back(std::shared_ptr<AttackerObject>(new AttackerNo1));
         break;
-    case Game::FirstAttacker:
-        attackers_[isRight].push_back(std::shared_ptr<AttackerObject>(new FirstAttackerObject));
+    case AttackerType::AttackerTypeNo2:
+        attackers_[isRight].push_back(std::shared_ptr<AttackerObject>(new AttackerNo2));
         break;
-    case Game::SecondAttacker:
-        attackers_[isRight].push_back(std::shared_ptr<AttackerObject>(new SecondAttackerObject));
+    case AttackerType::AttackerTypeNo3:
+        attackers_[isRight].push_back(std::shared_ptr<AttackerObject>(new AttackerNo3));
         break;
-    case Game::ThirdAttacker:
-        attackers_[isRight].push_back(std::shared_ptr<AttackerObject>(new ThirdAttackerObject));
+    case AttackerType::AttackerTypeNo4:
+        attackers_[isRight].push_back(std::shared_ptr<AttackerObject>(new AttackerNo4));
         break;
     }
     if (isRight) {
@@ -366,19 +366,19 @@ void aad::keyListener(cocos2d::EventKeyboard::KeyCode code, cocos2d::Event * eve
     }
 
     if (code == cocos2d::EventKeyboard::KeyCode::KEY_Q) {
-        GLOBAL_GAME_SCENE->buyAttacker(LEFT, Game::AttackerType::SimpleAttacker);
+        GLOBAL_GAME_SCENE->buyAttacker(LEFT, Game::AttackerType::AttackerTypeNo1);
     }
     if (code == cocos2d::EventKeyboard::KeyCode::KEY_W) {
-        GLOBAL_GAME_SCENE->buyAttacker(LEFT, Game::AttackerType::FirstAttacker);
+        GLOBAL_GAME_SCENE->buyAttacker(LEFT, Game::AttackerType::AttackerTypeNo2);
     }
     if (code == cocos2d::EventKeyboard::KeyCode::KEY_E) {
-        GLOBAL_GAME_SCENE->buyAttacker(LEFT, Game::AttackerType::SecondAttacker);
+        GLOBAL_GAME_SCENE->buyAttacker(LEFT, Game::AttackerType::AttackerTypeNo3);
     }
     if (code == cocos2d::EventKeyboard::KeyCode::KEY_R) {
-        GLOBAL_GAME_SCENE->buyAttacker(LEFT, Game::AttackerType::ThirdAttacker);
+        GLOBAL_GAME_SCENE->buyAttacker(LEFT, Game::AttackerType::AttackerTypeNo4);
     }
     if (code == cocos2d::EventKeyboard::KeyCode::KEY_A) {
-        GLOBAL_GAME_SCENE->buyCastle(LEFT, Game::CastleType::StrongCastle);
+        GLOBAL_GAME_SCENE->buyCastle(LEFT, Game::CastleType::CastleTypeNo2);
     }
     if (code == cocos2d::EventKeyboard::KeyCode::KEY_S) {
         GLOBAL_GAME_SCENE->buyCastleHp(LEFT);
@@ -388,19 +388,19 @@ void aad::keyListener(cocos2d::EventKeyboard::KeyCode code, cocos2d::Event * eve
     }
 
     if (code == cocos2d::EventKeyboard::KeyCode::KEY_U) {
-        GLOBAL_GAME_SCENE->buyAttacker(RIGHT, Game::AttackerType::SimpleAttacker);
+        GLOBAL_GAME_SCENE->buyAttacker(RIGHT, Game::AttackerType::AttackerTypeNo1);
     }
     if (code == cocos2d::EventKeyboard::KeyCode::KEY_I) {
-        GLOBAL_GAME_SCENE->buyAttacker(RIGHT, Game::AttackerType::FirstAttacker);
+        GLOBAL_GAME_SCENE->buyAttacker(RIGHT, Game::AttackerType::AttackerTypeNo2);
     }
     if (code == cocos2d::EventKeyboard::KeyCode::KEY_O) {
-        GLOBAL_GAME_SCENE->buyAttacker(RIGHT, Game::AttackerType::SecondAttacker);
+        GLOBAL_GAME_SCENE->buyAttacker(RIGHT, Game::AttackerType::AttackerTypeNo3);
     }
     if (code == cocos2d::EventKeyboard::KeyCode::KEY_P) {
-        GLOBAL_GAME_SCENE->buyAttacker(RIGHT, Game::AttackerType::ThirdAttacker);
+        GLOBAL_GAME_SCENE->buyAttacker(RIGHT, Game::AttackerType::AttackerTypeNo4);
     }
     if (code == cocos2d::EventKeyboard::KeyCode::KEY_J) {
-        GLOBAL_GAME_SCENE->buyCastle(RIGHT, Game::CastleType::StrongCastle);
+        GLOBAL_GAME_SCENE->buyCastle(RIGHT, Game::CastleType::CastleTypeNo2);
     }
     if (code == cocos2d::EventKeyboard::KeyCode::KEY_K) {
         GLOBAL_GAME_SCENE->buyCastleHp(RIGHT);

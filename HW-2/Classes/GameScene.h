@@ -9,18 +9,19 @@
 #include "blocks/BasicBlockObject.h"
 #include "blocks/GrassBlockObject.h"
 
-#include "castles/SimpleCastleObject.h"
-#include "castles/StrongCastleObject.h"
+#include "castles/CastleNo1.h"
+#include "castles/CastleNo2.h"
 
-#include "attackers/SimpleAttackerObject.h"
-#include "attackers/FirstAttackerObject.h"
-#include "attackers/SecondAttackerObject.h"
-#include "attackers/ThirdAttackerObject.h"
+#include "attackers/AttackerNo1.h"
+#include "attackers/AttackerNo2.h"
+#include "attackers/AttackerNo3.h"
+#include "attackers/AttackerNo4.h"
 
 namespace aad {
+
     // CONSTANTS
-    bool const LEFT = false;
-    bool const RIGHT = true;
+    bool const LEFT = 0;
+    bool const RIGHT = 1;
 
     // GAME PARAMETERS
     size_t const START_CASH = 50;
@@ -45,15 +46,15 @@ namespace aad {
     {
     public:
         enum AttackerType {
-            SimpleAttacker = 0
-            , FirstAttacker
-            , SecondAttacker
-            , ThirdAttacker
+            AttackerTypeNo1 = 0
+            , AttackerTypeNo2
+            , AttackerTypeNo3
+            , AttackerTypeNo4
         };
 
         enum CastleType {
-            SimpleCastle = 0
-            , StrongCastle
+            CastleTypeNo1 = 0
+            , CastleTypeNo2
         };
 
         static cocos2d::Scene* createScene();
@@ -80,7 +81,7 @@ namespace aad {
         void initMap_();
 
         std::shared_ptr<CastleObject> castles_[2];
-        void initCastle_(bool isRight, CastleType id = CastleType::SimpleCastle);
+        void initCastle_(bool isRight, CastleType id = CastleType::CastleTypeNo1);
 
         std::vector<std::shared_ptr<AttackerObject>> attackers_[2];
         void addAttacker_(bool isRight, AttackerType id);
