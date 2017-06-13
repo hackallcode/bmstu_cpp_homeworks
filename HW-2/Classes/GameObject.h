@@ -12,7 +12,7 @@ namespace aad {
     {
     public:
         GameObject();
-        GameObject(float x, float y, cocos2d::Sprite* sprite = nullptr); //TODO UPDATE
+        GameObject(float x, float y, cocos2d::Sprite* sprite = nullptr);
         GameObject(float x, float y, std::string const& fileName);
 
         virtual ~GameObject() = default;

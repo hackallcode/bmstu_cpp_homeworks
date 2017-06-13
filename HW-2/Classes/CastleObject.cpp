@@ -4,32 +4,74 @@
 aad::CastleObject::CastleObject()
     : StaticObject()
     , AliveObject()
+    , cost_(0)
 {}
 
-aad::CastleObject::CastleObject(float maxHealth, std::string const& fileName)
+aad::CastleObject::CastleObject(float maxHealth, std::string const& fileName, size_t cost)
     : StaticObject(CASTLE_X_POSITION, CASTLE_Y_POSITION, fileName)
-    , AliveObject(this, maxHealth, 2.f * maxHealth)
+    , AliveObject(*this, maxHealth, 2.f * maxHealth)
+    , cost_(cost)
 {}
+
+aad::CastleObject::CastleObject(CastleType type)
+    : CastleObject(
+          CastleObject::GetClassHealth_(type)
+        , CastleObject::GetClassFile(type)
+        , CastleObject::GetClassCost(type)
+    )
+{}
+
+void aad::CastleObject::Update(Game * const scene)
+{
+    SetAttackCount(0);
+}
 
 size_t aad::CastleObject::GetCost() const
 {
-    return 0;
+    return cost_;
 }
 
-void aad::CastleObject::OnXUpdate_()
+size_t aad::CastleObject::GetClassCost(CastleType type)
 {
-    StaticObject::OnXUpdate_();
-    AliveObject::OnXUpdate_();
+    switch (type)
+    {
+    case aad::CastleTypeNo1:
+        return CASTLE_NO_1_COST;
+    case aad::CastleTypeNo2:
+        return CASTLE_NO_2_COST;
+    default:
+        return CASTLE_NO_0_COST;
+    }
 }
 
-void aad::CastleObject::OnYUpdate_()
+std::string aad::CastleObject::GetClassFile(CastleType type)
 {
-    StaticObject::OnYUpdate_();
-    AliveObject::OnYUpdate_();
+    switch (type)
+    {
+    case aad::CastleTypeNo1:
+        return CASTLE_NO_1_FILE;
+    case aad::CastleTypeNo2:
+        return CASTLE_NO_2_FILE;
+    default:
+        return CASTLE_NO_0_FILE;
+    }
 }
 
 void aad::CastleObject::OnRightAlignmentUpdate_()
 {
     StaticObject::OnRightAlignmentUpdate_();
-    AliveObject::OnRightAlignmentUpdate_();
+    AliveObject::SetAlignment_(IsRightAlignment());
+}
+
+float aad::CastleObject::GetClassHealth_(CastleType type)
+{
+    switch (type)
+    {
+    case aad::CastleTypeNo1:
+        return CASTLE_NO_1_HEALTH;
+    case aad::CastleTypeNo2:
+        return CASTLE_NO_2_HEALTH;
+    default:
+        return CASTLE_NO_0_HEALTH;
+    }
 }

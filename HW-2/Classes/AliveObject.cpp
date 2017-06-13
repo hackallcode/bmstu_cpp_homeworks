@@ -2,31 +2,36 @@
 #include "GameScene.h"
 
 aad::AliveObject::AliveObject()
-    : parent_(nullptr)
-    , health_(0.f)
+    : health_(0.f)
     , maxHealth_(0.f)
     , armor_(0.f)
     , maxArmor_(0.f)
     , healthLabel_(nullptr)
     , armorLabel_(nullptr)
+    , attackCount_(0)
 {}
 
-aad::AliveObject::AliveObject(GameObject* const parent, float maxHealth, float maxArmor)
-    : parent_(nullptr)
-    , health_(0.f)
+aad::AliveObject::AliveObject(GameObject& parent, float maxHealth, float maxArmor)
+    : health_(0.f)
     , maxHealth_(maxHealth)
     , armor_(0.f)
     , maxArmor_(maxArmor)
     , healthLabel_(nullptr)
     , armorLabel_(nullptr)
+    , attackCount_(0)
 {
     SetParent(parent);
     SetHealth(maxHealth_);
     SetArmor(0.f);
 }
 
-void aad::AliveObject::Damage(float power)
+bool aad::AliveObject::Damage(float power)
 {
+    if (attackCount_ >= MAX_ATTACK_COUNT) {
+        return false;
+    }
+
+    ++attackCount_;
     if (power > GetArmor()) {
         SetArmor(0);
         SetHealth(GetHealth() - (power - GetArmor()));
@@ -37,12 +42,12 @@ void aad::AliveObject::Damage(float power)
     else {
         SetArmor(GetArmor() - power);
     }
+    return true;
 }
 
-void aad::AliveObject::SetParent(GameObject* const parent)
+void aad::AliveObject::SetParent(GameObject& parent)
 {
-    parent_ = parent;
-    LabelsInit_();
+    LabelsInit_(parent);
 }
 
 void aad::AliveObject::SetHealth(float health)
@@ -66,9 +71,9 @@ void aad::AliveObject::SetArmor(float armor)
     }
 }
 
-aad::GameObject* aad::AliveObject::GetParent() const
+void aad::AliveObject::SetAttackCount(size_t count)
 {
-    return parent_;
+    attackCount_ = count;
 }
 
 float aad::AliveObject::GetHealth() const
@@ -91,70 +96,41 @@ float aad::AliveObject::GetMaxArmor() const
     return maxArmor_;
 }
 
-cocos2d::CCLabelTTF* aad::AliveObject::GetHealthLabel() const
+size_t aad::AliveObject::GetAttackCount() const
 {
-    return healthLabel_;
+    return attackCount_;
 }
 
-cocos2d::CCLabelTTF* aad::AliveObject::GetArmorLabel() const
+void aad::AliveObject::LabelsInit_(GameObject& parent)
 {
-    return armorLabel_;
-}
-
-void aad::AliveObject::LabelsInit_()
-{
-    if (parent_ != nullptr) {
-        if (healthLabel_ == nullptr) {
-            healthLabel_ = cocos2d::CCLabelTTF::create("", "Helvetica", HEALTH_FONT_SIZE, cocos2d::Size(parent_->GetW(), HEALTH_FONT_SIZE));
-        }
-        else {
-            healthLabel_->setContentSize(cocos2d::Size(parent_->GetW(), HEALTH_FONT_SIZE));
-        }
-        if (armorLabel_ == nullptr) {
-            armorLabel_ = cocos2d::CCLabelTTF::create("", "Helvetica", HEALTH_FONT_SIZE, cocos2d::Size(parent_->GetW(), HEALTH_FONT_SIZE));
-        }
-        else {
-            armorLabel_->setContentSize(cocos2d::Size(parent_->GetW(), HEALTH_FONT_SIZE));
-        }
-
-        OnXUpdate_();
-        OnYUpdate_();
-        OnRightAlignmentUpdate_();
+    if (healthLabel_ != nullptr) {
+        healthLabel_->release();
+        healthLabel_ = nullptr;
     }
-}
-
-void aad::AliveObject::OnXUpdate_()
-{
-    if (parent_ != nullptr) {
-        if (healthLabel_ != nullptr) {
-            healthLabel_->setPositionX(parent_->GetSprite()->getPositionX());
-        }
-        if (armorLabel_ != nullptr) {
-            armorLabel_->setPositionX(parent_->GetSprite()->getPositionX());
-        }
+    if (armorLabel_ != nullptr) {
+        armorLabel_->release();
+        armorLabel_ = nullptr;
     }
+
+    healthLabel_ = cocos2d::CCLabelTTF::create("", "Helvetica", HEALTH_FONT_SIZE, cocos2d::Size(parent.GetW(), HEALTH_FONT_SIZE));
+    healthLabel_->setPosition(0, parent.GetH() + HEALTH_MARGIN);
+    parent.GetSprite()->addChild(healthLabel_, 1);
+
+    armorLabel_ = cocos2d::CCLabelTTF::create("", "Helvetica", HEALTH_FONT_SIZE, cocos2d::Size(parent.GetW(), HEALTH_FONT_SIZE));
+    armorLabel_->setPosition(0, parent.GetH() + 2 * HEALTH_MARGIN + HEALTH_FONT_SIZE);
+    parent.GetSprite()->addChild(armorLabel_, 1);
+
+    SetAlignment_(parent.IsRightAlignment());
 }
 
-void aad::AliveObject::OnYUpdate_()
+void aad::AliveObject::SetAlignment_(bool isRight)
 {
-    if (parent_ != nullptr) {
-        if (healthLabel_ != nullptr) {
-            healthLabel_->setPositionY(parent_->GetY() + parent_->GetH() + HEALTH_MARGIN);
-        }
-        if (armorLabel_ != nullptr) {
-            armorLabel_->setPositionY(parent_->GetY() + parent_->GetH() + 2 * HEALTH_MARGIN + HEALTH_FONT_SIZE);
-        }
+    if (healthLabel_ != nullptr) {
+        healthLabel_->setAnchorPoint(cocos2d::Vec2(isRight, 0));
+        healthLabel_->setRotation3D(cocos2d::Vec3(0, (isRight ? 180 : 0), 0));
     }
-}
-
-void aad::AliveObject::OnRightAlignmentUpdate_()
-{
-    if (parent_ != nullptr) {
-        if (healthLabel_ != nullptr) {
-            healthLabel_->setAnchorPoint(cocos2d::Vec2(parent_->IsRightAlignment() ? 1 : 0, 0));
-        }
-        if (armorLabel_ != nullptr) {
-            armorLabel_->setAnchorPoint(cocos2d::Vec2(parent_->IsRightAlignment() ? 1 : 0, 0));
-        }
+    if (armorLabel_ != nullptr) {
+        armorLabel_->setAnchorPoint(cocos2d::Vec2(isRight, 0));
+        armorLabel_->setRotation3D(cocos2d::Vec3(0, (isRight ? 180 : 0), 0));
     }
 }

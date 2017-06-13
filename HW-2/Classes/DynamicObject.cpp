@@ -23,8 +23,8 @@ void aad::DynamicObject::Update(Game* const scene)
 {
     GameObject::Update(scene);
 
-    SetY_(GetY() + vSpeed_);
-    SetX_(GetX() + hSpeed_);
+    SetY_(GetY() + vSpeed_ * scene->getMissedTime());
+    SetX_(GetX() + hSpeed_ * scene->getMissedTime());
     OnPositionUpdate_();
 }
 

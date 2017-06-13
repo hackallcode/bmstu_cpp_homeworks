@@ -6,16 +6,10 @@
 #include <memory> // std::shared_ptr
 #include <string> // std::to_string
 
-#include "blocks/BasicBlockObject.h"
-#include "blocks/GrassBlockObject.h"
-
-#include "castles/CastleNo1.h"
-#include "castles/CastleNo2.h"
-
-#include "attackers/AttackerNo1.h"
-#include "attackers/AttackerNo2.h"
-#include "attackers/AttackerNo3.h"
-#include "attackers/AttackerNo4.h"
+#include "BlockObject.h"
+#include "CastleObject.h"
+#include "AttackerObject.h"
+#include "ButtonObject.h"
 
 namespace aad {
 
@@ -24,10 +18,10 @@ namespace aad {
     bool const RIGHT = 1;
 
     // GAME PARAMETERS
-    size_t const START_CASH = 50;
-    size_t const CASH_INC_INTERVAL = 60;
+    size_t const START_CASH = 40;
     float const CORPSE_COST_FACTOR = 1.5f;
-    size_t const CHANGE_CASH_INC_INTERVAL = 45;
+    size_t const CASH_INC_INTERVAL = 50;
+    size_t const CASH_INC_INTERVAL_BOOST = 120;
 
     // COORDINATES
     float const CASH_TOP = 20.f;
@@ -39,31 +33,25 @@ namespace aad {
     int const CASTLE_Z_ORDER = 3;
     int const CASTLE_HEALTH_Z_ORDER = 4;
     int const BLOCK_Z_ORDER = 5;
-    int const CASH_Z_ORDER = 6;
+    int const BUTTON_Z_ORDER = 6;
+    int const CASH_Z_ORDER = 7;
+
+    // CHEATS PARAMETERS
+    size_t const CHEAT_CASH = 999999999;
 
     class Game
         : public cocos2d::Layer
     {
     public:
-        enum AttackerType {
-            AttackerTypeNo1 = 0
-            , AttackerTypeNo2
-            , AttackerTypeNo3
-            , AttackerTypeNo4
-        };
-
-        enum CastleType {
-            CastleTypeNo1 = 0
-            , CastleTypeNo2
-        };
-
         static cocos2d::Scene* createScene();
         static Game* create();
 
         ~Game() = default;
 
         virtual bool init() override;
-        virtual void update(float) override;
+        virtual void update(float time) override;
+
+        float getMissedTime() const;
 
         std::shared_ptr<CastleObject> getCastle(bool isRight);
         std::vector<std::shared_ptr<AttackerObject>>& getAttackers(bool isRight);
@@ -75,9 +63,14 @@ namespace aad {
         void buyCastleHp(bool isRight);
         void buyCastleArmor(bool isRight);
         void buyAttacker(bool isRight, AttackerType id);
+        
+        void moneyCheat(bool isRight);
 
     private:
-        std::vector<std::shared_ptr<BlockObject>> blocks_;        
+        float missedTime_;
+        
+        std::vector<std::shared_ptr<BlockObject>> blocks_;
+        std::vector<std::shared_ptr<ButtonObject>> buttons_[2];
         void initMap_();
 
         std::shared_ptr<CastleObject> castles_[2];

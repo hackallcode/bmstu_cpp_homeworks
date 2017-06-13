@@ -58,8 +58,10 @@ bool aad::Game::init()
     return true;
 }
 
-void aad::Game::update(float)
+void aad::Game::update(float time)
 {
+    missedTime_ = time;
+
     incCash_(LEFT);
     incCash_(RIGHT);
 
@@ -71,6 +73,9 @@ void aad::Game::update(float)
         setWinningPlayer_(LEFT);
         return;
     }
+
+    castles_[LEFT]->Update(this);
+    castles_[RIGHT]->Update(this);
 
     for (int i = 0; i < attackers_[LEFT].size(); ++i) {
         attackers_[LEFT][i]->Update(this);
@@ -88,6 +93,11 @@ void aad::Game::update(float)
 
     deleteDeadAttackers_(LEFT);
     deleteDeadAttackers_(RIGHT);
+}
+
+float aad::Game::getMissedTime() const
+{
+    return missedTime_;
 }
 
 std::shared_ptr<aad::CastleObject> aad::Game::getCastle(bool isRight)
@@ -129,18 +139,8 @@ void aad::Game::initNewGame()
 
 void aad::Game::buyCastle(bool isRight, CastleType id)
 {
-    switch (id)
-    {
-    case CastleType::CastleTypeNo1:
-        if (subtractCash_(isRight, CastleNo1::GetClassCost())) {
-            initCastle_(isRight, id);
-        }
-        break;
-    case CastleType::CastleTypeNo2:
-        if (subtractCash_(isRight, CastleNo2::GetClassCost())) {
-            initCastle_(isRight, id);
-        }
-        break;
+    if (subtractCash_(isRight, CastleObject::GetClassCost(id))) {
+        initCastle_(isRight, id);
     }
 }
 
@@ -164,42 +164,55 @@ void aad::Game::buyCastleArmor(bool isRight)
 
 void aad::Game::buyAttacker(bool isRight, AttackerType id)
 {
-    switch (id)
-    {
-    case AttackerType::AttackerTypeNo1:
-        if (subtractCash_(isRight, AttackerNo1::GetClassCost())) {
-            addAttacker_(isRight, id);
-        }
-        break;
-    case AttackerType::AttackerTypeNo2:
-        if (subtractCash_(isRight, AttackerNo2::GetClassCost())) {
-            addAttacker_(isRight, id);
-        }
-        break;
-    case AttackerType::AttackerTypeNo3:
-        if (subtractCash_(isRight, AttackerNo3::GetClassCost())) {
-            addAttacker_(isRight, id);
-        }
-        break;
-    case AttackerType::AttackerTypeNo4:
-        if (subtractCash_(isRight, AttackerNo4::GetClassCost())) {
-            addAttacker_(isRight, id);
-        }
-        break;
+    if (subtractCash_(isRight, AttackerObject::GetClassCost(id))) {
+        addAttacker_(isRight, id);
     }
+}
+
+void aad::Game::moneyCheat(bool isRight)
+{
+    setCash_(isRight, CHEAT_CASH);
 }
 
 void aad::Game::initMap_()
 {
     // Set background
-    cocos2d::CCSprite * background = cocos2d::CCSprite::create("background.png");
+    cocos2d::CCSprite * background = cocos2d::CCSprite::create("res/background.png");
     background->setAnchorPoint(cocos2d::Vec2(0, 0));
     addChild(background, -1);
 
+    // Create left buttons
+    buttons_[LEFT].push_back(std::shared_ptr<ButtonObject>(new ButtonObject(20, 830, AttackerType::AttackerTypeNo1, "Q", false)));
+    buttons_[LEFT].push_back(std::shared_ptr<ButtonObject>(new ButtonObject(160, 830, AttackerType::AttackerTypeNo2, "W", true)));
+    buttons_[LEFT].push_back(std::shared_ptr<ButtonObject>(new ButtonObject(300, 830, AttackerType::AttackerTypeNo3, "E", true)));
+    buttons_[LEFT].push_back(std::shared_ptr<ButtonObject>(new ButtonObject(440, 830, AttackerType::AttackerTypeNo4, "R", true)));
+    buttons_[LEFT].push_back(std::shared_ptr<ButtonObject>(new ButtonObject(20, 690, CastleType::CastleTypeNo2, "A", true)));
+    buttons_[LEFT].push_back(std::shared_ptr<ButtonObject>(new ButtonObject(160, 690, ButtonType::HealthButton, "S", true)));
+    buttons_[LEFT].push_back(std::shared_ptr<ButtonObject>(new ButtonObject(300, 690, ButtonType::ArmorButton, "D", true)));
+    // Create right buttons
+    buttons_[RIGHT].push_back(std::shared_ptr<ButtonObject>(new ButtonObject(20, 830, AttackerType::AttackerTypeNo1, "P", false)));
+    buttons_[RIGHT].push_back(std::shared_ptr<ButtonObject>(new ButtonObject(160, 830, AttackerType::AttackerTypeNo2, "O", true)));
+    buttons_[RIGHT].push_back(std::shared_ptr<ButtonObject>(new ButtonObject(300, 830, AttackerType::AttackerTypeNo3, "I", true)));
+    buttons_[RIGHT].push_back(std::shared_ptr<ButtonObject>(new ButtonObject(440, 830, AttackerType::AttackerTypeNo4, "U", true)));
+    buttons_[RIGHT].push_back(std::shared_ptr<ButtonObject>(new ButtonObject(20, 690, CastleType::CastleTypeNo2, "L", true)));
+    buttons_[RIGHT].push_back(std::shared_ptr<ButtonObject>(new ButtonObject(160, 690, ButtonType::HealthButton, "K", true)));
+    buttons_[RIGHT].push_back(std::shared_ptr<ButtonObject>(new ButtonObject(300, 690, ButtonType::ArmorButton, "J", true)));
+    // Set right aligment
+    for (size_t i = 0; i < buttons_[RIGHT].size(); ++i) {
+        buttons_[RIGHT][i]->SetRightAlignment(getContentSize().width);
+    }
+    // Show buttons
+    for (float i = 0; i < buttons_[LEFT].size(); ++i) {
+        addChild(buttons_[LEFT][i]->GetSprite(), BUTTON_Z_ORDER);
+    }
+    for (float i = 0; i < buttons_[RIGHT].size(); ++i) {
+        addChild(buttons_[RIGHT][i]->GetSprite(), BUTTON_Z_ORDER);
+    }
+
     // Blocks
     for (float i = 0; i < 24; ++i) {
-        blocks_.push_back(std::shared_ptr<BlockObject>(new BasicBlockObject(80 * i, 0)));
-        blocks_.push_back(std::shared_ptr<BlockObject>(new GrassBlockObject(80 * i, 80)));
+        blocks_.push_back(std::shared_ptr<BlockObject>(new BlockObject(80 * i, 0, BlockType::BasicBlockType)));
+        blocks_.push_back(std::shared_ptr<BlockObject>(new BlockObject(80 * i, 80, BlockType::GrassBlockType)));
         addChild(blocks_[2 * i]->GetSprite(), BLOCK_Z_ORDER);
         addChild(blocks_[2 * i + 1]->GetSprite(), BLOCK_Z_ORDER);
     }
@@ -209,52 +222,26 @@ void aad::Game::initCastle_(bool isRight, CastleType id)
 {
     if (castles_[isRight]) {
         removeChild(castles_[isRight]->GetSprite());
-        removeChild(castles_[isRight]->GetHealthLabel());
-        removeChild(castles_[isRight]->GetArmorLabel());
     }
 
-    switch (id)
-    {
-    case CastleType::CastleTypeNo1:
-        castles_[isRight] = std::shared_ptr<CastleObject>(new CastleNo1);
-        break;
-    case CastleType::CastleTypeNo2:
-        castles_[isRight] = std::shared_ptr<CastleObject>(new CastleNo2);
-        break;
-    }
+    castles_[isRight] = std::shared_ptr<CastleObject>(new CastleObject(id));
+     
     if (isRight) {
         castles_[isRight]->SetRightAlignment(getContentSize().width);
     }
 
     addChild(castles_[isRight]->GetSprite(), CASTLE_Z_ORDER);
-    addChild(castles_[isRight]->GetHealthLabel(), CASTLE_HEALTH_Z_ORDER);
-    addChild(castles_[isRight]->GetArmorLabel(), CASTLE_HEALTH_Z_ORDER);    
 }
 
 void aad::Game::addAttacker_(bool isRight, AttackerType id)
 {
-    switch (id)
-    {
-    case AttackerType::AttackerTypeNo1:
-        attackers_[isRight].push_back(std::shared_ptr<AttackerObject>(new AttackerNo1));
-        break;
-    case AttackerType::AttackerTypeNo2:
-        attackers_[isRight].push_back(std::shared_ptr<AttackerObject>(new AttackerNo2));
-        break;
-    case AttackerType::AttackerTypeNo3:
-        attackers_[isRight].push_back(std::shared_ptr<AttackerObject>(new AttackerNo3));
-        break;
-    case AttackerType::AttackerTypeNo4:
-        attackers_[isRight].push_back(std::shared_ptr<AttackerObject>(new AttackerNo4));
-        break;
-    }
+    attackers_[isRight].push_back(std::shared_ptr<AttackerObject>(new AttackerObject(id)));
+    
     if (isRight) {
         attackers_[isRight].back()->SetRightAlignment(getContentSize().width);
     }
 
     addChild(attackers_[isRight].back()->GetSprite(), ATTACKER_Z_ORDER);
-    addChild(attackers_[isRight].back()->GetHealthLabel(), ATTACKER_HEALTH_Z_ORDER);
-    addChild(attackers_[isRight].back()->GetArmorLabel(), ATTACKER_HEALTH_Z_ORDER);
 }
 
 void aad::Game::deleteDeadAttackers_(bool isRight)
@@ -264,8 +251,6 @@ void aad::Game::deleteDeadAttackers_(bool isRight)
             addCash_(!isRight, attackers_[isRight][i]->GetCost() * CORPSE_COST_FACTOR);
 
             removeChild(attackers_[isRight][i]->GetSprite());
-            removeChild(attackers_[isRight][i]->GetHealthLabel());
-
             attackers_[isRight].erase(attackers_[isRight].begin() + i);
             --i;
         }
@@ -276,8 +261,6 @@ void aad::Game::deleteAllAttackers_(bool isRight)
 {
     while (attackers_[isRight].size() > 0) {
         removeChild(attackers_[isRight].back()->GetSprite());
-        removeChild(attackers_[isRight].back()->GetHealthLabel());
-
         attackers_[isRight].pop_back();
     }
 }
@@ -306,6 +289,15 @@ void aad::Game::setCash_(bool isRight, size_t count)
     cash_[isRight] = count;
 
     cashLabels_[isRight]->setString(std::to_string(cash_[isRight]) + " coins");
+
+    for (std::shared_ptr<ButtonObject>& button : buttons_[isRight]) {
+        if (cash_[isRight] < std::stoi(button->GetBottomLabel())) {
+            button->Lock();
+        }
+        else {
+            button->Unlock();
+        }
+    }
 }
 
 void aad::Game::addCash_(bool isRight, size_t count)
@@ -315,13 +307,12 @@ void aad::Game::addCash_(bool isRight, size_t count)
 
 bool aad::Game::subtractCash_(bool isRight, size_t count)
 {
-    isPlayerBegin_[isRight] = true;
-
     if (count > cash_[isRight]) {
         return false;
     }
     else {
         setCash_(isRight, cash_[isRight] - count);
+        isPlayerBegin_[isRight] = true;
         return true;
     }
 }
@@ -331,8 +322,8 @@ void aad::Game::incCash_(bool isRight)
     if (isPlayerBegin_[isRight]) {
         ++steps_[isRight];
         if (steps_[isRight] % (
-            (steps_[isRight] / CHANGE_CASH_INC_INTERVAL < CASH_INC_INTERVAL) ?
-            (CASH_INC_INTERVAL - steps_[isRight] / CHANGE_CASH_INC_INTERVAL) : 1
+            (steps_[isRight] / CASH_INC_INTERVAL_BOOST < CASH_INC_INTERVAL) ?
+            (CASH_INC_INTERVAL - steps_[isRight] / CASH_INC_INTERVAL_BOOST) : 1
             ) == 0) {
             addCash_(isRight, 1);
         }
@@ -361,24 +352,35 @@ void aad::keyListener(cocos2d::EventKeyboard::KeyCode code, cocos2d::Event * eve
         return;
     }
 
-    if (code == cocos2d::EventKeyboard::KeyCode::KEY_SPACE && GLOBAL_GAME_SCENE->isGameEnd()) {
+    if (code == cocos2d::EventKeyboard::KeyCode::KEY_F1) {
+        GLOBAL_GAME_SCENE->initNewGame();
+    }
+    if (code == cocos2d::EventKeyboard::KeyCode::KEY_F2) {
+        GLOBAL_GAME_SCENE->moneyCheat(LEFT);
+    }
+    if (code == cocos2d::EventKeyboard::KeyCode::KEY_F3) {
+        GLOBAL_GAME_SCENE->moneyCheat(RIGHT);
+    }
+
+    if ((code == cocos2d::EventKeyboard::KeyCode::KEY_SPACE || code == cocos2d::EventKeyboard::KeyCode::KEY_ENTER) 
+        && GLOBAL_GAME_SCENE->isGameEnd()) {
         GLOBAL_GAME_SCENE->initNewGame();
     }
 
     if (code == cocos2d::EventKeyboard::KeyCode::KEY_Q) {
-        GLOBAL_GAME_SCENE->buyAttacker(LEFT, Game::AttackerType::AttackerTypeNo1);
+        GLOBAL_GAME_SCENE->buyAttacker(LEFT, AttackerType::AttackerTypeNo1);
     }
     if (code == cocos2d::EventKeyboard::KeyCode::KEY_W) {
-        GLOBAL_GAME_SCENE->buyAttacker(LEFT, Game::AttackerType::AttackerTypeNo2);
+        GLOBAL_GAME_SCENE->buyAttacker(LEFT, AttackerType::AttackerTypeNo2);
     }
     if (code == cocos2d::EventKeyboard::KeyCode::KEY_E) {
-        GLOBAL_GAME_SCENE->buyAttacker(LEFT, Game::AttackerType::AttackerTypeNo3);
+        GLOBAL_GAME_SCENE->buyAttacker(LEFT, AttackerType::AttackerTypeNo3);
     }
     if (code == cocos2d::EventKeyboard::KeyCode::KEY_R) {
-        GLOBAL_GAME_SCENE->buyAttacker(LEFT, Game::AttackerType::AttackerTypeNo4);
+        GLOBAL_GAME_SCENE->buyAttacker(LEFT, AttackerType::AttackerTypeNo4);
     }
     if (code == cocos2d::EventKeyboard::KeyCode::KEY_A) {
-        GLOBAL_GAME_SCENE->buyCastle(LEFT, Game::CastleType::CastleTypeNo2);
+        GLOBAL_GAME_SCENE->buyCastle(LEFT, CastleType::CastleTypeNo2);
     }
     if (code == cocos2d::EventKeyboard::KeyCode::KEY_S) {
         GLOBAL_GAME_SCENE->buyCastleHp(LEFT);
@@ -387,25 +389,25 @@ void aad::keyListener(cocos2d::EventKeyboard::KeyCode code, cocos2d::Event * eve
         GLOBAL_GAME_SCENE->buyCastleArmor(LEFT);
     }
 
-    if (code == cocos2d::EventKeyboard::KeyCode::KEY_U) {
-        GLOBAL_GAME_SCENE->buyAttacker(RIGHT, Game::AttackerType::AttackerTypeNo1);
-    }
-    if (code == cocos2d::EventKeyboard::KeyCode::KEY_I) {
-        GLOBAL_GAME_SCENE->buyAttacker(RIGHT, Game::AttackerType::AttackerTypeNo2);
+    if (code == cocos2d::EventKeyboard::KeyCode::KEY_P) {
+        GLOBAL_GAME_SCENE->buyAttacker(RIGHT, AttackerType::AttackerTypeNo1);
     }
     if (code == cocos2d::EventKeyboard::KeyCode::KEY_O) {
-        GLOBAL_GAME_SCENE->buyAttacker(RIGHT, Game::AttackerType::AttackerTypeNo3);
+        GLOBAL_GAME_SCENE->buyAttacker(RIGHT, AttackerType::AttackerTypeNo2);
     }
-    if (code == cocos2d::EventKeyboard::KeyCode::KEY_P) {
-        GLOBAL_GAME_SCENE->buyAttacker(RIGHT, Game::AttackerType::AttackerTypeNo4);
+    if (code == cocos2d::EventKeyboard::KeyCode::KEY_I) {
+        GLOBAL_GAME_SCENE->buyAttacker(RIGHT, AttackerType::AttackerTypeNo3);
     }
-    if (code == cocos2d::EventKeyboard::KeyCode::KEY_J) {
-        GLOBAL_GAME_SCENE->buyCastle(RIGHT, Game::CastleType::CastleTypeNo2);
+    if (code == cocos2d::EventKeyboard::KeyCode::KEY_U) {
+        GLOBAL_GAME_SCENE->buyAttacker(RIGHT, AttackerType::AttackerTypeNo4);
+    }
+    if (code == cocos2d::EventKeyboard::KeyCode::KEY_L) {
+        GLOBAL_GAME_SCENE->buyCastle(RIGHT, CastleType::CastleTypeNo2);
     }
     if (code == cocos2d::EventKeyboard::KeyCode::KEY_K) {
         GLOBAL_GAME_SCENE->buyCastleHp(RIGHT);
     }
-    if (code == cocos2d::EventKeyboard::KeyCode::KEY_L) {
+    if (code == cocos2d::EventKeyboard::KeyCode::KEY_J) {
         GLOBAL_GAME_SCENE->buyCastleArmor(RIGHT);
     }
 }
