@@ -2,30 +2,30 @@
 #include <fstream>
 #include <string>
 
-// Возможные знаки препинания
+// Р’РѕР·РјРѕР¶РЅС‹Рµ Р·РЅР°РєРё РїСЂРµРїРёРЅР°РЅРёСЏ
 const char marks[12] = { ' ', '!', '"', '\'', '(', ')', ',', '-', '.', ':', ';', '?' };
 
-// Проверка символа на знак препинания
+// РџСЂРѕРІРµСЂРєР° СЃРёРјРІРѕР»Р° РЅР° Р·РЅР°Рє РїСЂРµРїРёРЅР°РЅРёСЏ
 inline bool isMark(char letter) {
-	for (const char & mark : marks) {
+	for (const char& mark : marks) {
 		if (mark == letter) 
 			return true;
 	}
 	return false;
 }
 
-// Класс для работы со списком
+// РљР»Р°СЃСЃ РґР»СЏ СЂР°Р±РѕС‚С‹ СЃРѕ СЃРїРёСЃРєРѕРј
 class WordsList 
 {
 private:
-	// Структура списка
+	// РЎС‚СЂСѓРєС‚СѓСЂР° СЃРїРёСЃРєР°
 	struct WordsElement	{
 		std::string data;
 		WordsElement * prev;
 		WordsElement * next;
 	} * Word;
 public:
-	// Деструктор
+	// Р”РµСЃС‚СЂСѓРєС‚РѕСЂ
 	~WordsList()
 	{
 		while (Word != nullptr) {
@@ -35,11 +35,11 @@ public:
 		}
 	}
 
-	// Конструктор по умолчанию
+	// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
 	WordsList() : Word(nullptr)
 	{}
 
-	// Добавление слова в конец списка
+	// Р”РѕР±Р°РІР»РµРЅРёРµ СЃР»РѕРІР° РІ РєРѕРЅРµС† СЃРїРёСЃРєР°
 	void Add(const std::string data)
 	{
 		if (Word == nullptr) {
@@ -57,7 +57,7 @@ public:
 		lastWord->next->prev = lastWord;
 	}
 
-	// Функция печати слова с окружением из n слов
+	// Р¤СѓРЅРєС†РёСЏ РїРµС‡Р°С‚Рё СЃР»РѕРІР° СЃ РѕРєСЂСѓР¶РµРЅРёРµРј РёР· n СЃР»РѕРІ
 	void Print(std::ostream & stream, const std::string & search_word, size_t count)
 	{
 		WordsElement * lastWord = Word;
@@ -83,7 +83,7 @@ public:
 	}
 };
 
-// Функция открытия файла
+// Р¤СѓРЅРєС†РёСЏ РѕС‚РєСЂС‹С‚РёСЏ С„Р°Р№Р»Р°
 bool openDialog(std::ifstream & fin, const std::string printed_name = "file")
 {
 	std::string filename;
@@ -103,7 +103,7 @@ bool openDialog(std::ifstream & fin, const std::string printed_name = "file")
 	} while (true);
 }
 
-// Разделение строки на слова
+// Р Р°Р·РґРµР»РµРЅРёРµ СЃС‚СЂРѕРєРё РЅР° СЃР»РѕРІР°
 WordsList * split(std::string & str)
 {
 	WordsList * words = new WordsList;

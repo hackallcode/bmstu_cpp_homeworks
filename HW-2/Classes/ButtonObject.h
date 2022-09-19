@@ -20,10 +20,10 @@ namespace aad {
     size_t const UNKNOWN_BUTTON_COST = 0;
     std::string const UNKNOWN_BUTTON_FILE = "res/buttons/unknown.png";
 
-    size_t const HEALTH_BUTTON_COST = 100;
+    size_t const HEALTH_BUTTON_COST = 10;
     std::string const HEALTH_BUTTON_FILE = "res/buttons/health.png";
 
-    size_t const ARMOR_BUTTON_COST = 100;
+    size_t const ARMOR_BUTTON_COST = 10;
     std::string const ARMOR_BUTTON_FILE = "res/buttons/shield.png";
 
     enum ButtonType {

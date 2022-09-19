@@ -1,0 +1,8 @@
+"Scheme"={"Capital", "Population", "Area", "Asia"}
+"Great Britain"={"London", 141.12, 77, False}
+"Russia"={"Moscow", 145.531, 1, True}
+
+
+
+"China"={"Beijing",1511.51,3,True}
+"USA"={ "Washington", 301, 4, False }

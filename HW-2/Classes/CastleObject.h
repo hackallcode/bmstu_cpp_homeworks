@@ -14,13 +14,13 @@ namespace aad {
     std::string const CASTLE_NO_0_FILE = "res/castles/CastleNo0.png";
     size_t const CASTLE_NO_0_COST = 0.f;
 
-    float const CASTLE_NO_1_HEALTH = 300.f;
+    float const CASTLE_NO_1_HEALTH = 500.f;
     std::string const CASTLE_NO_1_FILE = "res/castles/CastleNo1.png";
     size_t const CASTLE_NO_1_COST = 50.f;
 
-    float const CASTLE_NO_2_HEALTH = 1000.f;
+    float const CASTLE_NO_2_HEALTH = 10000.f;
     std::string const CASTLE_NO_2_FILE = "res/castles/CastleNo2.png";
-    size_t const CASTLE_NO_2_COST = 500.f;
+    size_t const CASTLE_NO_2_COST = 1000.f;
 
     enum CastleType {
         CastleTypeNo1 = 1

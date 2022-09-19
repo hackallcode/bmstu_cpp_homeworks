@@ -1,4 +1,5 @@
 #include "Vector.h"
+#include <vector>
 #include <iostream>
 
 void printVector(const Vector<int>& vec)
@@ -10,6 +11,66 @@ void printVector(const Vector<int>& vec)
 
 int main()
 {
+    {
+        std::vector<int> vec;
+        vec.push_back(1);
+        vec.push_back(2);
+        vec.push_back(3);
+
+        std::vector<int> vec2(vec);
+        vec2.push_back(4);
+
+        std::vector<int> vec3(std::move(vec));
+        vec2 = std::move(vec3);
+
+        std::cout << "vec: ";
+        for (auto& el : vec) {
+            std::cout << el << " ";
+        }
+        std::cout << std::endl;
+
+        std::cout << "vec2: ";
+        for (auto& el : vec2) {
+            std::cout << el << " ";
+        }
+        std::cout << std::endl;
+
+        std::cout << "vec3: ";
+        for (auto& el : vec3) {
+            std::cout << el << " ";
+        }
+        std::cout << std::endl;
+    }
+    {
+        Vector<int> vec;
+        vec.push_back(1);
+        vec.push_back(2);
+        vec.push_back(3);
+
+        Vector<int> vec2(vec);
+        vec2.push_back(4);
+
+        Vector<int> vec3(std::move(vec));
+        vec2 = std::move(vec3);
+
+        std::cout << "vec: ";
+        for (auto& el : vec) {
+            std::cout << el << " ";
+        }
+        std::cout << std::endl;
+
+        std::cout << "vec2: ";
+        for (auto& el : vec2) {
+            std::cout << el << " ";
+        }
+        std::cout << std::endl;
+
+        std::cout << "vec3: ";
+        for (auto& el : vec3) {
+            std::cout << el << " ";
+        }
+        std::cout << std::endl;
+    }
     {
         Vector<int> vec;
         for (int i = 0; i < 32; ++i)

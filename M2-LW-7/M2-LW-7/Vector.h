@@ -52,9 +52,65 @@ public:
         ptr_ = new value_type[internalCapacity_];
     }
 
+    Vector(const Vector& _rhs)
+        : internalCapacity_(_rhs.internalCapacity_)
+        , size_(_rhs.size_)
+    {
+        ptr_ = new value_type[internalCapacity_];
+        std::copy(_rhs.ptr_, _rhs.ptr_ + size_, ptr_);
+    }
+
+    Vector(Vector&& _rhs)
+        : ptr_(nullptr)
+        , size_(0)
+        , internalCapacity_(0)
+    {
+        std::swap(size_, _rhs.size_);
+        std::swap(internalCapacity_, _rhs.internalCapacity_);
+        std::swap(ptr_, _rhs.ptr_);
+    }
+
     ~Vector()
     {
         delete[] ptr_;
+    }
+
+    Vector& operator=(const Vector& _rhs)
+    {
+        if (_rhs.ptr_ == this->ptr_) {
+            if (internalCapacity_ != _rhs.internalCapacity_) {
+                delete[] ptr_;
+                internalCapacity_ = _rhs.internalCapacity_;
+                ptr_ = new value_type[internalCapacity_];
+            }
+            size_ = _rhs.size_;
+            std::copy(_rhs.ptr_, _rhs.ptr_ + internalCapacity_, ptr_);
+        }
+        return *this;
+    }
+
+    Vector& operator=(Vector&& _rhs)
+    {
+        if (_rhs.ptr_ != ptr_) {
+            std::swap(size_, _rhs.size_);
+            std::swap(internalCapacity_, _rhs.internalCapacity_);
+            std::swap(ptr_, _rhs.ptr_);
+
+            delete[] _rhs.ptr_;
+            _rhs.size_ = 0;
+            _rhs.internalCapacity_ = 0;
+            _rhs.ptr_ = nullptr;
+        }
+        return *this;
+    }
+
+    void push_back(const value_type& _value)
+    {
+        if (size_ == internalCapacity_) {
+            internalCapacity_ == 0 ? reserve(1) : reserve(internalCapacity_ * 2);
+        }
+        ptr_[size_] = _value;
+        size_++;
     }
 
     bool empty() const throw()
@@ -93,38 +149,6 @@ public:
         std::copy(ptr_, ptr_ + size_, newPtr);
         delete[] ptr_;
         ptr_ = newPtr;
-    }
-
-    Vector(const Vector& _rhs)
-        : internalCapacity_(_rhs.internalCapacity_)
-        , size_(_rhs.size_)
-    {
-        ptr_ = new value_type[internalCapacity_];
-        std::copy(_rhs.ptr_, _rhs.ptr_ + size_, ptr_);
-    }
-
-    Vector& operator=(const Vector& _rhs)
-    {
-        if (_rhs.ptr_ == this->ptr_) {
-            return *this;
-        }
-        if (internalCapacity_ != _rhs.internalCapacity_) {
-            delete[] ptr_;
-            internalCapacity_ = _rhs.internalCapacity_;
-            ptr_ = new value_type[internalCapacity_];
-        }
-        size_ = _rhs.size_;
-        std::copy(_rhs.ptr_, _rhs.ptr_ + internalCapacity_, ptr_);
-        return *this;
-    }
-
-    void push_back(const value_type& _value)
-    {
-        if (size_ == internalCapacity_) {
-            internalCapacity_ == 0 ? reserve(1) : reserve(internalCapacity_ * 2);
-        }
-        ptr_[size_] = _value;
-        size_++;
     }
 
     reference at(size_type _index)

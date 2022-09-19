@@ -146,8 +146,8 @@ void aad::Game::buyCastle(bool isRight, CastleType id)
 
 void aad::Game::buyCastleHp(bool isRight)
 {
-    if (castles_[isRight]->GetHealth() <= castles_[isRight]->GetMaxHealth() - 100.f) {
-        if (subtractCash_(isRight, 100)) {
+    if (castles_[isRight]->GetHealth() <= castles_[isRight]->GetMaxHealth() - HEALTH_BUTTON_COST) {
+        if (subtractCash_(isRight, HEALTH_BUTTON_COST)) {
             castles_[isRight]->SetHealth(castles_[isRight]->GetHealth() + 100.f);
         }
     }
@@ -155,8 +155,8 @@ void aad::Game::buyCastleHp(bool isRight)
 
 void aad::Game::buyCastleArmor(bool isRight)
 {
-    if (castles_[isRight]->GetArmor() <= castles_[isRight]->GetMaxArmor() - 100.f) {
-        if (subtractCash_(isRight, 100)) {
+    if (castles_[isRight]->GetArmor() <= castles_[isRight]->GetMaxArmor() - ARMOR_BUTTON_COST) {
+        if (subtractCash_(isRight, ARMOR_BUTTON_COST)) {
             castles_[isRight]->SetArmor(castles_[isRight]->GetArmor() + 100.f);
         }
     }

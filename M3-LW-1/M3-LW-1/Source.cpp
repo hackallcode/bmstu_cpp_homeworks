@@ -606,5 +606,13 @@ int main()
     /* Тест бонусных функций */
     RUN_TEST(test_bonus, "successed");
 
+    {
+        BooleanFunction f("11000101");
+        BooleanFunction g("11010100");
+
+        std::cout << get_polynom(f) << std::endl;
+        std::cout << get_polynom(g) << std::endl;
+    }
+
     system("pause");
 }
